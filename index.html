@@ -339,6 +339,34 @@
             overflow-y: auto;
             word-break: break-all;
         }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: #475569;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .file-label:hover {
+            background: #64748b;
+        }
+        
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #10b981;
+            word-break: break-all;
+        }
 
         @media (max-width: 768px) {
             .container {
@@ -377,16 +405,25 @@
                 <div class="instructions">
                     <ol>
                         <li>Cole sua API key acima</li>
-                        <li>Use as ferramentas do mapa para <strong>desenhar um polígono</strong></li>
+                        <li><strong>Desenhe</strong> um polígono no mapa OU <strong>faça upload</strong> de arquivo GeoJSON</li>
                         <li>Clique em <strong>Validar Área</strong></li>
                     </ol>
                 </div>
             </div>
             
             <div class="card">
+                <h2 class="card-title">📁 Upload GeoJSON</h2>
+                <input type="file" id="fileInput" accept=".json,.geojson" class="file-input">
+                <label for="fileInput" class="file-label">
+                    <span>📂</span> Selecionar arquivo
+                </label>
+                <div id="fileName" class="file-name"></div>
+            </div>
+            
+            <div class="card">
                 <h2 class="card-title">📐 Área Selecionada</h2>
                 <div id="coordsDisplay" class="coords-display">
-                    Nenhuma área desenhada. Use a ferramenta de polígono no mapa.
+                    Nenhuma área desenhada. Desenhe no mapa ou faça upload de GeoJSON.
                 </div>
             </div>
             
@@ -419,6 +456,10 @@
                 <div id="checksList" class="checks-list"></div>
                 
                 <div id="metaInfo" class="meta-info"></div>
+                
+                <button id="downloadPdfBtn" class="btn btn-secondary" style="margin-top: 1rem; display: none;">
+                    <span>📄</span> Baixar Relatório PDF
+                </button>
             </div>
         </aside>
     </div>
@@ -491,6 +532,9 @@
         const loadingDiv = document.getElementById('loading');
         const errorMsg = document.getElementById('errorMsg');
         const resultCard = document.getElementById('resultCard');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDiv = document.getElementById('fileName');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
         
         // ============================================================
         // EVENTOS DO MAPA
@@ -604,8 +648,62 @@
             drawnItems.eachLayer(layer => {
                 const color = data.status === 'approved' ? '#10b981' : 
                               data.status === 'rejected' ? '#ef4444' : '#f59e0b';
-                layer.setStyle({ color: color, fillColor: color });
+                if (layer.setStyle) {
+                    layer.setStyle({ color: color, fillColor: color });
+                } else if (layer.eachLayer) {
+                    layer.eachLayer(l => l.setStyle && l.setStyle({ color: color, fillColor: color }));
+                }
             });
+            
+            // Mostrar botão PDF
+            downloadPdfBtn.style.display = 'flex';
+        }
+        
+        async function downloadPdf() {
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!currentPolygon) {
+                showError('Nenhum polígono para gerar relatório.');
+                return;
+            }
+            
+            const geometry = currentPolygon.geometry || currentPolygon;
+            
+            downloadPdfBtn.disabled = true;
+            downloadPdfBtn.innerHTML = '<span>⏳</span> Gerando...';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/v1/reports/due-diligence/quick`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    },
+                    body: JSON.stringify(geometry)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail?.[0]?.msg || error.detail || 'Erro ao gerar PDF');
+                }
+                
+                // Download do PDF
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `greengate-report-${Date.now()}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                downloadPdfBtn.disabled = false;
+                downloadPdfBtn.innerHTML = '<span>📄</span> Baixar Relatório PDF';
+            }
         }
         
         async function validateArea() {
@@ -663,6 +761,9 @@
             validateBtn.disabled = true;
             resultCard.classList.remove('show');
             errorMsg.classList.remove('show');
+            fileNameDiv.textContent = '';
+            fileInput.value = '';
+            downloadPdfBtn.style.display = 'none';
         }
         
         // ============================================================
@@ -670,6 +771,56 @@
         // ============================================================
         validateBtn.addEventListener('click', validateArea);
         clearBtn.addEventListener('click', clearMap);
+        downloadPdfBtn.addEventListener('click', downloadPdf);
+        
+        // File upload handler
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            fileNameDiv.textContent = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const geojson = JSON.parse(event.target.result);
+                    
+                    // Limpar mapa
+                    drawnItems.clearLayers();
+                    
+                    // Pegar geometria (pode ser Feature, FeatureCollection ou Geometry)
+                    let geometry;
+                    if (geojson.type === 'FeatureCollection') {
+                        geometry = geojson.features[0].geometry;
+                    } else if (geojson.type === 'Feature') {
+                        geometry = geojson.geometry;
+                    } else {
+                        geometry = geojson;
+                    }
+                    
+                    // Criar layer no mapa
+                    const layer = L.geoJSON(geometry, {
+                        style: {
+                            color: '#10b981',
+                            weight: 3,
+                            fillOpacity: 0.3
+                        }
+                    });
+                    
+                    drawnItems.addLayer(layer);
+                    map.fitBounds(layer.getBounds());
+                    
+                    // Salvar polígono
+                    currentPolygon = { type: 'Feature', geometry: geometry };
+                    updateCoordsDisplay();
+                    validateBtn.disabled = false;
+                    
+                } catch (error) {
+                    showError('Erro ao ler arquivo: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        });
         
         // Permitir validar com Enter no input da API key
         apiKeyInput.addEventListener('keypress', function(e) {
