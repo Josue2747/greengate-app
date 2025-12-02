@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenGate - Geo-Compliance Validator</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ecfdf5;
+        }
+        
+        .logo span {
+            font-size: 0.875rem;
+            color: #a7f3d0;
+            font-weight: 400;
+        }
+        
+        .status-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #ecfdf5;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            height: calc(100vh - 64px);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sidebar {
+            background: #1e293b;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: #334155;
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .api-key-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            font-family: monospace;
+        }
+        
+        .api-key-input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .instructions {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        
+        .instructions ol {
+            margin-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #475569;
+            color: #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background: #64748b;
+        }
+        
+        .result-card {
+            display: none;
+        }
+        
+        .result-card.show {
+            display: block;
+        }
+        
+        .result-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .result-status.approved {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        
+        .result-status.rejected {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+        }
+        
+        .result-status.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid #f59e0b;
+        }
+        
+        .status-icon {
+            font-size: 2rem;
+        }
+        
+        .status-text h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .status-text p {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .checks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .check-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: #1e293b;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .check-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .check-icon {
+            font-size: 1rem;
+        }
+        
+        .check-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .check-status.pass {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .check-status.fail {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .check-status.skip {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #475569;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #334155;
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .coords-display {
+            background: #1e293b;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            max-height: 100px;
+            overflow-y: auto;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 50vh 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🌿</span>
+            <div>
+                <h1>GreenGate</h1>
+                <span>Universal Geo-Compliance</span>
+            </div>
+        </div>
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            API Online
+        </div>
+    </header>
+    
+    <div class="container">
+        <div id="map"></div>
+        
+        <aside class="sidebar">
+            <div class="card">
+                <h2 class="card-title">🔑 API Key</h2>
+                <input type="password" id="apiKey" class="api-key-input" placeholder="Cole sua API key aqui...">
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">📍 Como usar</h2>
+                <div class="instructions">
+                    <ol>
+                        <li>Cole sua API key acima</li>
+                        <li>Use as ferramentas do mapa para <strong>desenhar um polígono</strong></li>
+                        <li>Clique em <strong>Validar Área</strong></li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">📐 Área Selecionada</h2>
+                <div id="coordsDisplay" class="coords-display">
+                    Nenhuma área desenhada. Use a ferramenta de polígono no mapa.
+                </div>
+            </div>
+            
+            <button id="validateBtn" class="btn btn-primary" disabled>
+                <span>🔍</span> Validar Área
+            </button>
+            
+            <button id="clearBtn" class="btn btn-secondary">
+                <span>🗑️</span> Limpar Mapa
+            </button>
+            
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Validando área...</p>
+            </div>
+            
+            <div id="errorMsg" class="error-message"></div>
+            
+            <div id="resultCard" class="card result-card">
+                <h2 class="card-title">📋 Resultado</h2>
+                
+                <div id="resultStatus" class="result-status">
+                    <span id="statusIcon" class="status-icon"></span>
+                    <div class="status-text">
+                        <h3 id="statusText"></h3>
+                        <p id="riskScore"></p>
+                    </div>
+                </div>
+                
+                <div id="checksList" class="checks-list"></div>
+                
+                <div id="metaInfo" class="meta-info"></div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    
+    <script>
+        // ============================================================
+        // CONFIGURAÇÃO
+        // ============================================================
+        const API_URL = 'https://greengate-production.up.railway.app';
+        
+        // ============================================================
+        // INICIALIZAR MAPA
+        // ============================================================
+        const map = L.map('map').setView([-12.5, -55.5], 6); // Centro do MT
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Camada para desenhos
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        
+        // Controles de desenho
+        const drawControl = new L.Control.Draw({
+            draw: {
+                polygon: {
+                    allowIntersection: false,
+                    shapeOptions: {
+                        color: '#10b981',
+                        weight: 3,
+                        fillOpacity: 0.3
+                    }
+                },
+                rectangle: {
+                    shapeOptions: {
+                        color: '#10b981',
+                        weight: 3,
+                        fillOpacity: 0.3
+                    }
+                },
+                circle: false,
+                circlemarker: false,
+                marker: false,
+                polyline: false
+            },
+            edit: {
+                featureGroup: drawnItems,
+                remove: true
+            }
+        });
+        map.addControl(drawControl);
+        
+        // ============================================================
+        // VARIÁVEIS
+        // ============================================================
+        let currentPolygon = null;
+        
+        // ============================================================
+        // ELEMENTOS DOM
+        // ============================================================
+        const apiKeyInput = document.getElementById('apiKey');
+        const validateBtn = document.getElementById('validateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const coordsDisplay = document.getElementById('coordsDisplay');
+        const loadingDiv = document.getElementById('loading');
+        const errorMsg = document.getElementById('errorMsg');
+        const resultCard = document.getElementById('resultCard');
+        
+        // ============================================================
+        // EVENTOS DO MAPA
+        // ============================================================
+        map.on(L.Draw.Event.CREATED, function(e) {
+            drawnItems.clearLayers();
+            drawnItems.addLayer(e.layer);
+            currentPolygon = e.layer.toGeoJSON();
+            updateCoordsDisplay();
+            validateBtn.disabled = false;
+        });
+        
+        map.on(L.Draw.Event.DELETED, function(e) {
+            currentPolygon = null;
+            coordsDisplay.textContent = 'Nenhuma área desenhada.';
+            validateBtn.disabled = true;
+        });
+        
+        map.on(L.Draw.Event.EDITED, function(e) {
+            const layers = e.layers;
+            layers.eachLayer(function(layer) {
+                currentPolygon = layer.toGeoJSON();
+            });
+            updateCoordsDisplay();
+        });
+        
+        // ============================================================
+        // FUNÇÕES
+        // ============================================================
+        function updateCoordsDisplay() {
+            if (currentPolygon) {
+                const coords = currentPolygon.geometry.coordinates[0];
+                const numPoints = coords.length - 1;
+                coordsDisplay.innerHTML = `<strong>${numPoints} pontos</strong><br>${JSON.stringify(coords.slice(0, 3))}...`;
+            }
+        }
+        
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.classList.add('show');
+            setTimeout(() => errorMsg.classList.remove('show'), 5000);
+        }
+        
+        function formatCheckName(checkType) {
+            const names = {
+                'deforestation_prodes': 'Desmatamento PRODES',
+                'deforestation_mapbiomas': 'Alertas MapBiomas',
+                'terra_indigena': 'Terra Indígena',
+                'embargo_ibama': 'Embargo IBAMA',
+                'quilombola': 'Quilombola',
+                'uc': 'Unidade Conservação',
+                'app_water': 'APP Hidrografia'
+            };
+            return names[checkType] || checkType;
+        }
+        
+        function displayResult(data) {
+            resultCard.classList.add('show');
+            
+            // Status
+            const statusDiv = document.getElementById('resultStatus');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const riskScore = document.getElementById('riskScore');
+            
+            statusDiv.className = `result-status ${data.status}`;
+            
+            if (data.status === 'approved') {
+                statusIcon.textContent = '✅';
+                statusText.textContent = 'Aprovado';
+            } else if (data.status === 'rejected') {
+                statusIcon.textContent = '❌';
+                statusText.textContent = 'Rejeitado';
+            } else {
+                statusIcon.textContent = '⚠️';
+                statusText.textContent = 'Atenção';
+            }
+            
+            riskScore.textContent = `Risk Score: ${data.risk_score}/100`;
+            
+            // Checks
+            const checksList = document.getElementById('checksList');
+            checksList.innerHTML = '';
+            
+            data.checks.forEach(check => {
+                const item = document.createElement('div');
+                item.className = 'check-item';
+                
+                const statusClass = check.status === 'pass' ? 'pass' : (check.status === 'fail' ? 'fail' : 'skip');
+                const icon = check.status === 'pass' ? '✅' : (check.status === 'fail' ? '❌' : '⏭️');
+                
+                item.innerHTML = `
+                    <span class="check-name">
+                        <span class="check-icon">${icon}</span>
+                        ${formatCheckName(check.check_type)}
+                    </span>
+                    <span class="check-status ${statusClass}">${check.status.toUpperCase()}</span>
+                `;
+                
+                checksList.appendChild(item);
+            });
+            
+            // Meta info
+            const metaInfo = document.getElementById('metaInfo');
+            metaInfo.innerHTML = `
+                <span>⏱️ ${data.processing_time_ms}ms</span>
+                <span>📅 ${new Date(data.validated_at).toLocaleString('pt-BR')}</span>
+            `;
+            
+            // Colorir polígono baseado no resultado
+            drawnItems.eachLayer(layer => {
+                const color = data.status === 'approved' ? '#10b981' : 
+                              data.status === 'rejected' ? '#ef4444' : '#f59e0b';
+                layer.setStyle({ color: color, fillColor: color });
+            });
+        }
+        
+        async function validateArea() {
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                showError('Por favor, insira sua API key.');
+                return;
+            }
+            
+            if (!currentPolygon) {
+                showError('Por favor, desenhe um polígono no mapa.');
+                return;
+            }
+            
+            // Preparar GeoJSON (só a geometria)
+            const geometry = currentPolygon.geometry;
+            
+            // UI
+            loadingDiv.classList.add('show');
+            resultCard.classList.remove('show');
+            errorMsg.classList.remove('show');
+            validateBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/v1/validations/quick`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    },
+                    body: JSON.stringify(geometry)
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.detail?.[0]?.msg || data.detail || 'Erro na validação');
+                }
+                
+                displayResult(data);
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                loadingDiv.classList.remove('show');
+                validateBtn.disabled = false;
+            }
+        }
+        
+        function clearMap() {
+            drawnItems.clearLayers();
+            currentPolygon = null;
+            coordsDisplay.textContent = 'Nenhuma área desenhada.';
+            validateBtn.disabled = true;
+            resultCard.classList.remove('show');
+            errorMsg.classList.remove('show');
+        }
+        
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        validateBtn.addEventListener('click', validateArea);
+        clearBtn.addEventListener('click', clearMap);
+        
+        // Permitir validar com Enter no input da API key
+        apiKeyInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && currentPolygon) {
+                validateArea();
+            }
+        });
+    </script>
+</body>
+</html>
