@@ -36,11 +36,11 @@ Como Funciona
 
 Funcionalidades
 
-⚡ Rápido	Tempo de resposta médio de ~150ms
 🔒 Seguro	Autenticação por chave de API, rate limiting
 📊 Auditável	Trilha de auditoria completa com hashes criptográficos
 📄 Relatórios	Geração de PDF para due diligence
 🌍 Escalável	Cloud-native, PostgreSQL + PostGIS
+
 Camadas de Referência Suportadas
 
     Alertas de desmatamento (via satélite) 
