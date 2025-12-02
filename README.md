@@ -18,17 +18,11 @@ Casos de uso:
 
 Como Funciona
 
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Seu App   │────▶│  GreenGate  │────▶│  Resultado  │
-│  (GeoJSON)  │     │     API     │     │  (JSON/PDF) │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                    ┌──────┴──────┐
-                    │  Camadas de │
-                    │  Referência │
-                    │  (PostGIS)  │
-                    └─────────────┘
+ 
+ Seu App   ────▶  GreenGate  ────▶  Resultado  
+(GeoJSON)            API             (JSON/PDF) 
 
+                   
     Envie um polígono (fazenda, talhão, concessão)
 
     Receba status de conformidade + pontuação de risco + relatório detalhado
