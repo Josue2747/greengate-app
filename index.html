@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- ESTILOS GERAIS --- */
         :root {
             --bg-primary: #0a0f1a; --bg-secondary: #111827; --bg-card: #1a2332; --bg-card-hover: #1f2937;
             --border-color: #2d3748; --text-primary: #f3f4f6; --text-secondary: #9ca3af; --text-muted: #6b7280;
@@ -28,18 +27,80 @@
         .logo-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
         .logo-text h1 { font-size: 1.1rem; font-weight: 700; }
         .logo-text span { font-size: 0.65rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+        .header-right { display: flex; align-items: center; gap: 10px; }
         .status-badge { display: flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.2); border: 1px solid var(--accent-green); padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.7rem; }
         .status-dot { width: 6px; height: 6px; background: var(--accent-green); border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        /* AJUDA (?) BUTTON */
-        .help-trigger { width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; background: rgba(255,255,255,0.1); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; font-weight: bold; margin-left: 10px; }
+        .help-trigger { width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; background: rgba(255,255,255,0.1); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
         .help-trigger:hover { background: rgba(255,255,255,0.2); border-color: white; }
 
         /* LAYOUT */
         .main-container { display: grid; grid-template-columns: 1fr 400px; height: calc(100vh - 60px); }
         .map-container { position: relative; width: 100%; height: 100%; }
         #map { width: 100%; height: 100%; }
+
+        .search-box {
+   	    position: absolute;
+    	    top: 15px;
+    	    left: 50%; /* Joga o início da caixa para o meio da tela */
+    	    transform: translateX(-50%); /* Corrige para centralizar o elemento exatamente no meio */
+    	    z-index: 50;
+    	    width: 300px; /* Aumentei um pouco para ficar mais confortável */
+    	    max-width: 90%; /* Garante que não quebre em telas muito pequenas */
+	}
+        .search-input-wrap {
+            position: relative;
+            background: rgba(26, 35, 50, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+        }
+        .search-input-wrap:focus-within { border-color: var(--accent-green); }
+        .search-input-wrap .icon { padding: 0 10px; color: var(--text-muted); }
+        .search-input {
+            flex: 1;
+            padding: 10px 0;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .search-input::placeholder { color: var(--text-muted); }
+        .search-clear {
+            padding: 0 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: none;
+        }
+        .search-clear.show { display: block; }
+        .search-results {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0; right: 0;
+            background: rgba(26, 35, 50, 0.98);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .search-results.show { display: block; }
+        .search-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background: var(--bg-card-hover); }
+        .search-item-name { font-size: 0.85rem; color: var(--text-primary); }
+        .search-item-type { font-size: 0.7rem; color: var(--text-muted); }
+        .search-loading, .search-empty { padding: 15px; text-align: center; color: var(--text-muted); font-size: 0.8rem; }
 
         /* MAP CONTROLS */
         .map-controls { position: absolute; top: 15px; left: 15px; display: flex; flex-direction: column; gap: 8px; z-index: 50; }
@@ -52,7 +113,7 @@
         #fullscreenBtn { display: none; }
         .close-fullscreen { display: none; position: absolute; top: 15px; right: 60px; z-index: 50; width: 40px; height: 40px; background: var(--accent-red); border: none; border-radius: 8px; color: white; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
 
-        /* AREA INFO (Updated for Limit) */
+        /* AREA INFO */
         .area-info { display: none; position: absolute; bottom: 25px; left: 15px; background: rgba(26, 35, 50, 0.95); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; z-index: 40; box-shadow: 0 4px 12px rgba(0,0,0,0.3); min-width: 180px; }
         .area-info.show { display: block; }
         .area-info.limit-exceeded { border-color: var(--accent-red); background: rgba(239, 68, 68, 0.15); }
@@ -61,6 +122,23 @@
         .area-info.limit-exceeded .area-info-value { color: var(--accent-red); }
         .area-limit-text { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
         .area-info.limit-exceeded .area-limit-text { color: var(--accent-red); font-weight: 600; }
+        .area-coords { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-family: monospace; }
+        .btn-export {
+            margin-top: 10px;
+            width: 100%;
+            padding: 6px 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .btn-export:hover { border-color: var(--accent-green); color: var(--accent-green); }
         
         /* LEGEND */
         .map-legend { position: absolute; bottom: 25px; right: 15px; background: rgba(26, 35, 50, 0.95); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; z-index: 40; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
@@ -77,6 +155,7 @@
         .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
         .card-title { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .card-title-icon { font-size: 1rem; }
+        .card-title-right { margin-left: auto; }
         
         .input-wrapper { position: relative; }
         .input-wrapper input { width: 100%; padding: 12px 40px 12px 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem; }
@@ -96,6 +175,28 @@
         .btn-validate { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark)); border: none; border-radius: 10px; color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
         .btn-validate:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
         .btn-validate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* HISTORY */
+        .history-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+        .history-empty { text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 15px; }
+        .history-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .history-item:hover { border-color: var(--accent-blue); }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .history-status { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+        .history-status.approved { background: rgba(16,185,129,0.2); color: var(--accent-green); }
+        .history-status.rejected { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+        .history-status.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
+        .history-date { font-size: 0.65rem; color: var(--text-muted); }
+        .history-info { font-size: 0.75rem; color: var(--text-secondary); }
+        .btn-clear-history { background: none; border: none; color: var(--text-muted); font-size: 0.65rem; cursor: pointer; text-decoration: underline; }
+        .btn-clear-history:hover { color: var(--accent-red); }
 
         /* MODAL DE AJUDA */
         .help-modal { display: none; position: fixed; inset: 0; background: rgba(10, 15, 26, 0.85); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
@@ -174,6 +275,7 @@
         .btn-pdf { width: 100%; padding: 12px; margin-top: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-pdf:hover { border-color: var(--accent-green); color: var(--accent-green); }
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent-red); color: white; padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 2001; opacity: 0; transition: all 0.3s; }
+        .toast.success { background: var(--accent-green); }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         body.fullscreen-mode .sidebar { display: none !important; }
@@ -185,6 +287,7 @@
             .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
             .map-controls { top: 10px; left: 10px; }
+            .search-box { top: 60px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 350px; }
             #fullscreenBtn { display: flex; }
             .map-legend { display: none; }
             .logo-text span { display: none; }
@@ -200,11 +303,8 @@
                 <span>Geo-Compliance Platform</span>
             </div>
         </div>
-        <div style="display: flex; align-items: center;">
-            <div class="status-badge">
-                <span class="status-dot"></span>
-                API Online
-            </div>
+        <div class="header-right">
+            <div class="status-badge"><span class="status-dot"></span> API Online</div>
             <button class="help-trigger" id="helpBtn" title="Ajuda">?</button>
         </div>
     </header>
@@ -226,12 +326,24 @@
                 <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
             </div>
             
+            <!-- SEARCH -->
+            <div class="search-box">
+                <div class="search-input-wrap">
+                    <span class="icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar cidade ou estado...">
+                    <button class="search-clear" id="searchClear">✕</button>
+                </div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
             <button class="close-fullscreen" id="closeFullscreen">✕</button>
             
             <div class="area-info" id="areaInfo">
                 <div class="area-info-label">Área Selecionada</div>
                 <div class="area-info-value"><span id="areaValue">0</span> <span>ha</span></div>
                 <div class="area-limit-text">Máx: 10.000 ha</div>
+                <div class="area-coords" id="areaCoords"></div>
+                <button class="btn-export" id="exportBtn">📥 Exportar GeoJSON</button>
             </div>
             
             <div class="map-legend">
@@ -263,9 +375,7 @@
                 <div class="upload-filename" id="fileName"></div>
             </div>
             
-            <button class="btn-validate" id="validateBtn" disabled>
-                🔍 Validar Área
-            </button>
+            <button class="btn-validate" id="validateBtn" disabled>🔍 Validar Área</button>
             
             <div class="card result-card" id="resultCard">
                 <div class="result-banner" id="resultBanner">
@@ -290,6 +400,17 @@
                 </div>
                 <button class="btn-pdf" id="pdfBtn">📄 Baixar Relatório PDF</button>
             </div>
+            
+            <!-- HISTORY -->
+            <div class="card">
+                <div class="card-title">
+                    <span><span class="card-title-icon">📋</span> Histórico</span>
+                    <button class="btn-clear-history card-title-right" id="clearHistory">Limpar</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">Nenhuma validação</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -307,10 +428,14 @@
                 </div>
                 <div class="step-item">
                     <div class="step-number">2</div>
-                    <div class="step-content"><h4>Defina a Área</h4><p>Use o <strong>Lápis (✏️)</strong> para desenhar ou faça <strong>Upload</strong>. <br><span style="color:var(--accent-yellow); font-size:0.75rem;">Limite máximo: 10.000 hectares.</span></p></div>
+                    <div class="step-content"><h4>Navegue no Mapa</h4><p>Use a <strong>busca</strong> para encontrar cidades ou estados.</p></div>
                 </div>
                 <div class="step-item">
                     <div class="step-number">3</div>
+                    <div class="step-content"><h4>Defina a Área</h4><p>Use o <strong>Lápis (✏️)</strong> para desenhar ou faça <strong>Upload</strong>. <br><span style="color:var(--accent-yellow); font-size:0.75rem;">Limite: 10.000 hectares.</span></p></div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
                     <div class="step-content"><h4>Validação</h4><p>Clique em <strong>Validar Área</strong> para gerar o relatório.</p></div>
                 </div>
             </div>
@@ -329,18 +454,59 @@
     <script src="https://js.arcgis.com/4.28/"></script>
     <script>
         const API_URL = 'https://greengate-production.up.railway.app';
+        const MAX_HISTORY = 5;
         let map, view, graphicsLayer, sketchVM, currentPolygon = null, currentGraphic = null, geoEngine, webMercatorUtils;
+        let searchTimeout = null;
         
+        // ===================== HISTORY =====================
+        function getHistory() {
+            try { return JSON.parse(localStorage.getItem('gg_history') || '[]'); } 
+            catch { return []; }
+        }
+        
+        function saveHistory(result, area) {
+            const h = getHistory();
+            h.unshift({
+                id: Date.now(),
+                status: result.status,
+                score: result.risk_score,
+                area: area,
+                date: new Date().toISOString(),
+                polygon: currentPolygon
+            });
+            if (h.length > MAX_HISTORY) h.pop();
+            localStorage.setItem('gg_history', JSON.stringify(h));
+            renderHistory();
+        }
+        
+        function renderHistory() {
+            const el = document.getElementById('historyList');
+            const h = getHistory();
+            if (!h.length) { el.innerHTML = '<div class="history-empty">Nenhuma validação</div>'; return; }
+            el.innerHTML = h.map(i => `
+                <div class="history-item" data-id="${i.id}">
+                    <div class="history-header">
+                        <span class="history-status ${i.status}">${i.status === 'approved' ? 'OK' : i.status === 'rejected' ? 'FAIL' : 'WARN'}</span>
+                        <span class="history-date">${new Date(i.date).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                    <div class="history-info">${i.area.toFixed(1)} ha • Score: ${i.score}</div>
+                </div>
+            `).join('');
+            el.querySelectorAll('.history-item').forEach(item => {
+                item.onclick = () => {
+                    const found = h.find(x => x.id === +item.dataset.id);
+                    if (found?.polygon) { loadGeoJSON(found.polygon); showToast('Polígono carregado', 'success'); }
+                };
+            });
+        }
+        
+        // ===================== CLEAR =====================
         function clearAll() {
             if (sketchVM) sketchVM.cancel();
-            currentPolygon = null;
-            currentGraphic = null;
+            currentPolygon = null; currentGraphic = null;
             if (graphicsLayer) graphicsLayer.removeAll();
-            
-            const areaInfo = document.getElementById('areaInfo');
-            areaInfo.classList.remove('show');
-            areaInfo.classList.remove('limit-exceeded');
-            
+            const ai = document.getElementById('areaInfo');
+            ai.classList.remove('show', 'limit-exceeded');
             document.getElementById('resultCard').classList.remove('show');
             document.getElementById('validateBtn').disabled = true;
             document.getElementById('uploadArea').classList.remove('has-file');
@@ -350,202 +516,209 @@
             document.getElementById('drawOptions').classList.remove('show');
         }
         
+        // ===================== INIT =====================
         document.addEventListener('DOMContentLoaded', () => {
-            const savedKey = localStorage.getItem('greengate_api_key');
-            if (savedKey) document.getElementById('apiKey').value = savedKey;
-            
-            // Tutorial Check
-            const seen = localStorage.getItem('greengate_tutorial_seen');
-            if (!seen) setTimeout(() => document.getElementById('helpModal').classList.add('show'), 1000);
+            const k = localStorage.getItem('gg_api_key');
+            if (k) document.getElementById('apiKey').value = k;
+            renderHistory();
+            if (!localStorage.getItem('gg_tutorial')) setTimeout(() => document.getElementById('helpModal').classList.add('show'), 1000);
         });
         
+        // ===================== ESRI =====================
         require([
             "esri/Map", "esri/views/MapView", "esri/layers/GraphicsLayer",
             "esri/widgets/Sketch/SketchViewModel", "esri/Graphic",
             "esri/geometry/geometryEngine", "esri/geometry/Polygon",
             "esri/widgets/BasemapGallery", "esri/widgets/Expand",
-            "esri/geometry/support/webMercatorUtils"
-        ], function(Map, MapView, GraphicsLayer, SketchViewModel, Graphic, geometryEngine, Polygon, BasemapGallery, Expand, WebMercatorUtils) {
-            geoEngine = geometryEngine;
-            webMercatorUtils = WebMercatorUtils;
-            
-            map = new Map({ basemap: "hybrid" }); // CHANGED TO HYBRID
-            
-            view = new MapView({ 
-                container: "map", map: map, center: [-55.5, -12.5], zoom: 6,
-                ui: { padding: { bottom: 200 } }
-            });
+            "esri/geometry/support/webMercatorUtils", "esri/rest/locator"
+        ], function(Map, MapView, GraphicsLayer, SketchVM, Graphic, geoEng, Polygon, BasemapGallery, Expand, wmUtils, locator) {
+            geoEngine = geoEng; webMercatorUtils = wmUtils;
+            map = new Map({ basemap: "hybrid" });
+            view = new MapView({ container: "map", map, center: [-55.5, -12.5], zoom: 6, ui: { padding: { bottom: 200 } } });
             view.ui.move("zoom", "bottom-right");
+            view.ui.add(new Expand({ view, content: new BasemapGallery({ view }), expandIconClass: "esri-icon-basemap", autoCollapse: true }), "top-right");
             
-            const bgExpand = new Expand({
-                view: view, content: new BasemapGallery({ view: view }),
-                expandIconClass: "esri-icon-basemap", autoCollapse: true
-            });
-            view.ui.add(bgExpand, "top-right");
-
-            graphicsLayer = new GraphicsLayer();
-            map.add(graphicsLayer);
+            graphicsLayer = new GraphicsLayer(); map.add(graphicsLayer);
+            sketchVM = new SketchVM({ view, layer: graphicsLayer, polygonSymbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } } });
             
-            sketchVM = new SketchViewModel({
-                view: view, layer: graphicsLayer,
-                polygonSymbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } }
-            });
-
-            // --- LÓGICA OTIMIZADA DE ÁREA E LIMITE ---
-            const checkAreaLimit = (geometry) => {
-                if (!geometry) return false;
-                
-                // Cálculo rápido (Geodesic) - Não trava!
-                const area = Math.abs(geoEngine.geodesicArea(geometry, "square-meters")) / 10000;
-                
-                const areaInfo = document.getElementById('areaInfo');
-                const areaVal = document.getElementById('areaValue');
-                const validateBtn = document.getElementById('validateBtn');
-                
-                areaVal.textContent = area.toFixed(2);
-                areaInfo.classList.add('show');
-                
-                if (area > 10000) {
-                    areaInfo.classList.add('limit-exceeded');
-                    validateBtn.disabled = true; // Bloqueia botão
-                    return false; // Inválido
-                } else {
-                    areaInfo.classList.remove('limit-exceeded');
-                    // Só habilita validação se o desenho estiver completo (não durante active)
-                    return true; // Válido
-                }
+            // ========== SEARCH ==========
+            const GEOCODE = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+            const sInput = document.getElementById('searchInput');
+            const sResults = document.getElementById('searchResults');
+            const sClear = document.getElementById('searchClear');
+            
+            sInput.oninput = (e) => {
+                const q = e.target.value.trim();
+                sClear.classList.toggle('show', q.length > 0);
+                if (searchTimeout) clearTimeout(searchTimeout);
+                if (q.length < 2) { sResults.classList.remove('show'); return; }
+                sResults.innerHTML = '<div class="search-loading">Buscando...</div>';
+                sResults.classList.add('show');
+                searchTimeout = setTimeout(() => {
+                    locator.addressToLocations(GEOCODE, {
+                        address: { SingleLine: q + ", Brasil" },
+                        countryCode: "BRA",
+                        maxLocations: 5,
+                        outFields: ["Addr_type", "City", "Region"]
+                    }).then(res => {
+                        if (!res.length) { sResults.innerHTML = '<div class="search-empty">Nenhum resultado</div>'; return; }
+                        sResults.innerHTML = res.map((r, i) => `
+                            <div class="search-item" data-i="${i}">
+                                <div class="search-item-name">${r.address}</div>
+                                <div class="search-item-type">${r.attributes.Addr_type || 'Local'}</div>
+                            </div>
+                        `).join('');
+                        sResults.querySelectorAll('.search-item').forEach(el => {
+                            el.onclick = () => {
+                                const r = res[+el.dataset.i];
+                                view.goTo({ center: [r.location.longitude, r.location.latitude], zoom: r.attributes.Addr_type === 'Locality' ? 12 : 8 });
+                                sInput.value = r.address;
+                                sResults.classList.remove('show');
+                            };
+                        });
+                    }).catch(() => sResults.innerHTML = '<div class="search-empty">Erro na busca</div>');
+                }, 350);
             };
-
-            sketchVM.on(["create", "update"], function(e) {
-                // Durante o desenho (active): Calcula área bruta sem simplificar (Zero Lag)
-                if (e.state === "active") {
-                    checkAreaLimit(e.graphic.geometry);
-                }
-
-                // Ao terminar (complete): Faz a limpeza pesada e prepara validação
+            sClear.onclick = () => { sInput.value = ''; sClear.classList.remove('show'); sResults.classList.remove('show'); };
+            document.addEventListener('click', e => { if (!e.target.closest('.search-box')) sResults.classList.remove('show'); });
+            
+            // ========== AREA ==========
+            const checkArea = (geo) => {
+                if (!geo) return false;
+                const area = Math.abs(geoEngine.geodesicArea(geo, "square-meters")) / 10000;
+                const c = geo.centroid;
+                const ai = document.getElementById('areaInfo');
+                document.getElementById('areaValue').textContent = area.toFixed(2);
+                document.getElementById('areaCoords').textContent = c ? `${c.latitude.toFixed(5)}, ${c.longitude.toFixed(5)}` : '';
+                ai.classList.add('show');
+                if (area > 10000) { ai.classList.add('limit-exceeded'); document.getElementById('validateBtn').disabled = true; return false; }
+                ai.classList.remove('limit-exceeded'); return true;
+            };
+            
+            sketchVM.on(["create", "update"], e => {
+                if (e.state === "active") checkArea(e.graphic.geometry);
                 if (e.state === "complete") {
                     currentGraphic = e.graphic;
-                    let finalGeo = e.graphic.geometry;
-                    
-                    if (finalGeo.spatialReference.isWebMercator) {
-                        finalGeo = webMercatorUtils.webMercatorToGeographic(finalGeo);
-                    }
-                    
-                    const simplifiedGeo = geoEngine.simplify(finalGeo);
-                    currentPolygon = { type: "Polygon", coordinates: simplifiedGeo.rings };
-                    
+                    let geo = e.graphic.geometry;
+                    if (geo.spatialReference.isWebMercator) geo = webMercatorUtils.webMercatorToGeographic(geo);
+                    const simp = geoEngine.simplify(geo);
+                    currentPolygon = { type: "Polygon", coordinates: simp.rings };
                     document.getElementById('drawOptions').classList.remove('show');
                     document.getElementById('drawBtn').classList.remove('active');
-                    
-                    // Verifica limite final antes de liberar botão
-                    if (checkAreaLimit(simplifiedGeo)) {
-                        document.getElementById('validateBtn').disabled = false;
-                    }
+                    if (checkArea(simp)) document.getElementById('validateBtn').disabled = false;
                 }
             });
             
-            window.loadGeoJSON = function(geom) {
+            window.loadGeoJSON = (geom) => {
                 clearAll();
                 const poly = new Polygon({ rings: geom.coordinates, spatialReference: { wkid: 4326 } });
                 const g = new Graphic({ geometry: poly, symbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } } });
-                graphicsLayer.add(g);
-                currentGraphic = g;
+                graphicsLayer.add(g); currentGraphic = g;
                 view.goTo(g.geometry.extent.expand(1.5));
                 currentPolygon = geom;
-                
-                // Verifica limite no upload
-                if (checkAreaLimit(poly)) {
-                    document.getElementById('validateBtn').disabled = false;
-                }
+                if (checkArea(poly)) document.getElementById('validateBtn').disabled = false;
             };
             
-            window.updateColor = function(status) {
+            window.updateColor = (s) => {
                 if (!currentGraphic) return;
-                const c = { approved: [[16,185,129,0.3],[16,185,129]], rejected: [[239,68,68,0.3],[239,68,68]], warning: [[245,158,11,0.3],[245,158,11]] };
-                const col = c[status] || c.approved;
-                currentGraphic.symbol = { type: "simple-fill", color: col[0], outline: { color: col[1], width: 2 } };
+                const c = { approved: [[16,185,129,0.3],[16,185,129]], rejected: [[239,68,68,0.3],[239,68,68]], warning: [[245,158,11,0.3],[245,158,11]] }[s] || [[59,130,246,0.3],[59,130,246]];
+                currentGraphic.symbol = { type: "simple-fill", color: c[0], outline: { color: c[1], width: 2 } };
             };
             
-            // Buttons logic
-            document.getElementById('drawBtn').onclick = function(e) {
-                e.preventDefault();
-                if (sketchVM.state === "active") sketchVM.cancel();
-                document.getElementById('drawOptions').classList.toggle('show');
-                this.classList.toggle('active');
-            };
-            document.getElementById('drawPolygon').onclick = function(e) { e.preventDefault(); clearAll(); sketchVM.create("polygon"); document.getElementById('drawOptions').classList.remove('show'); };
-            document.getElementById('drawRect').onclick = function(e) { e.preventDefault(); clearAll(); sketchVM.create("rectangle"); document.getElementById('drawOptions').classList.remove('show'); };
-            document.getElementById('clearBtn').onclick = function(e) { e.preventDefault(); clearAll(); };
-            document.getElementById('locateBtn').onclick = function(e) { e.preventDefault(); navigator.geolocation && navigator.geolocation.getCurrentPosition(p => view.goTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 14 })); };
-            document.getElementById('fullscreenBtn').onclick = function(e) { e.preventDefault(); document.body.classList.add('fullscreen-mode'); setTimeout(() => view.requestResize(), 100); };
-            document.getElementById('closeFullscreen').onclick = function(e) { e.preventDefault(); document.body.classList.remove('fullscreen-mode'); view.requestResize(); setTimeout(() => view.requestResize(), 50); };
+            // ========== BUTTONS ==========
+            document.getElementById('drawBtn').onclick = e => { e.preventDefault(); if (sketchVM.state === "active") sketchVM.cancel(); document.getElementById('drawOptions').classList.toggle('show'); document.getElementById('drawBtn').classList.toggle('active'); };
+            document.getElementById('drawPolygon').onclick = e => { e.preventDefault(); clearAll(); sketchVM.create("polygon"); document.getElementById('drawOptions').classList.remove('show'); };
+            document.getElementById('drawRect').onclick = e => { e.preventDefault(); clearAll(); sketchVM.create("rectangle"); document.getElementById('drawOptions').classList.remove('show'); };
+            document.getElementById('clearBtn').onclick = e => { e.preventDefault(); clearAll(); };
+            document.getElementById('locateBtn').onclick = e => { e.preventDefault(); navigator.geolocation?.getCurrentPosition(p => view.goTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 14 })); };
+            document.getElementById('fullscreenBtn').onclick = e => { e.preventDefault(); document.body.classList.add('fullscreen-mode'); setTimeout(() => view.requestResize(), 100); };
+            document.getElementById('closeFullscreen').onclick = e => { e.preventDefault(); document.body.classList.remove('fullscreen-mode'); view.requestResize(); };
         });
         
-        // UI Helpers
-        const helpModal = document.getElementById('helpModal');
-        const toggleHelp = (s) => { 
-            if(s) helpModal.classList.add('show'); 
-            else { helpModal.classList.remove('show'); localStorage.setItem('greengate_tutorial_seen', 'true'); }
+        // ===================== EXPORT GEOJSON =====================
+        document.getElementById('exportBtn').onclick = () => {
+            if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+            const gj = { type: "Feature", properties: { source: "GreenGate", exported: new Date().toISOString() }, geometry: currentPolygon };
+            const blob = new Blob([JSON.stringify(gj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `area-${Date.now()}.geojson`; a.click();
+            showToast('GeoJSON exportado!', 'success');
         };
-        document.getElementById('helpBtn').onclick = () => toggleHelp(true);
-        document.getElementById('closeHelp').onclick = () => toggleHelp(false);
-        document.getElementById('startBtn').onclick = () => toggleHelp(false);
-
-        document.getElementById('toggleKey').onclick = function(e) { e.preventDefault(); const inp = document.getElementById('apiKey'); inp.type = inp.type === 'password' ? 'text' : 'password'; this.textContent = inp.type === 'password' ? '👁️' : '🔒'; };
-        document.getElementById('fileInput').onchange = function(e) {
+        
+        // ===================== UI =====================
+        const modal = document.getElementById('helpModal');
+        const toggleModal = s => { s ? modal.classList.add('show') : (modal.classList.remove('show'), localStorage.setItem('gg_tutorial', '1')); };
+        document.getElementById('helpBtn').onclick = () => toggleModal(true);
+        document.getElementById('closeHelp').onclick = () => toggleModal(false);
+        document.getElementById('startBtn').onclick = () => toggleModal(false);
+        document.getElementById('clearHistory').onclick = () => { if (confirm('Limpar histórico?')) { localStorage.removeItem('gg_history'); renderHistory(); } };
+        document.getElementById('toggleKey').onclick = e => { e.preventDefault(); const i = document.getElementById('apiKey'); i.type = i.type === 'password' ? 'text' : 'password'; e.target.textContent = i.type === 'password' ? '👁️' : '🔒'; };
+        document.getElementById('fileInput').onchange = e => {
             const f = e.target.files[0]; if (!f) return;
-            document.getElementById('fileName').textContent = f.name; document.getElementById('fileName').classList.add('show'); document.getElementById('uploadArea').classList.add('has-file');
-            const reader = new FileReader();
-            reader.onload = function(ev) { try { const json = JSON.parse(ev.target.result); let geom = (json.type === 'FeatureCollection') ? json.features[0].geometry : (json.type === 'Feature' ? json.geometry : json); loadGeoJSON(geom); } catch (err) { showToast('Erro: ' + err.message); } };
-            reader.readAsText(f);
+            document.getElementById('fileName').textContent = f.name;
+            document.getElementById('fileName').classList.add('show');
+            document.getElementById('uploadArea').classList.add('has-file');
+            const r = new FileReader();
+            r.onload = ev => { try { const j = JSON.parse(ev.target.result); loadGeoJSON(j.type === 'FeatureCollection' ? j.features[0].geometry : j.type === 'Feature' ? j.geometry : j); } catch (err) { showToast('Erro: ' + err.message); } };
+            r.readAsText(f);
         };
         
-        function showToast(msg) { const t = document.getElementById('toast'); let txt = msg; if (typeof msg === 'object') txt = msg.detail || msg.message || "Erro desconhecido"; t.textContent = txt; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }
-        function formatCheck(c) { const n = { deforestation_prodes: 'Desmatamento PRODES', deforestation_mapbiomas: 'Alertas MapBiomas', terra_indigena: 'Terras Indígenas', embargo_ibama: 'Embargos IBAMA', quilombola: 'Quilombolas', uc: 'Unidades de Conservação', app_water: 'APP Hidrografia' }; return n[c] || c; }
+        function showToast(m, t = 'error') { const el = document.getElementById('toast'); el.textContent = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m; el.className = 'toast ' + t; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 4000); }
+        function fmtCheck(c) { return { deforestation_prodes: 'Desmatamento PRODES', deforestation_mapbiomas: 'Alertas MapBiomas', terra_indigena: 'Terras Indígenas', embargo_ibama: 'Embargos IBAMA', quilombola: 'Quilombolas', uc: 'Unidades de Conservação', app_water: 'APP Hidrografia' }[c] || c; }
         
+        // ===================== VALIDATE =====================
         async function validate() {
             const key = document.getElementById('apiKey').value.trim();
             if (!key) { showToast('Insira a API Key'); return; }
             if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
-            localStorage.setItem('greengate_api_key', key);
-            document.getElementById('loadingOverlay').classList.add('show'); document.getElementById('validateBtn').disabled = true;
+            localStorage.setItem('gg_api_key', key);
+            document.getElementById('loadingOverlay').classList.add('show');
+            document.getElementById('validateBtn').disabled = true;
             const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando TIs...', 'Verificando Embargos...', 'Analisando UCs...', 'Processando...'];
             let i = 0; const iv = setInterval(() => { if (i < steps.length) document.getElementById('loadingStep').textContent = steps[i++]; }, 2000);
             try {
                 const res = await fetch(API_URL + '/api/v1/validations/quick', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': key }, body: JSON.stringify(currentPolygon) });
-                clearInterval(iv); const data = await res.json();
-                if (!res.ok) { let err = 'Erro na validação'; if (data.detail) err = (typeof data.detail === 'string') ? data.detail : (Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : JSON.stringify(data.detail)); throw new Error(err); }
+                clearInterval(iv);
+                const data = await res.json();
+                if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
+                saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
                 showResult(data);
-            } catch (err) { clearInterval(iv); showToast(err.message || err); } finally { document.getElementById('loadingOverlay').classList.remove('show'); document.getElementById('validateBtn').disabled = false; }
+            } catch (err) { clearInterval(iv); showToast(err.message); }
+            finally { document.getElementById('loadingOverlay').classList.remove('show'); document.getElementById('validateBtn').disabled = false; }
         }
         
         function showResult(d) {
             document.getElementById('resultCard').classList.add('show');
-            const banner = document.getElementById('resultBanner'); banner.className = 'result-banner ' + d.status;
+            document.getElementById('resultBanner').className = 'result-banner ' + d.status;
             document.getElementById('resultIcon').textContent = d.status === 'approved' ? '✓' : d.status === 'rejected' ? '✗' : '⚠';
             document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
             document.getElementById('resultSubtitle').textContent = 'Índice: ' + d.risk_score;
             const fill = document.getElementById('complianceFill'); fill.style.width = d.risk_score + '%'; fill.className = 'compliance-fill ' + (d.risk_score >= 70 ? 'high' : d.risk_score >= 40 ? 'medium' : 'low');
-            document.getElementById('complianceValue').textContent = d.risk_score; document.getElementById('complianceLabel').textContent = d.risk_score >= 90 ? 'Excelente' : d.risk_score >= 70 ? 'Bom' : d.risk_score >= 40 ? 'Regular' : 'Crítico';
+            document.getElementById('complianceValue').textContent = d.risk_score;
+            document.getElementById('complianceLabel').textContent = d.risk_score >= 90 ? 'Excelente' : d.risk_score >= 70 ? 'Bom' : d.risk_score >= 40 ? 'Regular' : 'Crítico';
             const list = document.getElementById('checksList'); list.innerHTML = '';
             d.checks.forEach(c => {
-                const s = c.status; const icon = s === 'pass' ? '✓' : s === 'fail' ? '✗' : s === 'warning' ? '⚠' : '○';
-                let details = '<p>' + c.message + '</p>'; if (c.overlap_area_ha > 0) details += '<div class="check-overlap-box"><strong>Sobreposição:</strong> ' + c.overlap_area_ha.toFixed(2) + ' ha (' + c.overlap_percentage.toFixed(1) + '%)</div>';
-                const row = document.createElement('div'); row.className = 'check-row ' + s; row.innerHTML = '<div class="check-header" onclick="this.parentElement.classList.toggle(\'open\')"><div class="check-left"><div class="check-status-icon ' + s + '">' + icon + '</div><span class="check-name">' + formatCheck(c.check_type) + '</span></div><div class="check-right"><span class="check-badge ' + s + '">' + s + '</span><span class="check-arrow">▼</span></div></div><div class="check-details">' + details + '</div>';
+                const icon = c.status === 'pass' ? '✓' : c.status === 'fail' ? '✗' : c.status === 'warning' ? '⚠' : '○';
+                let det = '<p>' + c.message + '</p>'; if (c.overlap_area_ha > 0) det += '<div class="check-overlap-box"><strong>Sobreposição:</strong> ' + c.overlap_area_ha.toFixed(2) + ' ha (' + c.overlap_percentage.toFixed(1) + '%)</div>';
+                const row = document.createElement('div'); row.className = 'check-row ' + c.status;
+                row.innerHTML = `<div class="check-header" onclick="this.parentElement.classList.toggle('open')"><div class="check-left"><div class="check-status-icon ${c.status}">${icon}</div><span class="check-name">${fmtCheck(c.check_type)}</span></div><div class="check-right"><span class="check-badge ${c.status}">${c.status}</span><span class="check-arrow">▼</span></div></div><div class="check-details">${det}</div>`;
                 list.appendChild(row);
             });
-            document.getElementById('metaTime').textContent = '⏱️ ' + d.processing_time_ms + 'ms'; document.getElementById('metaDate').textContent = '📅 ' + new Date(d.validated_at).toLocaleString('pt-BR');
-            updateColor(d.status); document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('metaTime').textContent = '⏱️ ' + d.processing_time_ms + 'ms';
+            document.getElementById('metaDate').textContent = '📅 ' + new Date(d.validated_at).toLocaleString('pt-BR');
+            updateColor(d.status);
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
         }
         
         async function downloadPDF() {
-            const key = document.getElementById('apiKey').value.trim(); if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+            const key = document.getElementById('apiKey').value.trim();
+            if (!currentPolygon) { showToast('Nenhum polígono'); return; }
             const btn = document.getElementById('pdfBtn'); btn.disabled = true; btn.textContent = '⏳ Gerando...';
             try {
                 const res = await fetch(API_URL + '/api/v1/reports/due-diligence/quick', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': key }, body: JSON.stringify(currentPolygon) });
                 if (!res.ok) throw new Error('Erro ao gerar PDF');
-                const blob = await res.blob(); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'greengate-report.pdf'; a.click(); URL.revokeObjectURL(url);
-            } catch (err) { showToast(err.message); } finally { btn.disabled = false; btn.textContent = '📄 Baixar Relatório PDF'; }
+                const blob = await res.blob(); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'greengate-report.pdf'; a.click();
+            } catch (err) { showToast(err.message); }
+            finally { btn.disabled = false; btn.textContent = '📄 Baixar Relatório PDF'; }
         }
         
         document.getElementById('validateBtn').onclick = validate;
