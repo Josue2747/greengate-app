@@ -115,9 +115,9 @@
         .fullscreen-btn {
             position: absolute;
             top: 15px;
-            left: 15px;
-            right: auto;
-            z-index: 10;
+            right: 15px;
+            left: auto;
+            z-index: 20;
             background: rgba(59, 130, 246, 0.9);
             border-color: var(--accent-blue);
             display: none;
@@ -663,7 +663,6 @@
                 currentGraphic = g;
                 view.goTo(g.geometry.extent.expand(1.5));
                 processGraphic(g);
-                
             };
             
             window.updateColor = function(status) {
