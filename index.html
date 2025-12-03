@@ -44,29 +44,30 @@
             justify-content: space-between;
             position: relative;
             z-index: 100;
+            height: 60px;
         }
 
         .logo { display: flex; align-items: center; gap: 0.75rem; }
         .logo-icon {
-            width: 40px; height: 40px;
+            width: 36px; height: 36px;
             background: rgba(255,255,255,0.15);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
-        .logo-text h1 { font-size: 1.25rem; font-weight: 700; }
-        .logo-text span { font-size: 0.7rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+        .logo-text h1 { font-size: 1.1rem; font-weight: 700; }
+        .logo-text span { font-size: 0.65rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
 
         .status-badge {
             display: flex; align-items: center; gap: 0.5rem;
             background: rgba(16, 185, 129, 0.2);
             border: 1px solid var(--accent-green);
-            padding: 0.4rem 0.75rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
         .status-dot {
-            width: 8px; height: 8px;
+            width: 6px; height: 6px;
             background: var(--accent-green);
             border-radius: 50%;
             animation: pulse 2s infinite;
@@ -77,7 +78,7 @@
         .main-container {
             display: grid;
             grid-template-columns: 1fr 400px;
-            height: calc(100vh - 56px);
+            height: calc(100vh - 60px);
             transition: all 0.3s ease;
         }
 
@@ -85,94 +86,84 @@
         .map-container { position: relative; width: 100%; height: 100%; }
         #map { width: 100%; height: 100%; }
 
-        /* CONTROLS - FIXED POSITIONING */
-        /* Grupo Esquerda: Lapis, Lixeira, GPS */
-        .map-controls-left {
+        /* CONTROLS - LEFT COLUMN (Custom Tools) */
+        .map-controls {
             position: absolute;
             top: 15px;
             left: 15px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            z-index: 10;
-        }
-
-        /* Grupo Direita: Fullscreen, Layers */
-        .map-controls-right {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 10;
-            align-items: flex-end; /* Garante alinhamento a direita */
+            z-index: 50; /* Higher than map widgets */
         }
 
         .map-btn {
-            width: 42px;
-            height: 42px;
+            width: 40px; height: 40px;
             background: rgba(26, 35, 50, 0.95);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-primary);
-            font-size: 18px;
+            font-size: 1.1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
-            position: relative; /* Remove absolute individual */
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         .map-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-green); }
-        .map-btn.active { background: var(--accent-green); border-color: var(--accent-green); }
+        .map-btn.active { background: var(--accent-green); border-color: var(--accent-green); color: white; }
 
-        /* Fullscreen Button - Escondido no Desktop por padrão */
-        #fullscreenBtn { display: none; }
-
+        /* Draw Options Sub-menu */
         .draw-options {
             display: none;
             position: absolute;
-            left: 50px;
+            left: 48px; /* To the right of the pencil */
             top: 0;
             flex-direction: row;
             gap: 6px;
             background: rgba(26, 35, 50, 0.95);
-            padding: 6px;
+            padding: 4px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         .draw-options.show { display: flex; }
-        .draw-options .map-btn { width: 36px; height: 36px; font-size: 16px; }
+        .draw-options .map-btn { width: 32px; height: 32px; font-size: 0.9rem; box-shadow: none; }
 
-        /* Botão Fechar Fullscreen */
+        /* Fullscreen Button - Mobile Only Position */
+        #fullscreenBtn { display: none; }
+
         .close-fullscreen {
             display: none;
             position: absolute;
             top: 15px;
-            right: 15px;
-            z-index: 20;
-            width: 42px;
-            height: 42px;
+            right: 60px; /* Left of the layers button */
+            z-index: 50;
+            width: 40px; height: 40px;
             background: var(--accent-red);
             border: none;
             border-radius: 8px;
             color: white;
-            font-size: 20px;
+            font-size: 1.2rem;
             cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         /* AREA INFO */
         .area-info {
             display: none;
             position: absolute;
-            bottom: 15px;
+            bottom: 25px; /* Above attribution */
             left: 15px;
             background: rgba(26, 35, 50, 0.95);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 12px 16px;
-            z-index: 10;
+            z-index: 40;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            min-width: 180px;
         }
         .area-info.show { display: block; }
         .area-info-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -183,13 +174,14 @@
         /* LEGEND */
         .map-legend {
             position: absolute;
-            bottom: 15px;
+            bottom: 25px;
             right: 15px;
             background: rgba(26, 35, 50, 0.95);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 12px;
-            z-index: 10;
+            z-index: 40;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         .map-legend-title { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
         .legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; }
@@ -261,12 +253,7 @@
             padding: 24px 16px;
             cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 8px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px;
         }
         .upload-area:hover { border-color: var(--accent-green); background: rgba(16,185,129,0.05); }
         .upload-area.has-file { border-color: var(--accent-green); background: rgba(16,185,129,0.1); }
@@ -298,10 +285,7 @@
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all 0.2s;
         }
         .btn-validate:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
@@ -310,13 +294,10 @@
         /* LOADING */
         .loading-overlay {
             display: none;
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(10,15,26,0.9);
             z-index: 1000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column; align-items: center; justify-content: center;
         }
         .loading-overlay.show { display: flex; }
         .loading-spinner {
@@ -335,9 +316,7 @@
         .result-card.show { display: block; }
 
         .result-banner {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             padding: 16px;
             border-radius: 10px;
             margin-bottom: 16px;
@@ -353,13 +332,8 @@
         .result-banner.warning .result-title { color: var(--accent-yellow); }
         .result-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
 
-        /* COMPLIANCE BAR */
-        .compliance-section {
-            background: var(--bg-primary);
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 16px;
-        }
+        /* COMPLIANCE BAR & CHECKS (Same as before) */
+        .compliance-section { background: var(--bg-primary); border-radius: 8px; padding: 14px; margin-bottom: 16px; }
         .compliance-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
         .compliance-bar { height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
         .compliance-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
@@ -369,138 +343,52 @@
         .compliance-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem; color: var(--text-muted); }
         .compliance-row strong { font-size: 1.2rem; color: var(--text-primary); }
 
-        /* CHECKS */
         .checks-list { display: flex; flex-direction: column; gap: 8px; }
-        .check-row {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-        }
+        .check-row { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
         .check-row.fail { border-color: rgba(239,68,68,0.4); }
         .check-row.warning { border-color: rgba(245,158,11,0.4); }
-        .check-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            cursor: pointer;
-        }
+        .check-header { display: flex; align-items: center; justify-content: space-between; padding: 12px; cursor: pointer; }
         .check-header:hover { background: var(--bg-card); }
         .check-left { display: flex; align-items: center; gap: 10px; }
-        .check-status-icon {
-            width: 26px; height: 26px;
-            border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem;
-        }
+        .check-status-icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
         .check-status-icon.pass { background: rgba(16,185,129,0.2); color: var(--accent-green); }
         .check-status-icon.fail { background: rgba(239,68,68,0.2); color: var(--accent-red); }
         .check-status-icon.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
         .check-status-icon.skip { background: rgba(107,114,128,0.2); color: var(--text-muted); }
         .check-name { font-size: 0.85rem; font-weight: 500; }
         .check-right { display: flex; align-items: center; gap: 8px; }
-        .check-badge {
-            font-size: 0.6rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            padding: 3px 6px;
-            border-radius: 4px;
-        }
+        .check-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; padding: 3px 6px; border-radius: 4px; }
         .check-badge.pass { background: rgba(16,185,129,0.2); color: var(--accent-green); }
         .check-badge.fail { background: rgba(239,68,68,0.2); color: var(--accent-red); }
         .check-badge.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
         .check-badge.skip { background: rgba(107,114,128,0.2); color: var(--text-muted); }
         .check-arrow { color: var(--text-muted); font-size: 0.7rem; transition: transform 0.2s; }
         .check-row.open .check-arrow { transform: rotate(180deg); }
-        .check-details {
-            display: none;
-            padding: 0 12px 12px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
+        .check-details { display: none; padding: 0 12px 12px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
         .check-row.open .check-details { display: block; }
-        .check-overlap-box {
-            background: rgba(239,68,68,0.1);
-            border-left: 3px solid var(--accent-red);
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 0 6px 6px 0;
-            font-size: 0.75rem;
-        }
+        .check-overlap-box { background: rgba(239,68,68,0.1); border-left: 3px solid var(--accent-red); padding: 10px; margin-top: 10px; border-radius: 0 6px 6px 0; font-size: 0.75rem; }
         .check-overlap-box strong { color: var(--accent-red); }
 
-        /* META */
-        .meta-row {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 12px;
-            margin-top: 12px;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
+        .meta-row { display: flex; justify-content: space-between; padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--border-color); font-size: 0.7rem; color: var(--text-muted); }
 
-        /* PDF BUTTON */
-        .btn-pdf {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+        .btn-pdf { width: 100%; padding: 12px; margin-top: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-pdf:hover { border-color: var(--accent-green); color: var(--accent-green); }
 
-        /* TOAST */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--accent-red);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            z-index: 1001;
-            opacity: 0;
-            transition: all 0.3s;
-        }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent-red); color: white; padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 1001; opacity: 0; transition: all 0.3s; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* FULLSCREEN LOGIC */
-        /* Desktop/Padrao: não afeta */
-        
-        /* Quando ativado Fullscreen */
+        /* FULLSCREEN MODE */
         body.fullscreen-mode .sidebar { display: none !important; }
-        body.fullscreen-mode .main-container { 
-            grid-template-columns: 1fr !important;
-            grid-template-rows: 1fr !important; /* IMPORTANTE: Garante que o mapa ocupe altura total */
-            height: 100vh !important; /* Força altura total */
-        }
-        body.fullscreen-mode .header { display: none !important; } /* Opcional: esconde header para imersão total */
+        body.fullscreen-mode .main-container { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; height: 100vh !important; }
+        body.fullscreen-mode .header { display: none !important; }
         body.fullscreen-mode .close-fullscreen { display: flex !important; align-items: center; justify-content: center; }
-        
-        /* Esconde controles normais da direita no modo fullscreen para usar o botão de fechar */
-        body.fullscreen-mode .map-controls-right { display: none !important; } 
 
         /* RESPONSIVE */
         @media (max-width: 900px) {
             .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
-            
-            /* No mobile, mostramos o botão de fullscreen */
+            .map-controls { top: 10px; left: 10px; }
             #fullscreenBtn { display: flex; }
-            
             .map-legend { display: none; }
             .logo-text span { display: none; }
         }
@@ -525,19 +413,17 @@
         <div class="map-container">
             <div id="map"></div>
             
-            <div class="map-controls-left">
-                <button class="map-btn" id="drawBtn">✏️</button>
-                <div class="draw-options" id="drawOptions">
-                    <button class="map-btn" id="drawPolygon">⬡</button>
-                    <button class="map-btn" id="drawRect">▢</button>
+            <div class="map-controls">
+                <div style="position: relative;">
+                    <button class="map-btn" id="drawBtn" title="Desenhar">✏️</button>
+                    <div class="draw-options" id="drawOptions">
+                        <button class="map-btn" id="drawPolygon" title="Polígono">⬡</button>
+                        <button class="map-btn" id="drawRect" title="Retângulo">▢</button>
+                    </div>
                 </div>
-                <button class="map-btn" id="clearBtn">🗑️</button>
-                <button class="map-btn" id="locateBtn">📍</button>
-            </div>
-            
-            <div class="map-controls-right">
-                <button class="map-btn" id="fullscreenBtn">⛶</button>
-                <button class="map-btn" id="layersBtn">🗺️</button>
+                <button class="map-btn" id="clearBtn" title="Limpar">🗑️</button>
+                <button class="map-btn" id="locateBtn" title="Localização">📍</button>
+                <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
             </div>
             
             <button class="close-fullscreen" id="closeFullscreen">✕</button>
@@ -646,12 +532,27 @@
         require([
             "esri/Map", "esri/views/MapView", "esri/layers/GraphicsLayer",
             "esri/widgets/Sketch/SketchViewModel", "esri/Graphic",
-            "esri/geometry/geometryEngine", "esri/geometry/Polygon"
-        ], function(Map, MapView, GraphicsLayer, SketchViewModel, Graphic, geometryEngine, Polygon) {
+            "esri/geometry/geometryEngine", "esri/geometry/Polygon",
+            "esri/widgets/BasemapGallery", "esri/widgets/Expand"
+        ], function(Map, MapView, GraphicsLayer, SketchViewModel, Graphic, geometryEngine, Polygon, BasemapGallery, Expand) {
             geoEngine = geometryEngine;
             
             map = new Map({ basemap: "satellite" });
             view = new MapView({ container: "map", map: map, center: [-55.5, -12.5], zoom: 6 });
+            
+            // MOVE DEFAULT ZOOM TO BOTTOM-RIGHT (Fixes the ghost issue behind buttons)
+            view.ui.move("zoom", "bottom-right");
+            
+            // ADD BASEMAP GALLERY (LAYERS) IN TOP-RIGHT
+            const bg = new BasemapGallery({ view: view });
+            const bgExpand = new Expand({
+                view: view,
+                content: bg,
+                expandIconClass: "esri-icon-basemap",
+                autoCollapse: true
+            });
+            view.ui.add(bgExpand, "top-right");
+
             graphicsLayer = new GraphicsLayer();
             map.add(graphicsLayer);
             
@@ -717,20 +618,12 @@
             document.getElementById('fullscreenBtn').onclick = function(e) { 
                 e.preventDefault(); 
                 document.body.classList.add('fullscreen-mode'); 
-                // Força resize do mapa
                 setTimeout(() => view.requestResize(), 100);
             };
             document.getElementById('closeFullscreen').onclick = function(e) { 
                 e.preventDefault(); 
                 document.body.classList.remove('fullscreen-mode'); 
                 setTimeout(() => view.requestResize(), 100);
-            };
-
-            // Toggle Layers (Basemap)
-            document.getElementById('layersBtn').onclick = function(e) {
-                e.preventDefault();
-                const current = map.basemap.id;
-                map.basemap = (current === 'satellite') ? 'hybrid' : 'satellite';
             };
         });
         
