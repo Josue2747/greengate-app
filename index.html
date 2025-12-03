@@ -78,14 +78,16 @@
             display: grid;
             grid-template-columns: 1fr 400px;
             height: calc(100vh - 56px);
+            transition: all 0.3s ease;
         }
 
         /* MAP */
-        .map-container { position: relative; }
+        .map-container { position: relative; width: 100%; height: 100%; }
         #map { width: 100%; height: 100%; }
 
-        /* MAP BUTTONS */
-        .map-buttons {
+        /* CONTROLS - FIXED POSITIONING */
+        /* Grupo Esquerda: Lapis, Lixeira, GPS */
+        .map-controls-left {
             position: absolute;
             top: 15px;
             left: 15px;
@@ -93,6 +95,18 @@
             flex-direction: column;
             gap: 8px;
             z-index: 10;
+        }
+
+        /* Grupo Direita: Fullscreen, Layers */
+        .map-controls-right {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+            align-items: flex-end; /* Garante alinhamento a direita */
         }
 
         .map-btn {
@@ -108,22 +122,13 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            position: relative; /* Remove absolute individual */
         }
         .map-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-green); }
         .map-btn.active { background: var(--accent-green); border-color: var(--accent-green); }
 
-        /* FULLSCREEN BTN - FIXED FOR DESKTOP */
-        .fullscreen-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            left: auto;
-            z-index: 10;
-            background: rgba(59, 130, 246, 0.9);
-            border-color: var(--accent-blue);
-            display: none !important; /* Escondido no Desktop */
-        }
-        .fullscreen-btn:hover { background: var(--accent-blue); }
+        /* Fullscreen Button - Escondido no Desktop por padrão */
+        #fullscreenBtn { display: none; }
 
         .draw-options {
             display: none;
@@ -140,6 +145,7 @@
         .draw-options.show { display: flex; }
         .draw-options .map-btn { width: 36px; height: 36px; font-size: 16px; }
 
+        /* Botão Fechar Fullscreen */
         .close-fullscreen {
             display: none;
             position: absolute;
@@ -247,7 +253,7 @@
             font-size: 1rem;
         }
 
-        /* FILE UPLOAD - FIXED ALIGNMENT */
+        /* UPLOAD AREA */
         .upload-area {
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
@@ -471,26 +477,30 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* FULLSCREEN */
+        /* FULLSCREEN LOGIC */
+        /* Desktop/Padrao: não afeta */
+        
+        /* Quando ativado Fullscreen */
         body.fullscreen-mode .sidebar { display: none !important; }
-        body.fullscreen-mode .main-container { grid-template-columns: 1fr !important; }
+        body.fullscreen-mode .main-container { 
+            grid-template-columns: 1fr !important;
+            grid-template-rows: 1fr !important; /* IMPORTANTE: Garante que o mapa ocupe altura total */
+            height: 100vh !important; /* Força altura total */
+        }
+        body.fullscreen-mode .header { display: none !important; } /* Opcional: esconde header para imersão total */
         body.fullscreen-mode .close-fullscreen { display: flex !important; align-items: center; justify-content: center; }
-        body.fullscreen-mode .fullscreen-btn { display: none !important; }
+        
+        /* Esconde controles normais da direita no modo fullscreen para usar o botão de fechar */
+        body.fullscreen-mode .map-controls-right { display: none !important; } 
 
         /* RESPONSIVE */
         @media (max-width: 900px) {
             .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
             
-            /* FIXED: Button moved to right on mobile */
-            .fullscreen-btn { 
-                display: flex !important; 
-                align-items: center; 
-                justify-content: center;
-                top: 15px;
-                right: 15px; 
-                left: auto;
-            }
+            /* No mobile, mostramos o botão de fullscreen */
+            #fullscreenBtn { display: flex; }
+            
             .map-legend { display: none; }
             .logo-text span { display: none; }
         }
@@ -515,7 +525,7 @@
         <div class="map-container">
             <div id="map"></div>
             
-            <div class="map-buttons">
+            <div class="map-controls-left">
                 <button class="map-btn" id="drawBtn">✏️</button>
                 <div class="draw-options" id="drawOptions">
                     <button class="map-btn" id="drawPolygon">⬡</button>
@@ -525,7 +535,11 @@
                 <button class="map-btn" id="locateBtn">📍</button>
             </div>
             
-            <button class="map-btn fullscreen-btn" id="fullscreenBtn">⛶</button>
+            <div class="map-controls-right">
+                <button class="map-btn" id="fullscreenBtn">⛶</button>
+                <button class="map-btn" id="layersBtn">🗺️</button>
+            </div>
+            
             <button class="close-fullscreen" id="closeFullscreen">✕</button>
             
             <div class="area-info" id="areaInfo">
@@ -624,7 +638,6 @@
             document.getElementById('drawOptions').classList.remove('show');
         }
         
-        // Restore API Key on load
         document.addEventListener('DOMContentLoaded', () => {
             const savedKey = localStorage.getItem('greengate_api_key');
             if (savedKey) document.getElementById('apiKey').value = savedKey;
@@ -657,18 +670,13 @@
             });
             
             window.processGraphic = function(g) {
-                // FIXED: Simplify geometry to handle self-intersections and correct processing
                 const simplifiedGeom = geoEngine.simplify(g.geometry);
-                
                 const area = Math.abs(geoEngine.geodesicArea(simplifiedGeom, "square-meters")) / 10000;
                 const c = simplifiedGeom.centroid;
                 document.getElementById('areaValue').textContent = area.toFixed(2);
                 document.getElementById('areaCoords').textContent = c.latitude.toFixed(4) + ', ' + c.longitude.toFixed(4);
                 document.getElementById('areaInfo').classList.add('show');
-                
-                // FIXED: Handle multiple rings (polygons with holes)
                 currentPolygon = { type: "Polygon", coordinates: simplifiedGeom.rings };
-                
                 document.getElementById('validateBtn').disabled = false;
             };
             
@@ -680,7 +688,6 @@
                 currentGraphic = g;
                 view.goTo(g.geometry.extent.expand(1.5));
                 processGraphic(g);
-                
             };
             
             window.updateColor = function(status) {
@@ -690,7 +697,7 @@
                 currentGraphic.symbol = { type: "simple-fill", color: col[0], outline: { color: col[1], width: 2 } };
             };
             
-            // Buttons
+            // Buttons Logic
             document.getElementById('drawBtn').onclick = function(e) {
                 e.preventDefault();
                 const opts = document.getElementById('drawOptions');
@@ -700,15 +707,33 @@
             document.getElementById('drawPolygon').onclick = function(e) { e.preventDefault(); clearAll(); sketchVM.create("polygon"); document.getElementById('drawOptions').classList.remove('show'); };
             document.getElementById('drawRect').onclick = function(e) { e.preventDefault(); clearAll(); sketchVM.create("rectangle"); document.getElementById('drawOptions').classList.remove('show'); };
             document.getElementById('clearBtn').onclick = function(e) { e.preventDefault(); clearAll(); };
+            
             document.getElementById('locateBtn').onclick = function(e) {
                 e.preventDefault();
                 navigator.geolocation && navigator.geolocation.getCurrentPosition(p => view.goTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 14 }));
             };
-            document.getElementById('fullscreenBtn').onclick = function(e) { e.preventDefault(); document.body.classList.add('fullscreen-mode'); };
-            document.getElementById('closeFullscreen').onclick = function(e) { e.preventDefault(); document.body.classList.remove('fullscreen-mode'); };
+            
+            // Toggle Fullscreen
+            document.getElementById('fullscreenBtn').onclick = function(e) { 
+                e.preventDefault(); 
+                document.body.classList.add('fullscreen-mode'); 
+                // Força resize do mapa
+                setTimeout(() => view.requestResize(), 100);
+            };
+            document.getElementById('closeFullscreen').onclick = function(e) { 
+                e.preventDefault(); 
+                document.body.classList.remove('fullscreen-mode'); 
+                setTimeout(() => view.requestResize(), 100);
+            };
+
+            // Toggle Layers (Basemap)
+            document.getElementById('layersBtn').onclick = function(e) {
+                e.preventDefault();
+                const current = map.basemap.id;
+                map.basemap = (current === 'satellite') ? 'hybrid' : 'satellite';
+            };
         });
         
-        // Toggle key
         document.getElementById('toggleKey').onclick = function(e) {
             e.preventDefault();
             const inp = document.getElementById('apiKey');
@@ -716,7 +741,6 @@
             this.textContent = inp.type === 'password' ? '👁️' : '🔒';
         };
         
-        // File upload
         document.getElementById('fileInput').onchange = function(e) {
             const f = e.target.files[0];
             if (!f) return;
@@ -753,17 +777,12 @@
             const key = document.getElementById('apiKey').value.trim();
             if (!key) { showToast('Insira a API Key'); return; }
             if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
-            
-            // Save API Key
             localStorage.setItem('greengate_api_key', key);
-            
             document.getElementById('loadingOverlay').classList.add('show');
             document.getElementById('validateBtn').disabled = true;
-            
             const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando TIs...', 'Verificando Embargos...', 'Analisando UCs...', 'Processando...'];
             let i = 0;
             const iv = setInterval(() => { if (i < steps.length) document.getElementById('loadingStep').textContent = steps[i++]; }, 2000);
-            
             try {
                 const res = await fetch(API_URL + '/api/v1/validations/quick', {
                     method: 'POST',
@@ -774,13 +793,8 @@
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.detail || 'Erro');
                 showResult(data);
-            } catch (err) {
-                clearInterval(iv);
-                showToast(err.message);
-            } finally {
-                document.getElementById('loadingOverlay').classList.remove('show');
-                document.getElementById('validateBtn').disabled = false;
-            }
+            } catch (err) { clearInterval(iv); showToast(err.message); } 
+            finally { document.getElementById('loadingOverlay').classList.remove('show'); document.getElementById('validateBtn').disabled = false; }
         }
         
         function showResult(d) {
@@ -790,13 +804,11 @@
             document.getElementById('resultIcon').textContent = d.status === 'approved' ? '✓' : d.status === 'rejected' ? '✗' : '⚠';
             document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
             document.getElementById('resultSubtitle').textContent = 'Índice: ' + d.risk_score;
-            
             const fill = document.getElementById('complianceFill');
             fill.style.width = d.risk_score + '%';
             fill.className = 'compliance-fill ' + (d.risk_score >= 70 ? 'high' : d.risk_score >= 40 ? 'medium' : 'low');
             document.getElementById('complianceValue').textContent = d.risk_score;
             document.getElementById('complianceLabel').textContent = d.risk_score >= 90 ? 'Excelente' : d.risk_score >= 70 ? 'Bom' : d.risk_score >= 40 ? 'Regular' : 'Crítico';
-            
             const list = document.getElementById('checksList');
             list.innerHTML = '';
             d.checks.forEach(c => {
@@ -809,10 +821,8 @@
                 row.innerHTML = '<div class="check-header" onclick="this.parentElement.classList.toggle(\'open\')"><div class="check-left"><div class="check-status-icon ' + s + '">' + icon + '</div><span class="check-name">' + formatCheck(c.check_type) + '</span></div><div class="check-right"><span class="check-badge ' + s + '">' + s + '</span><span class="check-arrow">▼</span></div></div><div class="check-details">' + details + '</div>';
                 list.appendChild(row);
             });
-            
             document.getElementById('metaTime').textContent = '⏱️ ' + d.processing_time_ms + 'ms';
             document.getElementById('metaDate').textContent = '📅 ' + new Date(d.validated_at).toLocaleString('pt-BR');
-            
             updateColor(d.status);
             document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
         }
