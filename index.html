@@ -2,11 +2,16 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenGate - Geo-Compliance Platform</title>
     
+    <!-- ESRI ArcGIS CSS -->
     <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/dark/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -23,16 +28,17 @@
             --accent-red: #ef4444;
             --accent-yellow: #f59e0b;
             --accent-blue: #3b82f6;
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
         
         /* HEADER */
@@ -42,11 +48,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: var(--shadow-lg);
             position: relative;
             z-index: 100;
         }
         
         .logo { display: flex; align-items: center; gap: 0.75rem; }
+        
         .logo-icon {
             width: 40px; height: 40px;
             background: rgba(255,255,255,0.15);
@@ -54,7 +62,8 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.5rem;
         }
-        .logo-text h1 { font-size: 1.25rem; font-weight: 700; }
+        
+        .logo-text h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.5px; }
         .logo-text span { font-size: 0.7rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
         
         .status-badge {
@@ -63,430 +72,309 @@
             border: 1px solid var(--accent-green);
             padding: 0.4rem 0.75rem;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.75rem; font-weight: 500;
         }
+        
         .status-dot {
             width: 8px; height: 8px;
             background: var(--accent-green);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
-        /* LAYOUT */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.95); }
+        }
+        
+        /* MAIN LAYOUT */
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            height: calc(100vh - 56px);
+            grid-template-columns: 1fr 420px;
+            height: calc(100vh - 60px);
         }
         
         /* MAP */
-        .map-container { position: relative; }
+        .map-container { position: relative; width: 100%; height: 100%; }
         #map { width: 100%; height: 100%; }
         
-        /* MAP BUTTONS */
-        .map-buttons {
+        .map-controls {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 10;
+            top: 1rem; left: 1rem;
+            z-index: 50;
+            display: flex; flex-direction: column; gap: 0.5rem;
         }
         
         .map-btn {
-            width: 42px;
-            height: 42px;
-            background: rgba(26, 35, 50, 0.95);
+            width: 40px; height: 40px;
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-primary);
-            font-size: 18px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
             transition: all 0.2s;
         }
+        
         .map-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-green); }
         .map-btn.active { background: var(--accent-green); border-color: var(--accent-green); }
         
-        .fullscreen-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            left: auto;
-            z-index: 20;
-            background: rgba(59, 130, 246, 0.9);
-            border-color: var(--accent-blue);
-            display: none;
-        }
-        .fullscreen-btn:hover { background: var(--accent-blue); }
-        
-        .draw-options {
-            display: none;
-            position: absolute;
-            left: 50px;
-            top: 0;
-            flex-direction: row;
-            gap: 6px;
-            background: rgba(26, 35, 50, 0.95);
-            padding: 6px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-        .draw-options.show { display: flex; }
-        .draw-options .map-btn { width: 36px; height: 36px; font-size: 16px; }
-        
-        .close-fullscreen {
-            display: none;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 20;
-            width: 42px;
-            height: 42px;
-            background: var(--accent-red);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        
-        /* AREA INFO */
+        /* Area Info */
         .area-info {
-            display: none;
             position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(26, 35, 50, 0.95);
+            bottom: 1rem; left: 1rem;
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px 16px;
-            z-index: 10;
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 200px;
+            z-index: 50;
+            display: none;
         }
-        .area-info.show { display: block; }
-        .area-info-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .area-info-value { font-size: 1.4rem; font-weight: 700; color: var(--accent-green); margin-top: 4px; }
-        .area-info-value span { font-size: 0.85rem; font-weight: 400; color: var(--text-secondary); }
-        .area-info-coords { font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; font-family: monospace; }
         
-        /* LEGEND */
+        .area-info.show { display: block; }
+        .area-info h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .area-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-green); }
+        .area-value span { font-size: 0.875rem; color: var(--text-secondary); font-weight: 400; }
+        .area-coords { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; font-family: monospace; }
+        
+        /* Legend */
         .map-legend {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: rgba(26, 35, 50, 0.95);
+            bottom: 1rem; right: 1rem;
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
-            z-index: 10;
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 50;
         }
-        .map-legend-title { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .legend-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; }
-        .legend-dot { width: 14px; height: 14px; border-radius: 3px; border: 2px solid; }
-        .legend-dot.neutral { background: rgba(59,130,246,0.3); border-color: #3b82f6; }
-        .legend-dot.approved { background: rgba(16,185,129,0.3); border-color: #10b981; }
-        .legend-dot.warning { background: rgba(245,158,11,0.3); border-color: #f59e0b; }
-        .legend-dot.rejected { background: rgba(239,68,68,0.3); border-color: #ef4444; }
+        
+        .map-legend h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+        .legend-color { width: 16px; height: 16px; border-radius: 4px; border: 2px solid; }
+        .legend-color.approved { background: rgba(16,185,129,0.3); border-color: #10b981; }
+        .legend-color.rejected { background: rgba(239,68,68,0.3); border-color: #ef4444; }
+        .legend-color.warning { background: rgba(245,158,11,0.3); border-color: #f59e0b; }
+        .legend-color.neutral { background: rgba(59,130,246,0.3); border-color: #3b82f6; }
         
         /* SIDEBAR */
         .sidebar {
             background: var(--bg-secondary);
             border-left: 1px solid var(--border-color);
-            overflow-y: auto;
-            padding: 20px;
+            display: flex; flex-direction: column;
+            overflow: hidden;
         }
         
-        /* CARDS */
+        .sidebar-scroll { flex: 1; overflow-y: auto; padding: 1.25rem; }
+        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: var(--bg-primary); }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        
+        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        .card-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .card-title-icon {
-            font-size: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
         }
         
-        /* INPUT */
-        .input-wrapper { position: relative; }
-        .input-wrapper input {
+        .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+        .card-icon {
+            width: 32px; height: 32px;
+            background: rgba(16,185,129,0.15);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+        .card-title { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Input */
+        .input-group { position: relative; }
+        .input-group input {
             width: 100%;
-            padding: 12px 40px 12px 14px;
+            padding: 0.875rem 1rem;
+            padding-right: 2.5rem;
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-primary);
             font-size: 0.875rem;
+            transition: all 0.2s;
         }
-        .input-wrapper input:focus { outline: none; border-color: var(--accent-green); }
-        .input-wrapper input::placeholder { color: var(--text-muted); }
-        .input-eye {
+        .input-group input:focus { outline: none; border-color: var(--accent-green); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+        .input-group input::placeholder { color: var(--text-muted); }
+        .input-toggle {
             position: absolute;
-            right: 12px;
-            top: 50%;
+            right: 0.75rem; top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
+            background: none; border: none;
             color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
+            cursor: pointer; font-size: 1rem;
         }
         
-        /* FILE UPLOAD - SIMPLIFIED */
-        .upload-area {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--border-color);
             border-radius: 8px;
-            padding: 24px 16px;
+            padding: 1.5rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .upload-area:hover { border-color: var(--accent-green); background: rgba(16,185,129,0.05); }
-        .upload-area.has-file { border-color: var(--accent-green); background: rgba(16,185,129,0.1); }
-        .upload-area input { display: none; }
-        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
-        .upload-text { font-size: 0.875rem; color: var(--text-secondary); }
-        .upload-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
-        .upload-filename {
-            display: none;
-            margin-top: 12px;
-            padding: 8px 12px;
-            background: var(--bg-card);
-            border-radius: 6px;
-            font-size: 0.75rem;
-            color: var(--accent-green);
-            word-break: break-all;
-        }
-        .upload-filename.show { display: block; }
+        .file-upload:hover { border-color: var(--accent-green); background: rgba(16,185,129,0.05); }
+        .file-upload.has-file { border-color: var(--accent-green); background: rgba(16,185,129,0.1); }
+        .file-upload input { display: none; }
+        .file-upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .file-upload-text { font-size: 0.875rem; color: var(--text-secondary); }
+        .file-upload-text strong { color: var(--accent-green); }
+        .file-name { margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: var(--bg-primary); border-radius: 6px; font-size: 0.75rem; color: var(--accent-green); display: none; }
+        .file-name.show { display: block; }
         
-        /* BUTTON */
-        .btn-validate {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 0.95rem;
-            font-weight: 600;
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 1rem;
+            border: none; border-radius: 10px;
+            font-size: 0.9375rem; font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
         }
-        .btn-validate:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
-        .btn-validate:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+        }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
-        /* LOADING */
+        /* Loading */
         .loading-overlay {
             display: none;
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(10,15,26,0.9);
             z-index: 1000;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            align-items: center; justify-content: center;
         }
         .loading-overlay.show { display: flex; }
         .loading-spinner {
-            width: 50px; height: 50px;
+            width: 60px; height: 60px;
             border: 3px solid var(--border-color);
             border-top-color: var(--accent-green);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { margin-top: 20px; color: var(--text-secondary); }
-        .loading-step { margin-top: 8px; color: var(--accent-green); font-weight: 500; }
+        .loading-text { margin-top: 1.5rem; font-size: 1rem; color: var(--text-secondary); }
+        .loading-step { margin-top: 0.5rem; font-size: 0.875rem; color: var(--accent-green); font-weight: 500; }
+        .loading-progress { width: 200px; height: 4px; background: var(--border-color); border-radius: 2px; margin-top: 1rem; overflow: hidden; }
+        .loading-progress-bar { height: 100%; background: var(--accent-green); border-radius: 2px; animation: progress 2s ease-in-out infinite; }
+        @keyframes progress { 0% { width: 0%; } 50% { width: 70%; } 100% { width: 100%; } }
         
-        /* RESULTS */
+        /* Results */
         .result-card { display: none; }
         .result-card.show { display: block; }
         
-        .result-banner {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
+        .result-header {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1.25rem; border-radius: 10px; margin-bottom: 1rem;
         }
-        .result-banner.approved { background: rgba(16,185,129,0.15); border: 1px solid var(--accent-green); }
-        .result-banner.rejected { background: rgba(239,68,68,0.15); border: 1px solid var(--accent-red); }
-        .result-banner.warning { background: rgba(245,158,11,0.15); border: 1px solid var(--accent-yellow); }
+        .result-header.approved { background: linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(5,150,105,0.1) 100%); border: 1px solid var(--accent-green); }
+        .result-header.rejected { background: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(185,28,28,0.1) 100%); border: 1px solid var(--accent-red); }
+        .result-header.warning { background: linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(180,83,9,0.1) 100%); border: 1px solid var(--accent-yellow); }
         
-        .result-icon { font-size: 2rem; }
-        .result-title { font-size: 1.1rem; font-weight: 700; }
-        .result-banner.approved .result-title { color: var(--accent-green); }
-        .result-banner.rejected .result-title { color: var(--accent-red); }
-        .result-banner.warning .result-title { color: var(--accent-yellow); }
-        .result-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
-        
-        /* COMPLIANCE BAR */
-        .compliance-section {
-            background: var(--bg-primary);
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 16px;
+        .result-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
         }
-        .compliance-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .compliance-bar { height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
-        .compliance-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+        .result-header.approved .result-icon { background: rgba(16,185,129,0.2); }
+        .result-header.rejected .result-icon { background: rgba(239,68,68,0.2); }
+        .result-header.warning .result-icon { background: rgba(245,158,11,0.2); }
+        
+        .result-info h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .result-header.approved h3 { color: var(--accent-green); }
+        .result-header.rejected h3 { color: var(--accent-red); }
+        .result-header.warning h3 { color: var(--accent-yellow); }
+        .result-score { font-size: 0.875rem; color: var(--text-secondary); }
+        
+        /* Compliance Index */
+        .compliance-index { background: var(--bg-primary); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+        .compliance-index h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+        .compliance-bar { height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
+        .compliance-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
         .compliance-fill.high { background: var(--accent-green); }
         .compliance-fill.medium { background: var(--accent-yellow); }
         .compliance-fill.low { background: var(--accent-red); }
-        .compliance-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem; color: var(--text-muted); }
-        .compliance-row strong { font-size: 1.2rem; color: var(--text-primary); }
+        .compliance-value { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); }
+        .compliance-value strong { color: var(--text-primary); font-size: 1.25rem; }
         
-        /* CHECKS */
-        .checks-list { display: flex; flex-direction: column; gap: 8px; }
+        /* Checks Accordion */
+        .checks-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .check-item { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.2s; }
+        .check-item:hover { border-color: var(--text-muted); }
+        .check-item.fail { border-color: rgba(239,68,68,0.5); }
+        .check-item.warning { border-color: rgba(245,158,11,0.5); }
         
-        .check-row {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .check-row.fail { border-color: rgba(239,68,68,0.4); }
-        .check-row.warning { border-color: rgba(245,158,11,0.4); }
-        
-        .check-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            cursor: pointer;
-        }
+        .check-header { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 1rem; cursor: pointer; transition: background 0.2s; }
         .check-header:hover { background: var(--bg-card); }
+        .check-left { display: flex; align-items: center; gap: 0.75rem; }
         
-        .check-left { display: flex; align-items: center; gap: 10px; }
-        .check-status-icon {
-            width: 26px; height: 26px;
-            border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem;
-        }
-        .check-status-icon.pass { background: rgba(16,185,129,0.2); color: var(--accent-green); }
-        .check-status-icon.fail { background: rgba(239,68,68,0.2); color: var(--accent-red); }
-        .check-status-icon.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
-        .check-status-icon.skip { background: rgba(107,114,128,0.2); color: var(--text-muted); }
+        .check-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
+        .check-icon.pass { background: rgba(16,185,129,0.2); color: var(--accent-green); }
+        .check-icon.fail { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+        .check-icon.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
+        .check-icon.skip { background: rgba(107,114,128,0.2); color: var(--text-muted); }
         
-        .check-name { font-size: 0.85rem; font-weight: 500; }
+        .check-name { font-size: 0.875rem; font-weight: 500; }
         
-        .check-right { display: flex; align-items: center; gap: 8px; }
-        .check-badge {
-            font-size: 0.6rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            padding: 3px 6px;
-            border-radius: 4px;
-        }
-        .check-badge.pass { background: rgba(16,185,129,0.2); color: var(--accent-green); }
-        .check-badge.fail { background: rgba(239,68,68,0.2); color: var(--accent-red); }
-        .check-badge.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
-        .check-badge.skip { background: rgba(107,114,128,0.2); color: var(--text-muted); }
+        .check-status { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.25rem 0.5rem; border-radius: 4px; }
+        .check-status.pass { background: rgba(16,185,129,0.2); color: var(--accent-green); }
+        .check-status.fail { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+        .check-status.warning { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
+        .check-status.skip { background: rgba(107,114,128,0.2); color: var(--text-muted); }
         
-        .check-arrow { color: var(--text-muted); font-size: 0.7rem; transition: transform 0.2s; }
-        .check-row.open .check-arrow { transform: rotate(180deg); }
+        .check-expand { color: var(--text-muted); transition: transform 0.2s; }
+        .check-item.open .check-expand { transform: rotate(180deg); }
         
-        .check-details {
-            display: none;
-            padding: 0 12px 12px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-        .check-row.open .check-details { display: block; }
+        .check-details { display: none; padding: 0 1rem 1rem; font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; }
+        .check-item.open .check-details { display: block; }
         
-        .check-overlap-box {
-            background: rgba(239,68,68,0.1);
-            border-left: 3px solid var(--accent-red);
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 0 6px 6px 0;
-            font-size: 0.75rem;
-        }
-        .check-overlap-box strong { color: var(--accent-red); }
+        .check-overlap { background: rgba(239,68,68,0.1); border-left: 3px solid var(--accent-red); padding: 0.75rem; margin-top: 0.75rem; border-radius: 0 6px 6px 0; }
+        .check-overlap strong { color: var(--accent-red); }
         
-        /* META */
-        .meta-row {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 12px;
-            margin-top: 12px;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
+        /* Meta Info */
+        .meta-info { display: flex; justify-content: space-between; padding-top: 1rem; margin-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted); }
         
-        /* PDF BUTTON */
-        .btn-pdf {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+        /* PDF Button */
+        .btn-pdf { margin-top: 1rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-secondary); }
         .btn-pdf:hover { border-color: var(--accent-green); color: var(--accent-green); }
         
-        /* TOAST */
-        .toast {
+        /* Error Toast */
+        .error-toast {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
+            bottom: 2rem; left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: var(--accent-red);
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.875rem; font-weight: 500;
             z-index: 1001;
             opacity: 0;
             transition: all 0.3s;
+            max-width: 90%;
         }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .error-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         
-        /* FULLSCREEN */
-        body.fullscreen-mode .sidebar { display: none !important; }
-        body.fullscreen-mode .main-container { grid-template-columns: 1fr !important; }
-        body.fullscreen-mode .close-fullscreen { display: flex !important; align-items: center; justify-content: center; }
-        body.fullscreen-mode .fullscreen-btn { display: none !important; }
-        
-        /* RESPONSIVE */
+        /* Responsive */
         @media (max-width: 900px) {
             .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
-            .fullscreen-btn { display: flex !important; align-items: center; justify-content: center; }
-            .map-legend { display: none; }
-            .logo-text span { display: none; }
         }
     </style>
 </head>
@@ -509,319 +397,396 @@
         <div class="map-container">
             <div id="map"></div>
             
-            <div class="map-buttons">
-                <button class="map-btn" id="drawBtn">✏️</button>
-                <div class="draw-options" id="drawOptions">
-                    <button class="map-btn" id="drawPolygon">⬡</button>
-                    <button class="map-btn" id="drawRect">▢</button>
-                </div>
-                <button class="map-btn" id="clearBtn">🗑️</button>
-                <button class="map-btn" id="locateBtn">📍</button>
+            <div class="map-controls">
+                <button class="map-btn" id="drawBtn" title="Desenhar polígono">✏️</button>
+                <button class="map-btn" id="clearBtn" title="Limpar mapa">🗑️</button>
+                <button class="map-btn" id="locateBtn" title="Minha localização">📍</button>
             </div>
             
-            <button class="map-btn fullscreen-btn" id="fullscreenBtn">⛶</button>
-            <button class="close-fullscreen" id="closeFullscreen">✕</button>
-            
             <div class="area-info" id="areaInfo">
-                <div class="area-info-label">Área Selecionada</div>
-                <div class="area-info-value"><span id="areaValue">0</span> <span>ha</span></div>
-                <div class="area-info-coords" id="areaCoords">--.----, --.----</div>
+                <h4>Área Selecionada</h4>
+                <div class="area-value"><span id="areaValue">0</span> <span>hectares</span></div>
+                <div class="area-coords" id="areaCoords">--.----, --.----</div>
             </div>
             
             <div class="map-legend">
-                <div class="map-legend-title">Legenda</div>
-                <div class="legend-row"><div class="legend-dot neutral"></div>Selecionada</div>
-                <div class="legend-row"><div class="legend-dot approved"></div>Conforme</div>
-                <div class="legend-row"><div class="legend-dot warning"></div>Atenção</div>
-                <div class="legend-row"><div class="legend-dot rejected"></div>Não conforme</div>
+                <h4>Legenda</h4>
+                <div class="legend-item"><div class="legend-color neutral"></div><span>Área selecionada</span></div>
+                <div class="legend-item"><div class="legend-color approved"></div><span>Conforme</span></div>
+                <div class="legend-item"><div class="legend-color warning"></div><span>Atenção</span></div>
+                <div class="legend-item"><div class="legend-color rejected"></div><span>Não conforme</span></div>
             </div>
         </div>
         
-        <div class="sidebar">
-            <div class="card">
-                <div class="card-title"><span class="card-title-icon">🔑</span> Autenticação</div>
-                <div class="input-wrapper">
-                    <input type="password" id="apiKey" placeholder="Cole sua API Key">
-                    <button class="input-eye" id="toggleKey">👁️</button>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-title"><span class="card-title-icon">📁</span> Upload de Arquivo</div>
-                <label class="upload-area" id="uploadArea">
-                    <input type="file" id="fileInput" accept=".json,.geojson">
-                    <div class="upload-icon">📄</div>
-                    <div class="upload-text">Toque para selecionar</div>
-                    <div class="upload-hint">GeoJSON ou JSON</div>
-                </label>
-                <div class="upload-filename" id="fileName"></div>
-            </div>
-            
-            <button class="btn-validate" id="validateBtn" disabled>
-                🔍 Validar Área
-            </button>
-            
-            <div class="card result-card" id="resultCard">
-                <div class="result-banner" id="resultBanner">
-                    <div class="result-icon" id="resultIcon">✓</div>
-                    <div>
-                        <div class="result-title" id="resultTitle">Conforme</div>
-                        <div class="result-subtitle" id="resultSubtitle">Índice: 100</div>
+        <aside class="sidebar">
+            <div class="sidebar-scroll">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔑</div>
+                        <span class="card-title">Autenticação</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="apiKey" placeholder="Cole sua API Key aqui">
+                        <button class="input-toggle" id="toggleKey">👁️</button>
                     </div>
                 </div>
                 
-                <div class="compliance-section">
-                    <div class="compliance-label">Índice de Conformidade</div>
-                    <div class="compliance-bar"><div class="compliance-fill" id="complianceFill"></div></div>
-                    <div class="compliance-row">
-                        <span><strong id="complianceValue">100</strong>/100</span>
-                        <span id="complianceLabel">Excelente</span>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📁</div>
+                        <span class="card-title">Upload de Arquivo</span>
                     </div>
+                    <label class="file-upload" id="fileUpload">
+                        <input type="file" id="fileInput" accept=".json,.geojson">
+                        <div class="file-upload-icon">📄</div>
+                        <div class="file-upload-text">Arraste um arquivo ou <strong>clique para selecionar</strong></div>
+                        <div class="file-upload-text" style="font-size: 0.75rem; margin-top: 0.25rem;">Formatos: GeoJSON, JSON</div>
+                    </label>
+                    <div class="file-name" id="fileName"></div>
                 </div>
                 
-                <div class="checks-list" id="checksList"></div>
+                <button class="btn btn-primary" id="validateBtn" disabled>
+                    <span>🔍</span> Validar Área
+                </button>
                 
-                <div class="meta-row">
-                    <span id="metaTime">⏱️ --ms</span>
-                    <span id="metaDate">📅 --/--/----</span>
+                <div class="card result-card" id="resultCard">
+                    <div class="result-header" id="resultHeader">
+                        <div class="result-icon" id="resultIcon">✓</div>
+                        <div class="result-info">
+                            <h3 id="resultStatus">Conforme</h3>
+                            <div class="result-score" id="resultScore">Índice de Conformidade: 100</div>
+                        </div>
+                    </div>
+                    
+                    <div class="compliance-index">
+                        <h4>Índice de Conformidade</h4>
+                        <div class="compliance-bar"><div class="compliance-fill" id="complianceFill"></div></div>
+                        <div class="compliance-value">
+                            <span><strong id="complianceValue">100</strong>/100</span>
+                            <span id="complianceLabel">Excelente</span>
+                        </div>
+                    </div>
+                    
+                    <div class="checks-list" id="checksList"></div>
+                    
+                    <div class="meta-info" id="metaInfo">
+                        <span id="metaTime">⏱️ --ms</span>
+                        <span id="metaDate">📅 --/--/----</span>
+                    </div>
+                    
+                    <button class="btn btn-pdf" id="pdfBtn"><span>📄</span> Baixar Relatório PDF</button>
                 </div>
-                
-                <button class="btn-pdf" id="pdfBtn">📄 Baixar Relatório PDF</button>
             </div>
-        </div>
+        </aside>
     </div>
     
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text">Validando área...</div>
-        <div class="loading-step" id="loadingStep">Conectando</div>
+        <div class="loading-step" id="loadingStep">Conectando ao servidor</div>
+        <div class="loading-progress"><div class="loading-progress-bar"></div></div>
     </div>
     
-    <div class="toast" id="toast"></div>
+    <div class="error-toast" id="errorToast"></div>
     
     <script src="https://js.arcgis.com/4.28/"></script>
+    
     <script>
         const API_URL = 'https://greengate-production.up.railway.app';
-        let map, view, graphicsLayer, sketchVM, currentPolygon = null, currentGraphic = null, geoEngine;
-        
-        function clearAll() {
-            currentPolygon = null;
-            currentGraphic = null;
-            if (graphicsLayer) graphicsLayer.removeAll();
-            document.getElementById('areaInfo').classList.remove('show');
-            document.getElementById('resultCard').classList.remove('show');
-            document.getElementById('validateBtn').disabled = true;
-            document.getElementById('uploadArea').classList.remove('has-file');
-            document.getElementById('fileName').classList.remove('show');
-            document.getElementById('fileInput').value = '';
-            document.getElementById('drawBtn').classList.remove('active');
-            document.getElementById('drawOptions').classList.remove('show');
-        }
+        let map, view, graphicsLayer, sketchViewModel;
+        let currentPolygon = null, currentGraphic = null;
         
         require([
             "esri/Map", "esri/views/MapView", "esri/layers/GraphicsLayer",
-            "esri/widgets/Sketch/SketchViewModel", "esri/Graphic",
-            "esri/geometry/geometryEngine", "esri/geometry/Polygon"
-        ], function(Map, MapView, GraphicsLayer, SketchViewModel, Graphic, geometryEngine, Polygon) {
-            geoEngine = geometryEngine;
+            "esri/widgets/Sketch/SketchViewModel", "esri/widgets/BasemapGallery",
+            "esri/widgets/Expand", "esri/Graphic", "esri/geometry/geometryEngine",
+            "esri/geometry/Polygon"
+        ], function(Map, MapView, GraphicsLayer, SketchViewModel, BasemapGallery, Expand, Graphic, geometryEngine, Polygon) {
             
             map = new Map({ basemap: "satellite" });
-            view = new MapView({ container: "map", map: map, center: [-55.5, -12.5], zoom: 6 });
+            
+            view = new MapView({
+                container: "map", map: map,
+                center: [-55.5, -12.5], zoom: 6
+            });
+            
             graphicsLayer = new GraphicsLayer();
             map.add(graphicsLayer);
             
-            sketchVM = new SketchViewModel({
+            sketchViewModel = new SketchViewModel({
                 view: view, layer: graphicsLayer,
-                polygonSymbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } }
-            });
-            
-            sketchVM.on("create", function(e) {
-                if (e.state === "complete") {
-                    currentGraphic = e.graphic;
-                    processGraphic(e.graphic);
-                    document.getElementById('drawOptions').classList.remove('show');
-                    document.getElementById('drawBtn').classList.remove('active');
+                polygonSymbol: {
+                    type: "simple-fill",
+                    color: [59, 130, 246, 0.3],
+                    outline: { color: [59, 130, 246], width: 2 }
                 }
             });
             
-            window.processGraphic = function(g) {
-                const geom = g.geometry;
-                const area = Math.abs(geoEngine.geodesicArea(geom, "square-meters")) / 10000;
-                const c = geom.centroid;
-                document.getElementById('areaValue').textContent = area.toFixed(2);
-                document.getElementById('areaCoords').textContent = c.latitude.toFixed(4) + ', ' + c.longitude.toFixed(4);
+            const basemapGallery = new BasemapGallery({ view: view });
+            const bgExpand = new Expand({ view: view, content: basemapGallery, expandIconClass: "esri-icon-basemap" });
+            view.ui.add(bgExpand, "top-right");
+            
+            sketchViewModel.on("create", function(event) {
+                if (event.state === "complete") {
+                    currentGraphic = event.graphic;
+                    processGraphic(event.graphic, geometryEngine);
+                }
+            });
+            
+            window.processGraphic = function(graphic, geoEngine) {
+                const geometry = graphic.geometry;
+                const areaM2 = geoEngine.geodesicArea(geometry, "square-meters");
+                const areaHa = areaM2 / 10000;
+                const centroid = geometry.centroid;
+                
+                document.getElementById('areaValue').textContent = areaHa.toFixed(2);
+                document.getElementById('areaCoords').textContent = `${centroid.latitude.toFixed(4)}, ${centroid.longitude.toFixed(4)}`;
                 document.getElementById('areaInfo').classList.add('show');
-                currentPolygon = { type: "Polygon", coordinates: [geom.rings[0].map(p => [p[0], p[1]])] };
+                
+                const rings = geometry.rings[0].map(coord => [coord[0], coord[1]]);
+                currentPolygon = { type: "Polygon", coordinates: [rings] };
                 document.getElementById('validateBtn').disabled = false;
             };
             
-            window.loadGeoJSON = function(geom) {
-                clearAll();
-                const poly = new Polygon({ rings: geom.coordinates, spatialReference: { wkid: 4326 } });
-                const g = new Graphic({ geometry: poly, symbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } } });
-                graphicsLayer.add(g);
-                currentGraphic = g;
-                view.goTo(g.geometry.extent.expand(1.5));
-                processGraphic(g);
-            };
-            
-            window.updateColor = function(status) {
-                if (!currentGraphic) return;
-                const c = { approved: [[16,185,129,0.3],[16,185,129]], rejected: [[239,68,68,0.3],[239,68,68]], warning: [[245,158,11,0.3],[245,158,11]] };
-                const col = c[status] || c.approved;
-                currentGraphic.symbol = { type: "simple-fill", color: col[0], outline: { color: col[1], width: 2 } };
-            };
-            
-            // Buttons
-            document.getElementById('drawBtn').onclick = function(e) {
-                e.preventDefault();
-                const opts = document.getElementById('drawOptions');
-                opts.classList.toggle('show');
+            document.getElementById('drawBtn').addEventListener('click', function() {
                 this.classList.toggle('active');
+                if (this.classList.contains('active')) sketchViewModel.create("polygon");
+                else sketchViewModel.cancel();
+            });
+            
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                graphicsLayer.removeAll();
+                currentPolygon = null; currentGraphic = null;
+                document.getElementById('areaInfo').classList.remove('show');
+                document.getElementById('resultCard').classList.remove('show');
+                document.getElementById('validateBtn').disabled = true;
+                document.getElementById('fileUpload').classList.remove('has-file');
+                document.getElementById('fileName').classList.remove('show');
+                document.getElementById('fileInput').value = '';
+                document.getElementById('drawBtn').classList.remove('active');
+            });
+            
+            document.getElementById('locateBtn').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        view.goTo({ center: [position.coords.longitude, position.coords.latitude], zoom: 12 });
+                    });
+                }
+            });
+            
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileName').classList.add('show');
+                document.getElementById('fileUpload').classList.add('has-file');
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const geojson = JSON.parse(event.target.result);
+                        let geometry;
+                        if (geojson.type === 'FeatureCollection') geometry = geojson.features[0].geometry;
+                        else if (geojson.type === 'Feature') geometry = geojson.geometry;
+                        else geometry = geojson;
+                        
+                        graphicsLayer.removeAll();
+                        
+                        const esriPolygon = new Polygon({ rings: geometry.coordinates, spatialReference: { wkid: 4326 } });
+                        const graphic = new Graphic({
+                            geometry: esriPolygon,
+                            symbol: { type: "simple-fill", color: [59, 130, 246, 0.3], outline: { color: [59, 130, 246], width: 2 } }
+                        });
+                        
+                        graphicsLayer.add(graphic);
+                        currentGraphic = graphic;
+                        view.goTo(graphic.geometry.extent.expand(1.5));
+                        processGraphic(graphic, geometryEngine);
+                        currentPolygon = geometry;
+                    } catch (error) {
+                        showError('Erro ao ler arquivo: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            });
+            
+            window.updatePolygonColor = function(status) {
+                if (!currentGraphic) return;
+                const colors = {
+                    approved: { fill: [16, 185, 129, 0.3], outline: [16, 185, 129] },
+                    rejected: { fill: [239, 68, 68, 0.3], outline: [239, 68, 68] },
+                    warning: { fill: [245, 158, 11, 0.3], outline: [245, 158, 11] }
+                };
+                const color = colors[status] || colors.approved;
+                currentGraphic.symbol = { type: "simple-fill", color: color.fill, outline: { color: color.outline, width: 2 } };
             };
-            document.getElementById('drawPolygon').onclick = function(e) { e.preventDefault(); clearAll(); sketchVM.create("polygon"); document.getElementById('drawOptions').classList.remove('show'); };
-            document.getElementById('drawRect').onclick = function(e) { e.preventDefault(); clearAll(); sketchVM.create("rectangle"); document.getElementById('drawOptions').classList.remove('show'); };
-            document.getElementById('clearBtn').onclick = function(e) { e.preventDefault(); clearAll(); };
-            document.getElementById('locateBtn').onclick = function(e) {
-                e.preventDefault();
-                navigator.geolocation && navigator.geolocation.getCurrentPosition(p => view.goTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 14 }));
-            };
-            document.getElementById('fullscreenBtn').onclick = function(e) { e.preventDefault(); document.body.classList.add('fullscreen-mode'); };
-            document.getElementById('closeFullscreen').onclick = function(e) { e.preventDefault(); document.body.classList.remove('fullscreen-mode'); };
         });
         
-        // Toggle key
-        document.getElementById('toggleKey').onclick = function(e) {
-            e.preventDefault();
-            const inp = document.getElementById('apiKey');
-            inp.type = inp.type === 'password' ? 'text' : 'password';
-            this.textContent = inp.type === 'password' ? '👁️' : '🔒';
-        };
+        const apiKeyInput = document.getElementById('apiKey');
+        const validateBtn = document.getElementById('validateBtn');
+        const resultCard = document.getElementById('resultCard');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingStep = document.getElementById('loadingStep');
+        const errorToast = document.getElementById('errorToast');
+        const pdfBtn = document.getElementById('pdfBtn');
         
-        // File upload
-        document.getElementById('fileInput').onchange = function(e) {
-            const f = e.target.files[0];
-            if (!f) return;
-            document.getElementById('fileName').textContent = f.name;
-            document.getElementById('fileName').classList.add('show');
-            document.getElementById('uploadArea').classList.add('has-file');
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                try {
-                    const json = JSON.parse(ev.target.result);
-                    let geom;
-                    if (json.type === 'FeatureCollection') geom = json.features[0].geometry;
-                    else if (json.type === 'Feature') geom = json.geometry;
-                    else geom = json;
-                    loadGeoJSON(geom);
-                } catch (err) { showToast('Erro: ' + err.message); }
+        function showError(msg) {
+            errorToast.textContent = msg;
+            errorToast.classList.add('show');
+            setTimeout(() => errorToast.classList.remove('show'), 5000);
+        }
+        
+        function showLoading(show, step = '') {
+            if (show) { loadingOverlay.classList.add('show'); loadingStep.textContent = step; }
+            else { loadingOverlay.classList.remove('show'); }
+        }
+        
+        function formatCheckName(checkType) {
+            const names = {
+                'deforestation_prodes': 'Desmatamento PRODES',
+                'deforestation_mapbiomas': 'Alertas MapBiomas',
+                'terra_indigena': 'Terras Indígenas',
+                'embargo_ibama': 'Embargos IBAMA',
+                'quilombola': 'Territórios Quilombolas',
+                'uc': 'Unidades de Conservação',
+                'app_water': 'APP Hidrografia'
             };
-            reader.readAsText(f);
-        };
-        
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 4000);
+            return names[checkType] || checkType;
         }
         
-        function formatCheck(c) {
-            const n = { deforestation_prodes: 'Desmatamento PRODES', deforestation_mapbiomas: 'Alertas MapBiomas', terra_indigena: 'Terras Indígenas', embargo_ibama: 'Embargos IBAMA', quilombola: 'Quilombolas', uc: 'Unidades de Conservação', app_water: 'APP Hidrografia' };
-            return n[c] || c;
+        function getComplianceLabel(score) {
+            if (score >= 90) return 'Excelente';
+            if (score >= 70) return 'Bom';
+            if (score >= 50) return 'Regular';
+            if (score >= 30) return 'Ruim';
+            return 'Crítico';
         }
         
-        async function validate() {
-            const key = document.getElementById('apiKey').value.trim();
-            if (!key) { showToast('Insira a API Key'); return; }
-            if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
+        document.getElementById('toggleKey').addEventListener('click', function() {
+            const input = apiKeyInput;
+            input.type = input.type === 'password' ? 'text' : 'password';
+            this.textContent = input.type === 'password' ? '👁️' : '🔒';
+        });
+        
+        async function validateArea() {
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) { showError('Por favor, insira sua API Key'); return; }
+            if (!currentPolygon) { showError('Por favor, desenhe ou carregue um polígono'); return; }
             
-            document.getElementById('loadingOverlay').classList.add('show');
-            document.getElementById('validateBtn').disabled = true;
+            showLoading(true, 'Conectando ao servidor...');
+            validateBtn.disabled = true;
             
-            const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando TIs...', 'Verificando Embargos...', 'Analisando UCs...', 'Processando...'];
-            let i = 0;
-            const iv = setInterval(() => { if (i < steps.length) document.getElementById('loadingStep').textContent = steps[i++]; }, 2000);
+            const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando Terras Indígenas...', 'Verificando Embargos IBAMA...', 'Analisando Unidades de Conservação...', 'Processando resultado...'];
+            let stepIndex = 0;
+            const stepInterval = setInterval(() => { if (stepIndex < steps.length) loadingStep.textContent = steps[stepIndex++]; }, 2000);
             
             try {
-                const res = await fetch(API_URL + '/api/v1/validations/quick', {
+                const response = await fetch(`${API_URL}/api/v1/validations/quick`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
                     body: JSON.stringify(currentPolygon)
                 });
-                clearInterval(iv);
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.detail || 'Erro');
-                showResult(data);
-            } catch (err) {
-                clearInterval(iv);
-                showToast(err.message);
+                clearInterval(stepInterval);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.detail?.[0]?.msg || data.detail || 'Erro na validação');
+                displayResult(data);
+            } catch (error) {
+                clearInterval(stepInterval);
+                showError(error.message);
             } finally {
-                document.getElementById('loadingOverlay').classList.remove('show');
-                document.getElementById('validateBtn').disabled = false;
+                showLoading(false);
+                validateBtn.disabled = false;
             }
         }
         
-        function showResult(d) {
-            document.getElementById('resultCard').classList.add('show');
-            const banner = document.getElementById('resultBanner');
-            banner.className = 'result-banner ' + d.status;
-            document.getElementById('resultIcon').textContent = d.status === 'approved' ? '✓' : d.status === 'rejected' ? '✗' : '⚠';
-            document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
-            document.getElementById('resultSubtitle').textContent = 'Índice: ' + d.risk_score;
+        function displayResult(data) {
+            resultCard.classList.add('show');
+            
+            const header = document.getElementById('resultHeader');
+            const icon = document.getElementById('resultIcon');
+            const statusText = document.getElementById('resultStatus');
+            const scoreText = document.getElementById('resultScore');
+            
+            header.className = `result-header ${data.status}`;
+            icon.textContent = data.status === 'approved' ? '✓' : data.status === 'rejected' ? '✗' : '⚠';
+            statusText.textContent = data.status === 'approved' ? 'Conforme' : data.status === 'rejected' ? 'Não Conforme' : 'Atenção Necessária';
+            scoreText.textContent = `Índice de Conformidade: ${data.risk_score}`;
             
             const fill = document.getElementById('complianceFill');
-            fill.style.width = d.risk_score + '%';
-            fill.className = 'compliance-fill ' + (d.risk_score >= 70 ? 'high' : d.risk_score >= 40 ? 'medium' : 'low');
-            document.getElementById('complianceValue').textContent = d.risk_score;
-            document.getElementById('complianceLabel').textContent = d.risk_score >= 90 ? 'Excelente' : d.risk_score >= 70 ? 'Bom' : d.risk_score >= 40 ? 'Regular' : 'Crítico';
+            fill.style.width = `${data.risk_score}%`;
+            fill.className = 'compliance-fill ' + (data.risk_score >= 70 ? 'high' : data.risk_score >= 40 ? 'medium' : 'low');
+            document.getElementById('complianceValue').textContent = data.risk_score;
+            document.getElementById('complianceLabel').textContent = getComplianceLabel(data.risk_score);
             
-            const list = document.getElementById('checksList');
-            list.innerHTML = '';
-            d.checks.forEach(c => {
-                const s = c.status;
-                const icon = s === 'pass' ? '✓' : s === 'fail' ? '✗' : s === 'warning' ? '⚠' : '○';
-                let details = '<p>' + c.message + '</p>';
-                if (c.overlap_area_ha > 0) details += '<div class="check-overlap-box"><strong>Sobreposição:</strong> ' + c.overlap_area_ha.toFixed(2) + ' ha (' + c.overlap_percentage.toFixed(1) + '%)</div>';
-                const row = document.createElement('div');
-                row.className = 'check-row ' + s;
-                row.innerHTML = '<div class="check-header" onclick="this.parentElement.classList.toggle(\'open\')"><div class="check-left"><div class="check-status-icon ' + s + '">' + icon + '</div><span class="check-name">' + formatCheck(c.check_type) + '</span></div><div class="check-right"><span class="check-badge ' + s + '">' + s + '</span><span class="check-arrow">▼</span></div></div><div class="check-details">' + details + '</div>';
-                list.appendChild(row);
+            const checksList = document.getElementById('checksList');
+            checksList.innerHTML = '';
+            
+            data.checks.forEach((check) => {
+                const statusClass = check.status === 'pass' ? 'pass' : check.status === 'fail' ? 'fail' : check.status === 'warning' ? 'warning' : 'skip';
+                const icon = check.status === 'pass' ? '✓' : check.status === 'fail' ? '✗' : check.status === 'warning' ? '⚠' : '○';
+                
+                let detailsHtml = `<p>${check.message}</p>`;
+                if (check.overlap_area_ha && check.overlap_area_ha > 0) {
+                    detailsHtml += `<div class="check-overlap"><strong>Sobreposição detectada:</strong><br>Área: ${check.overlap_area_ha.toFixed(4)} ha (${check.overlap_percentage.toFixed(2)}%)</div>`;
+                }
+                
+                const item = document.createElement('div');
+                item.className = `check-item ${statusClass}`;
+                item.innerHTML = `
+                    <div class="check-header" onclick="this.parentElement.classList.toggle('open')">
+                        <div class="check-left">
+                            <div class="check-icon ${statusClass}">${icon}</div>
+                            <span class="check-name">${formatCheckName(check.check_type)}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="check-status ${statusClass}">${check.status}</span>
+                            <span class="check-expand">▼</span>
+                        </div>
+                    </div>
+                    <div class="check-details">${detailsHtml}</div>`;
+                checksList.appendChild(item);
             });
             
-            document.getElementById('metaTime').textContent = '⏱️ ' + d.processing_time_ms + 'ms';
-            document.getElementById('metaDate').textContent = '📅 ' + new Date(d.validated_at).toLocaleString('pt-BR');
+            document.getElementById('metaTime').textContent = `⏱️ ${data.processing_time_ms}ms`;
+            document.getElementById('metaDate').textContent = `📅 ${new Date(data.validated_at).toLocaleString('pt-BR')}`;
             
-            updateColor(d.status);
-            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+            if (typeof updatePolygonColor === 'function') updatePolygonColor(data.status);
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
-        async function downloadPDF() {
-            const key = document.getElementById('apiKey').value.trim();
-            if (!currentPolygon) { showToast('Nenhum polígono'); return; }
-            const btn = document.getElementById('pdfBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ Gerando...';
+        async function downloadPdf() {
+            const apiKey = apiKeyInput.value.trim();
+            if (!currentPolygon) { showError('Nenhum polígono para gerar relatório'); return; }
+            
+            pdfBtn.disabled = true;
+            pdfBtn.innerHTML = '<span>⏳</span> Gerando...';
+            
             try {
-                const res = await fetch(API_URL + '/api/v1/reports/due-diligence/quick', {
+                const response = await fetch(`${API_URL}/api/v1/reports/due-diligence/quick`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
                     body: JSON.stringify(currentPolygon)
                 });
-                if (!res.ok) throw new Error('Erro ao gerar PDF');
-                const blob = await res.blob();
-                const url = URL.createObjectURL(blob);
+                if (!response.ok) { const error = await response.json(); throw new Error(error.detail?.[0]?.msg || error.detail || 'Erro ao gerar PDF'); }
+                
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
-                a.download = 'greengate-report.pdf';
-                a.click();
-                URL.revokeObjectURL(url);
-            } catch (err) { showToast(err.message); }
-            finally { btn.disabled = false; btn.textContent = '📄 Baixar Relatório PDF'; }
+                a.href = url; a.download = `greengate-report-${Date.now()}.pdf`;
+                document.body.appendChild(a); a.click();
+                window.URL.revokeObjectURL(url); a.remove();
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                pdfBtn.disabled = false;
+                pdfBtn.innerHTML = '<span>📄</span> Baixar Relatório PDF';
+            }
         }
         
-        document.getElementById('validateBtn').onclick = validate;
-        document.getElementById('pdfBtn').onclick = downloadPDF;
+        validateBtn.addEventListener('click', validateArea);
+        pdfBtn.addEventListener('click', downloadPdf);
+        apiKeyInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && currentPolygon) validateArea(); });
     </script>
 </body>
 </html>
