@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenGate - Geo-Compliance Platform</title>
     
-    <!-- ESRI ArcGIS CSS -->
     <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/dark/main.css">
-    
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -54,7 +51,6 @@
         }
         
         .logo { display: flex; align-items: center; gap: 0.75rem; }
-        
         .logo-icon {
             width: 40px; height: 40px;
             background: rgba(255,255,255,0.15);
@@ -62,7 +58,6 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.5rem;
         }
-        
         .logo-text h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.5px; }
         .logo-text span { font-size: 0.7rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
         
@@ -74,14 +69,12 @@
             border-radius: 20px;
             font-size: 0.75rem; font-weight: 500;
         }
-        
         .status-dot {
             width: 8px; height: 8px;
             background: var(--accent-green);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-        
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.6; transform: scale(0.95); }
@@ -98,6 +91,7 @@
         .map-container { position: relative; width: 100%; height: 100%; }
         #map { width: 100%; height: 100%; }
         
+        /* Map Controls */
         .map-controls {
             position: absolute;
             top: 1rem; left: 1rem;
@@ -115,10 +109,39 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.1rem;
             transition: all 0.2s;
+            position: relative;
         }
-        
         .map-btn:hover { background: var(--bg-card-hover); border-color: var(--accent-green); }
         .map-btn.active { background: var(--accent-green); border-color: var(--accent-green); }
+        
+        .map-btn-tooltip {
+            display: none;
+            position: absolute;
+            left: 48px;
+            background: var(--bg-card);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        .map-btn:hover .map-btn-tooltip { display: block; }
+        
+        /* Draw Tools Submenu */
+        .draw-submenu {
+            display: none;
+            position: absolute;
+            left: 48px; top: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            flex-direction: row;
+        }
+        .draw-submenu.show { display: flex; }
+        .draw-submenu .map-btn { width: 36px; height: 36px; font-size: 1rem; }
         
         /* Area Info */
         .area-info {
@@ -132,7 +155,6 @@
             z-index: 50;
             display: none;
         }
-        
         .area-info.show { display: block; }
         .area-info h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
         .area-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-green); }
@@ -149,7 +171,6 @@
             padding: 1rem;
             z-index: 50;
         }
-        
         .map-legend h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
         .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
         .legend-color { width: 16px; height: 16px; border-radius: 4px; border: 2px solid; }
@@ -158,6 +179,14 @@
         .legend-color.warning { background: rgba(245,158,11,0.3); border-color: #f59e0b; }
         .legend-color.neutral { background: rgba(59,130,246,0.3); border-color: #3b82f6; }
         
+        /* Fullscreen button (mobile) */
+        .fullscreen-btn {
+            display: none;
+            position: absolute;
+            top: 1rem; right: 1rem;
+            z-index: 60;
+        }
+        
         /* SIDEBAR */
         .sidebar {
             background: var(--bg-secondary);
@@ -165,7 +194,6 @@
             display: flex; flex-direction: column;
             overflow: hidden;
         }
-        
         .sidebar-scroll { flex: 1; overflow-y: auto; padding: 1.25rem; }
         .sidebar-scroll::-webkit-scrollbar { width: 6px; }
         .sidebar-scroll::-webkit-scrollbar-track { background: var(--bg-primary); }
@@ -179,7 +207,6 @@
             padding: 1.25rem;
             margin-bottom: 1rem;
         }
-        
         .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
         .card-icon {
             width: 32px; height: 32px;
@@ -229,7 +256,17 @@
         .file-upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
         .file-upload-text { font-size: 0.875rem; color: var(--text-secondary); }
         .file-upload-text strong { color: var(--accent-green); }
-        .file-name { margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: var(--bg-primary); border-radius: 6px; font-size: 0.75rem; color: var(--accent-green); display: none; }
+        .file-upload-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+        .file-name { 
+            margin-top: 0.75rem; 
+            padding: 0.5rem 0.75rem; 
+            background: var(--bg-primary); 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            color: var(--accent-green); 
+            display: none;
+            word-break: break-all;
+        }
         .file-name.show { display: block; }
         
         /* Buttons */
@@ -371,10 +408,33 @@
         }
         .error-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         
+        /* Fullscreen Map Mode */
+        .map-fullscreen .sidebar { display: none; }
+        .map-fullscreen .main-container { grid-template-columns: 1fr; }
+        .map-fullscreen .close-fullscreen { display: flex !important; }
+        
+        .close-fullscreen {
+            display: none;
+            position: absolute;
+            top: 1rem; right: 1rem;
+            z-index: 60;
+            background: var(--accent-red);
+            border: none;
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            align-items: center; justify-content: center;
+        }
+        
         /* Responsive */
         @media (max-width: 900px) {
-            .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
+            .main-container { grid-template-columns: 1fr; grid-template-rows: 45vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
+            .fullscreen-btn { display: flex; }
+            .map-legend { display: none; }
+            .area-info { bottom: auto; top: 4rem; left: 1rem; }
         }
     </style>
 </head>
@@ -398,10 +458,31 @@
             <div id="map"></div>
             
             <div class="map-controls">
-                <button class="map-btn" id="drawBtn" title="Desenhar polígono">✏️</button>
-                <button class="map-btn" id="clearBtn" title="Limpar mapa">🗑️</button>
-                <button class="map-btn" id="locateBtn" title="Minha localização">📍</button>
+                <div style="position: relative;">
+                    <button class="map-btn" id="drawBtn">
+                        ✏️
+                        <span class="map-btn-tooltip">Desenhar</span>
+                    </button>
+                    <div class="draw-submenu" id="drawSubmenu">
+                        <button class="map-btn" id="drawPolygonBtn" title="Polígono livre">⬡</button>
+                        <button class="map-btn" id="drawRectBtn" title="Retângulo">▢</button>
+                    </div>
+                </div>
+                <button class="map-btn" id="clearBtn">
+                    🗑️
+                    <span class="map-btn-tooltip">Limpar</span>
+                </button>
+                <button class="map-btn" id="locateBtn">
+                    📍
+                    <span class="map-btn-tooltip">Minha localização</span>
+                </button>
+                <button class="map-btn fullscreen-btn" id="fullscreenBtn">
+                    ⛶
+                    <span class="map-btn-tooltip">Tela cheia</span>
+                </button>
             </div>
+            
+            <button class="close-fullscreen" id="closeFullscreen">✕</button>
             
             <div class="area-info" id="areaInfo">
                 <h4>Área Selecionada</h4>
@@ -420,6 +501,7 @@
         
         <aside class="sidebar">
             <div class="sidebar-scroll">
+                <!-- API Key Card -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon">🔑</div>
@@ -431,6 +513,7 @@
                     </div>
                 </div>
                 
+                <!-- File Upload Card -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon">📁</div>
@@ -440,15 +523,17 @@
                         <input type="file" id="fileInput" accept=".json,.geojson">
                         <div class="file-upload-icon">📄</div>
                         <div class="file-upload-text">Arraste um arquivo ou <strong>clique para selecionar</strong></div>
-                        <div class="file-upload-text" style="font-size: 0.75rem; margin-top: 0.25rem;">Formatos: GeoJSON, JSON</div>
+                        <div class="file-upload-hint">Formatos: GeoJSON, JSON</div>
                     </label>
                     <div class="file-name" id="fileName"></div>
                 </div>
                 
+                <!-- Validate Button -->
                 <button class="btn btn-primary" id="validateBtn" disabled>
                     <span>🔍</span> Validar Área
                 </button>
                 
+                <!-- Results Card -->
                 <div class="card result-card" id="resultCard">
                     <div class="result-header" id="resultHeader">
                         <div class="result-icon" id="resultIcon">✓</div>
@@ -469,7 +554,7 @@
                     
                     <div class="checks-list" id="checksList"></div>
                     
-                    <div class="meta-info" id="metaInfo">
+                    <div class="meta-info">
                         <span id="metaTime">⏱️ --ms</span>
                         <span id="metaDate">📅 --/--/----</span>
                     </div>
@@ -492,29 +577,70 @@
     <script src="https://js.arcgis.com/4.28/"></script>
     
     <script>
+        // ============================================================
+        // CONFIGURAÇÃO
+        // ============================================================
         const API_URL = 'https://greengate-production.up.railway.app';
-        let map, view, graphicsLayer, sketchViewModel;
-        let currentPolygon = null, currentGraphic = null;
+        const MAX_RETRIES = 2;
+        const RETRY_DELAY = 3000;
         
+        // ============================================================
+        // VARIÁVEIS GLOBAIS
+        // ============================================================
+        let map, view, graphicsLayer, sketchViewModel;
+        let currentPolygon = null;
+        let currentGraphic = null;
+        let geometryEngine = null;
+        
+        // ============================================================
+        // FUNÇÃO PARA LIMPAR ESTADO COMPLETAMENTE
+        // ============================================================
+        function clearAllState() {
+            currentPolygon = null;
+            currentGraphic = null;
+            
+            if (graphicsLayer) {
+                graphicsLayer.removeAll();
+            }
+            
+            document.getElementById('areaInfo').classList.remove('show');
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('validateBtn').disabled = true;
+            document.getElementById('fileUpload').classList.remove('has-file');
+            document.getElementById('fileName').classList.remove('show');
+            document.getElementById('fileName').textContent = '';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('drawBtn').classList.remove('active');
+            document.getElementById('drawSubmenu').classList.remove('show');
+        }
+        
+        // ============================================================
+        // INICIALIZAR MAPA ESRI
+        // ============================================================
         require([
             "esri/Map", "esri/views/MapView", "esri/layers/GraphicsLayer",
             "esri/widgets/Sketch/SketchViewModel", "esri/widgets/BasemapGallery",
             "esri/widgets/Expand", "esri/Graphic", "esri/geometry/geometryEngine",
             "esri/geometry/Polygon"
-        ], function(Map, MapView, GraphicsLayer, SketchViewModel, BasemapGallery, Expand, Graphic, geometryEngine, Polygon) {
+        ], function(Map, MapView, GraphicsLayer, SketchViewModel, BasemapGallery, Expand, Graphic, geoEngine, Polygon) {
+            
+            geometryEngine = geoEngine;
             
             map = new Map({ basemap: "satellite" });
             
             view = new MapView({
-                container: "map", map: map,
-                center: [-55.5, -12.5], zoom: 6
+                container: "map",
+                map: map,
+                center: [-55.5, -12.5],
+                zoom: 6
             });
             
             graphicsLayer = new GraphicsLayer();
             map.add(graphicsLayer);
             
             sketchViewModel = new SketchViewModel({
-                view: view, layer: graphicsLayer,
+                view: view,
+                layer: graphicsLayer,
                 polygonSymbol: {
                     type: "simple-fill",
                     color: [59, 130, 246, 0.3],
@@ -522,50 +648,75 @@
                 }
             });
             
+            // Basemap Gallery
             const basemapGallery = new BasemapGallery({ view: view });
             const bgExpand = new Expand({ view: view, content: basemapGallery, expandIconClass: "esri-icon-basemap" });
             view.ui.add(bgExpand, "top-right");
             
+            // Evento: desenho concluído
             sketchViewModel.on("create", function(event) {
                 if (event.state === "complete") {
                     currentGraphic = event.graphic;
-                    processGraphic(event.graphic, geometryEngine);
+                    processGraphic(event.graphic);
+                    document.getElementById('drawBtn').classList.remove('active');
+                    document.getElementById('drawSubmenu').classList.remove('show');
                 }
             });
             
-            window.processGraphic = function(graphic, geoEngine) {
+            // Processar gráfico desenhado
+            window.processGraphic = function(graphic) {
                 const geometry = graphic.geometry;
-                const areaM2 = geoEngine.geodesicArea(geometry, "square-meters");
-                const areaHa = areaM2 / 10000;
+                const areaM2 = geometryEngine.geodesicArea(geometry, "square-meters");
+                const areaHa = Math.abs(areaM2) / 10000;
                 const centroid = geometry.centroid;
                 
                 document.getElementById('areaValue').textContent = areaHa.toFixed(2);
                 document.getElementById('areaCoords').textContent = `${centroid.latitude.toFixed(4)}, ${centroid.longitude.toFixed(4)}`;
                 document.getElementById('areaInfo').classList.add('show');
                 
+                // Converter para GeoJSON
                 const rings = geometry.rings[0].map(coord => [coord[0], coord[1]]);
                 currentPolygon = { type: "Polygon", coordinates: [rings] };
+                
                 document.getElementById('validateBtn').disabled = false;
             };
             
-            document.getElementById('drawBtn').addEventListener('click', function() {
+            // Botão desenhar - toggle submenu
+            document.getElementById('drawBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                const submenu = document.getElementById('drawSubmenu');
+                submenu.classList.toggle('show');
                 this.classList.toggle('active');
-                if (this.classList.contains('active')) sketchViewModel.create("polygon");
-                else sketchViewModel.cancel();
+                
+                if (!submenu.classList.contains('show')) {
+                    sketchViewModel.cancel();
+                }
             });
             
-            document.getElementById('clearBtn').addEventListener('click', function() {
-                graphicsLayer.removeAll();
-                currentPolygon = null; currentGraphic = null;
-                document.getElementById('areaInfo').classList.remove('show');
-                document.getElementById('resultCard').classList.remove('show');
-                document.getElementById('validateBtn').disabled = true;
-                document.getElementById('fileUpload').classList.remove('has-file');
-                document.getElementById('fileName').classList.remove('show');
-                document.getElementById('fileInput').value = '';
-                document.getElementById('drawBtn').classList.remove('active');
+            // Desenhar polígono livre
+            document.getElementById('drawPolygonBtn').addEventListener('click', function() {
+                clearAllState();
+                sketchViewModel.create("polygon");
             });
             
+            // Desenhar retângulo
+            document.getElementById('drawRectBtn').addEventListener('click', function() {
+                clearAllState();
+                sketchViewModel.create("rectangle");
+            });
+            
+            // Fechar submenu ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.map-controls')) {
+                    document.getElementById('drawSubmenu').classList.remove('show');
+                    document.getElementById('drawBtn').classList.remove('active');
+                }
+            });
+            
+            // Botão limpar
+            document.getElementById('clearBtn').addEventListener('click', clearAllState);
+            
+            // Botão localização
             document.getElementById('locateBtn').addEventListener('click', function() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {
@@ -574,9 +725,22 @@
                 }
             });
             
+            // Fullscreen
+            document.getElementById('fullscreenBtn').addEventListener('click', function() {
+                document.body.classList.add('map-fullscreen');
+            });
+            
+            document.getElementById('closeFullscreen').addEventListener('click', function() {
+                document.body.classList.remove('map-fullscreen');
+            });
+            
+            // Upload de arquivo
             document.getElementById('fileInput').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
+                
+                // Limpar estado anterior
+                clearAllState();
                 
                 document.getElementById('fileName').textContent = file.name;
                 document.getElementById('fileName').classList.add('show');
@@ -587,30 +751,47 @@
                     try {
                         const geojson = JSON.parse(event.target.result);
                         let geometry;
-                        if (geojson.type === 'FeatureCollection') geometry = geojson.features[0].geometry;
-                        else if (geojson.type === 'Feature') geometry = geojson.geometry;
-                        else geometry = geojson;
                         
-                        graphicsLayer.removeAll();
+                        if (geojson.type === 'FeatureCollection' && geojson.features && geojson.features.length > 0) {
+                            geometry = geojson.features[0].geometry;
+                        } else if (geojson.type === 'Feature' && geojson.geometry) {
+                            geometry = geojson.geometry;
+                        } else if (geojson.type === 'Polygon' || geojson.type === 'MultiPolygon') {
+                            geometry = geojson;
+                        } else {
+                            throw new Error('Formato GeoJSON não reconhecido');
+                        }
                         
-                        const esriPolygon = new Polygon({ rings: geometry.coordinates, spatialReference: { wkid: 4326 } });
+                        // Criar polígono ESRI
+                        const esriPolygon = new Polygon({ 
+                            rings: geometry.coordinates, 
+                            spatialReference: { wkid: 4326 } 
+                        });
+                        
                         const graphic = new Graphic({
                             geometry: esriPolygon,
-                            symbol: { type: "simple-fill", color: [59, 130, 246, 0.3], outline: { color: [59, 130, 246], width: 2 } }
+                            symbol: { 
+                                type: "simple-fill", 
+                                color: [59, 130, 246, 0.3], 
+                                outline: { color: [59, 130, 246], width: 2 } 
+                            }
                         });
                         
                         graphicsLayer.add(graphic);
                         currentGraphic = graphic;
                         view.goTo(graphic.geometry.extent.expand(1.5));
-                        processGraphic(graphic, geometryEngine);
+                        processGraphic(graphic);
                         currentPolygon = geometry;
+                        
                     } catch (error) {
                         showError('Erro ao ler arquivo: ' + error.message);
+                        clearAllState();
                     }
                 };
                 reader.readAsText(file);
             });
             
+            // Atualizar cor do polígono
             window.updatePolygonColor = function(status) {
                 if (!currentGraphic) return;
                 const colors = {
@@ -619,10 +800,17 @@
                     warning: { fill: [245, 158, 11, 0.3], outline: [245, 158, 11] }
                 };
                 const color = colors[status] || colors.approved;
-                currentGraphic.symbol = { type: "simple-fill", color: color.fill, outline: { color: color.outline, width: 2 } };
+                currentGraphic.symbol = { 
+                    type: "simple-fill", 
+                    color: color.fill, 
+                    outline: { color: color.outline, width: 2 } 
+                };
             };
         });
         
+        // ============================================================
+        // ELEMENTOS DOM
+        // ============================================================
         const apiKeyInput = document.getElementById('apiKey');
         const validateBtn = document.getElementById('validateBtn');
         const resultCard = document.getElementById('resultCard');
@@ -631,6 +819,9 @@
         const errorToast = document.getElementById('errorToast');
         const pdfBtn = document.getElementById('pdfBtn');
         
+        // ============================================================
+        // FUNÇÕES UTILITÁRIAS
+        // ============================================================
         function showError(msg) {
             errorToast.textContent = msg;
             errorToast.classList.add('show');
@@ -638,8 +829,12 @@
         }
         
         function showLoading(show, step = '') {
-            if (show) { loadingOverlay.classList.add('show'); loadingStep.textContent = step; }
-            else { loadingOverlay.classList.remove('show'); }
+            if (show) { 
+                loadingOverlay.classList.add('show'); 
+                loadingStep.textContent = step; 
+            } else { 
+                loadingOverlay.classList.remove('show'); 
+            }
         }
         
         function formatCheckName(checkType) {
@@ -663,43 +858,117 @@
             return 'Crítico';
         }
         
+        // Toggle API Key visibility
         document.getElementById('toggleKey').addEventListener('click', function() {
             const input = apiKeyInput;
             input.type = input.type === 'password' ? 'text' : 'password';
             this.textContent = input.type === 'password' ? '👁️' : '🔒';
         });
         
+        // ============================================================
+        // FETCH COM RETRY (para cold start)
+        // ============================================================
+        async function fetchWithRetry(url, options, retries = MAX_RETRIES) {
+            for (let i = 0; i <= retries; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+                    
+                    const response = await fetch(url, {
+                        ...options,
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    return response;
+                    
+                } catch (error) {
+                    if (i === retries) throw error;
+                    
+                    // Se for erro de rede/timeout, aguardar e tentar novamente
+                    if (error.name === 'AbortError' || error.message.includes('fetch')) {
+                        loadingStep.textContent = `Reconectando... (tentativa ${i + 2}/${retries + 1})`;
+                        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+        }
+        
+        // ============================================================
+        // VALIDAÇÃO
+        // ============================================================
         async function validateArea() {
             const apiKey = apiKeyInput.value.trim();
-            if (!apiKey) { showError('Por favor, insira sua API Key'); return; }
-            if (!currentPolygon) { showError('Por favor, desenhe ou carregue um polígono'); return; }
+            
+            if (!apiKey) { 
+                showError('Por favor, insira sua API Key'); 
+                return; 
+            }
+            
+            if (!currentPolygon) { 
+                showError('Por favor, desenhe ou carregue um polígono'); 
+                return; 
+            }
             
             showLoading(true, 'Conectando ao servidor...');
             validateBtn.disabled = true;
             
-            const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando Terras Indígenas...', 'Verificando Embargos IBAMA...', 'Analisando Unidades de Conservação...', 'Processando resultado...'];
+            const steps = [
+                'Analisando PRODES...', 
+                'Verificando MapBiomas...', 
+                'Consultando Terras Indígenas...', 
+                'Verificando Embargos IBAMA...', 
+                'Analisando Unidades de Conservação...', 
+                'Verificando APP Hidrografia...',
+                'Processando resultado...'
+            ];
+            
             let stepIndex = 0;
-            const stepInterval = setInterval(() => { if (stepIndex < steps.length) loadingStep.textContent = steps[stepIndex++]; }, 2000);
+            const stepInterval = setInterval(() => { 
+                if (stepIndex < steps.length) {
+                    loadingStep.textContent = steps[stepIndex++]; 
+                }
+            }, 2500);
             
             try {
-                const response = await fetch(`${API_URL}/api/v1/validations/quick`, {
+                const response = await fetchWithRetry(`${API_URL}/api/v1/validations/quick`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'x-api-key': apiKey 
+                    },
                     body: JSON.stringify(currentPolygon)
                 });
+                
                 clearInterval(stepInterval);
+                
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.detail?.[0]?.msg || data.detail || 'Erro na validação');
+                
+                if (!response.ok) {
+                    throw new Error(data.detail?.[0]?.msg || data.detail || 'Erro na validação');
+                }
+                
                 displayResult(data);
+                
             } catch (error) {
                 clearInterval(stepInterval);
-                showError(error.message);
+                
+                if (error.name === 'AbortError') {
+                    showError('Tempo limite excedido. Tente novamente.');
+                } else {
+                    showError(error.message);
+                }
             } finally {
                 showLoading(false);
                 validateBtn.disabled = false;
             }
         }
         
+        // ============================================================
+        // EXIBIR RESULTADO
+        // ============================================================
         function displayResult(data) {
             resultCard.classList.add('show');
             
@@ -724,7 +993,7 @@
             
             data.checks.forEach((check) => {
                 const statusClass = check.status === 'pass' ? 'pass' : check.status === 'fail' ? 'fail' : check.status === 'warning' ? 'warning' : 'skip';
-                const icon = check.status === 'pass' ? '✓' : check.status === 'fail' ? '✗' : check.status === 'warning' ? '⚠' : '○';
+                const iconChar = check.status === 'pass' ? '✓' : check.status === 'fail' ? '✗' : check.status === 'warning' ? '⚠' : '○';
                 
                 let detailsHtml = `<p>${check.message}</p>`;
                 if (check.overlap_area_ha && check.overlap_area_ha > 0) {
@@ -736,7 +1005,7 @@
                 item.innerHTML = `
                     <div class="check-header" onclick="this.parentElement.classList.toggle('open')">
                         <div class="check-left">
-                            <div class="check-icon ${statusClass}">${icon}</div>
+                            <div class="check-icon ${statusClass}">${iconChar}</div>
                             <span class="check-name">${formatCheckName(check.check_type)}</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -751,31 +1020,52 @@
             document.getElementById('metaTime').textContent = `⏱️ ${data.processing_time_ms}ms`;
             document.getElementById('metaDate').textContent = `📅 ${new Date(data.validated_at).toLocaleString('pt-BR')}`;
             
-            if (typeof updatePolygonColor === 'function') updatePolygonColor(data.status);
+            if (typeof updatePolygonColor === 'function') {
+                updatePolygonColor(data.status);
+            }
+            
             resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
+        // ============================================================
+        // DOWNLOAD PDF
+        // ============================================================
         async function downloadPdf() {
             const apiKey = apiKeyInput.value.trim();
-            if (!currentPolygon) { showError('Nenhum polígono para gerar relatório'); return; }
+            
+            if (!currentPolygon) { 
+                showError('Nenhum polígono para gerar relatório'); 
+                return; 
+            }
             
             pdfBtn.disabled = true;
             pdfBtn.innerHTML = '<span>⏳</span> Gerando...';
             
             try {
-                const response = await fetch(`${API_URL}/api/v1/reports/due-diligence/quick`, {
+                const response = await fetchWithRetry(`${API_URL}/api/v1/reports/due-diligence/quick`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'x-api-key': apiKey 
+                    },
                     body: JSON.stringify(currentPolygon)
                 });
-                if (!response.ok) { const error = await response.json(); throw new Error(error.detail?.[0]?.msg || error.detail || 'Erro ao gerar PDF'); }
+                
+                if (!response.ok) { 
+                    const error = await response.json(); 
+                    throw new Error(error.detail?.[0]?.msg || error.detail || 'Erro ao gerar PDF'); 
+                }
                 
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url; a.download = `greengate-report-${Date.now()}.pdf`;
-                document.body.appendChild(a); a.click();
-                window.URL.revokeObjectURL(url); a.remove();
+                a.href = url; 
+                a.download = `greengate-report-${Date.now()}.pdf`;
+                document.body.appendChild(a); 
+                a.click();
+                window.URL.revokeObjectURL(url); 
+                a.remove();
+                
             } catch (error) {
                 showError(error.message);
             } finally {
@@ -784,9 +1074,14 @@
             }
         }
         
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
         validateBtn.addEventListener('click', validateArea);
         pdfBtn.addEventListener('click', downloadPdf);
-        apiKeyInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && currentPolygon) validateArea(); });
+        apiKeyInput.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter' && currentPolygon) validateArea(); 
+        });
     </script>
 </body>
 </html>
