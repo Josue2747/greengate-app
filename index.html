@@ -456,7 +456,7 @@
                 map: map, 
                 center: [-55.5, -12.5], 
                 zoom: 6,
-                ui: { padding: { bottom: 200 } }
+                ui: { padding: { bottom: 120 } }
             });
             
             view.ui.move("zoom", "bottom-right");
@@ -475,29 +475,31 @@
                 polygonSymbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } }
             });
 
-            const calculateAndShowArea = (geometry) => {
-                if (!geometry) return;
-                const simplified = geoEngine.simplify(geometry);
-                const area = Math.abs(geoEngine.geodesicArea(simplified, "square-meters")) / 10000;
-                const c = simplified.extent.center; 
-                document.getElementById('areaValue').textContent = area.toFixed(2);
-                document.getElementById('areaCoords').textContent = c.latitude.toFixed(4) + ', ' + c.longitude.toFixed(4);
-                document.getElementById('areaInfo').classList.add('show');
-            };
-
-            sketchVM.on(["create", "update"], function(e) {
-                if (e.state === "active" || e.state === "complete") {
-                    calculateAndShowArea(e.graphic.geometry);
-                }
-
+            // Lógica simplificada: Calcula área apenas no FINAL para evitar travamento
+            sketchVM.on("create", function(e) {
                 if (e.state === "complete") {
                     currentGraphic = e.graphic;
                     let finalGeo = e.graphic.geometry;
+                    
+                    // Converte para coordenadas globais se necessário
                     if (finalGeo.spatialReference.isWebMercator) {
                         finalGeo = webMercatorUtils.webMercatorToGeographic(finalGeo);
                     }
+                    
+                    // Simplifica para corrigir erros de topologia
                     const simplifiedGeo = geoEngine.simplify(finalGeo);
+                    
+                    // Calcula área
+                    const area = Math.abs(geoEngine.geodesicArea(simplifiedGeo, "square-meters")) / 10000;
+                    const c = simplifiedGeo.extent.center;
+                    
+                    // Atualiza UI
+                    document.getElementById('areaValue').textContent = area.toFixed(2);
+                    document.getElementById('areaCoords').textContent = c.latitude.toFixed(4) + ', ' + c.longitude.toFixed(4);
+                    document.getElementById('areaInfo').classList.add('show');
+                    
                     currentPolygon = { type: "Polygon", coordinates: simplifiedGeo.rings };
+                    
                     document.getElementById('drawOptions').classList.remove('show');
                     document.getElementById('drawBtn').classList.remove('active');
                     document.getElementById('validateBtn').disabled = false;
@@ -511,7 +513,14 @@
                 graphicsLayer.add(g);
                 currentGraphic = g;
                 view.goTo(g.geometry.extent.expand(1.5));
-                calculateAndShowArea(poly);
+                
+                // Calcula área (como é carregamento, pode calcular direto pois não é evento de mouse)
+                const area = Math.abs(geoEngine.geodesicArea(poly, "square-meters")) / 10000;
+                const c = poly.extent.center;
+                document.getElementById('areaValue').textContent = area.toFixed(2);
+                document.getElementById('areaCoords').textContent = c.latitude.toFixed(4) + ', ' + c.longitude.toFixed(4);
+                document.getElementById('areaInfo').classList.add('show');
+                
                 currentPolygon = geom;
                 document.getElementById('validateBtn').disabled = false;
             };
