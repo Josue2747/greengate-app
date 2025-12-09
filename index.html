@@ -39,7 +39,7 @@
         .map-container { position: relative; width: 100%; height: 100%; }
         #map { width: 100%; height: 100%; }
 
-        /* SEARCH BAR - CENTRALIZADO NO TOPO (DESKTOP E MOBILE) */
+        /* SEARCH BAR - CENTRALIZADO NO TOPO */
         .search-box {
             position: absolute;
             top: 15px;
@@ -288,13 +288,7 @@
             .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
             .map-controls { top: 10px; left: 10px; }
-            .search-box {
-                top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: calc(100% - 100px);
-                max-width: 300px;
-            }
+            .search-box { left: 50%; transform: translateX(-50%); width: calc(100% - 100px); max-width: 300px; }
             #fullscreenBtn { display: flex; }
             .map-legend { display: none; }
             .logo-text span { display: none; }
@@ -333,7 +327,7 @@
                 <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
             </div>
             
-            <!-- SEARCH CENTRALIZADO -->
+            <!-- SEARCH -->
             <div class="search-box">
                 <div class="search-input-wrap">
                     <span class="icon">🔍</span>
