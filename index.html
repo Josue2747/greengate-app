@@ -454,11 +454,11 @@
     
     <!-- Modal Info Relatório -->
     <div class="help-modal" id="pdfModal">
-        <div class="help-card" style="max-width: 400px;">
+        <div class="help-card" style="max-width: 420px;">
             <button class="close-help" id="closePdfModal">✕</button>
             <div class="help-header" style="margin-bottom: 20px;">
                 <div class="help-icon">📄</div>
-                <h2 style="font-size: 1.2rem;">Informações do Relatório</h2>
+                <h2 style="font-size: 1.2rem;">Gerar Relatório PDF</h2>
             </div>
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
                 <div>
@@ -473,7 +473,23 @@
                     <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Município (opcional)</label>
                     <input type="text" id="municipality" placeholder="Ex: Sinop" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
                 </div>
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Idioma do Relatório</label>
+                    <div style="display: flex; gap: 10px;">
+                        <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="reportLang" value="pt" checked style="accent-color: var(--accent-green);"> 
+                            <span>🇧🇷 Português</span>
+                        </label>
+                        <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="reportLang" value="en" style="accent-color: var(--accent-green);"> 
+                            <span>🇺🇸 English</span>
+                        </label>
+                    </div>
+                </div>
             </div>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px; text-align: center;">
+                📱 O relatório incluirá QR Code para verificação de autenticidade
+            </p>
             <button class="btn-start" id="confirmPdfBtn">📄 Gerar Relatório PDF</button>
         </div>
     </div>
@@ -755,6 +771,10 @@
                 return;
             }
             
+            // Obter idioma selecionado
+            const langRadio = document.querySelector('input[name="reportLang"]:checked');
+            const lang = langRadio ? langRadio.value : 'pt';
+            
             closePdfModal();
             
             const key = document.getElementById('apiKey').value.trim();
@@ -762,7 +782,7 @@
             const btn = document.getElementById('pdfBtn'); btn.disabled = true; btn.textContent = '⏳ Gerando...';
             
             try {
-                // Novo formato: geometry + property_info
+                // Payload com geometry, property_info e idioma
                 const payload = {
                     geometry: currentPolygon,
                     property_info: {
@@ -770,7 +790,8 @@
                         plot_name: plotName,
                         municipality: document.getElementById('municipality').value.trim() || null,
                         state: 'MT'
-                    }
+                    },
+                    lang: lang
                 };
                 
                 const res = await fetch(API_URL + '/api/v1/reports/due-diligence/quick', { 
@@ -778,9 +799,17 @@
                     headers: { 'Content-Type': 'application/json', 'x-api-key': key }, 
                     body: JSON.stringify(payload) 
                 });
+                
                 if (!res.ok) throw new Error('Erro ao gerar PDF');
+                
+                // Mostrar código do relatório se disponível
+                const reportCode = res.headers.get('X-Report-Code');
+                if (reportCode) {
+                    console.log('Código do relatório:', reportCode);
+                }
+                
                 const blob = await res.blob(); 
-                const filename = `greengate-${farmName.replace(/\s+/g, '-')}-${plotName.replace(/\s+/g, '-')}.pdf`;
+                const filename = `GreenGate-${farmName.replace(/\s+/g, '-')}-${plotName.replace(/\s+/g, '-')}.pdf`;
                 const a = document.createElement('a'); 
                 a.href = URL.createObjectURL(blob); 
                 a.download = filename; 
