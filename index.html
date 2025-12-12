@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Plataforma de Diligência Prévia Ambiental</title>
-    
+
     <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/dark/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --bg-primary: #0a0f1a; --bg-secondary: #111827; --bg-card: #1a2332; --bg-card-hover: #1f2937;
@@ -16,7 +16,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
-        
+
         /* HEADER */
         .header {
             background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
@@ -140,7 +140,7 @@
             gap: 5px;
         }
         .btn-export:hover { border-color: var(--accent-green); color: var(--accent-green); }
-        
+
         /* LEGEND */
         .map-legend { position: absolute; bottom: 25px; right: 15px; background: rgba(26, 35, 50, 0.95); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; z-index: 40; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .map-legend-title { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
@@ -157,7 +157,7 @@
         .card-title { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .card-title-icon { font-size: 1rem; }
         .card-title-right { margin-left: auto; }
-        
+
         .input-wrapper { position: relative; }
         .input-wrapper input { width: 100%; padding: 12px 40px 12px 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem; }
         .input-wrapper input:focus { outline: none; border-color: var(--accent-green); }
@@ -296,9 +296,9 @@
     </style>
 </head>
 <body>
-    <header class="header" style="position: relative; display: flex; align-items: center; justify-content: center; height: 100%;">
-    <div class="logo-icon" style="position: absolute; left: 20px; height: 70px;">
-        <img src="logo.png" alt="GreenGate" style="height: 100%; width: auto;">
+<header class="header" style="position: relative; display: flex; align-items: center; justify-content: center; height: 60px;">
+    <div class="logo-icon" style="position: absolute; left: 20px; height: 40px; width: auto; background: transparent;">
+        <img src="logo.png" alt="GreenGate" style="height: 40px; width: auto;">
     </div>
     <div class="logo-text" style="text-align: center;">
         <h1 style="margin: 0; line-height: 1.2; font-size: 24px;">GreenGate</h1>
@@ -309,516 +309,816 @@
         <button class="help-trigger" id="helpBtn" title="Ajuda">?</button>
     </div>
 </header>
-    
-    <div class="main-container">
-        <div class="map-container">
-            <div id="map"></div>
-            
-            <div class="map-controls">
-                <div style="position: relative;">
-                    <button class="map-btn" id="drawBtn" title="Desenhar">✏️</button>
-                    <div class="draw-options" id="drawOptions">
-                        <button class="map-btn" id="drawPolygon" title="Polígono">⬡</button>
-                        <button class="map-btn" id="drawRect" title="Retângulo">▢</button>
-                    </div>
+
+<div class="main-container">
+    <div class="map-container">
+        <div id="map"></div>
+
+        <div class="map-controls">
+            <div style="position: relative;">
+                <button class="map-btn" id="drawBtn" title="Desenhar">✏️</button>
+                <div class="draw-options" id="drawOptions">
+                    <button class="map-btn" id="drawPolygon" title="Polígono">⬡</button>
+                    <button class="map-btn" id="drawRect" title="Retângulo">▢</button>
                 </div>
-                <button class="map-btn" id="clearBtn" title="Limpar">🗑️</button>
-                <button class="map-btn" id="locateBtn" title="Localização">📍</button>
-                <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
             </div>
-            
-            <!-- SEARCH -->
-            <div class="search-box">
-                <div class="search-input-wrap">
-                    <span class="icon">🔍</span>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar cidade ou estado...">
-                    <button class="search-clear" id="searchClear">✕</button>
-                </div>
-                <div class="search-results" id="searchResults"></div>
-            </div>
-            
-            <button class="close-fullscreen" id="closeFullscreen">✕</button>
-            
-            <div class="area-info" id="areaInfo">
-                <div class="area-info-label">Área Selecionada</div>
-                <div class="area-info-value"><span id="areaValue">0</span> <span>ha</span></div>
-                <div class="area-limit-text">Máx: 10.000 ha</div>
-                <div class="area-coords" id="areaCoords"></div>
-                <button class="btn-export" id="exportBtn">📥 Exportar GeoJSON</button>
-            </div>
-            
-            <div class="map-legend">
-                <div class="map-legend-title">Legenda</div>
-                <div class="legend-row"><div class="legend-dot neutral"></div>Selecionada</div>
-                <div class="legend-row"><div class="legend-dot approved"></div>Conforme</div>
-                <div class="legend-row"><div class="legend-dot warning"></div>Atenção</div>
-                <div class="legend-row"><div class="legend-dot rejected"></div>Não conforme</div>
-            </div>
+            <button class="map-btn" id="clearBtn" title="Limpar">🗑️</button>
+            <button class="map-btn" id="locateBtn" title="Localização">📍</button>
+            <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
         </div>
-        
-        <div class="sidebar">
-            <div class="card">
-                <div class="card-title"><span class="card-title-icon">🔑</span> Autenticação</div>
-                <div class="input-wrapper">
-                    <input type="password" id="apiKey" placeholder="Cole sua API Key">
-                    <button class="input-eye" id="toggleKey">👁️</button>
-                </div>
+
+        <!-- SEARCH -->
+        <div class="search-box">
+            <div class="search-input-wrap">
+                <span class="icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar cidade ou estado...">
+                <button class="search-clear" id="searchClear">✕</button>
             </div>
-            
-            <div class="card">
-                <div class="card-title"><span class="card-title-icon">📁</span> Upload de Arquivo</div>
-                <label class="upload-area" id="uploadArea">
-                    <input type="file" id="fileInput" accept=".json,.geojson">
-                    <div class="upload-icon">📄</div>
-                    <div class="upload-text">Toque para selecionar</div>
-                    <div class="upload-hint">GeoJSON ou JSON</div>
-                </label>
-                <div class="upload-filename" id="fileName"></div>
-            </div>
-            
-            <button class="btn-validate" id="validateBtn" disabled>🔍 Validar Área</button>
-            
-            <div class="card result-card" id="resultCard">
-                <div class="result-banner" id="resultBanner">
-                    <div class="result-icon" id="resultIcon">✓</div>
-                    <div>
-                        <div class="result-title" id="resultTitle">Conforme</div>
-                        <div class="result-subtitle" id="resultSubtitle">Índice: 100</div>
-                    </div>
-                </div>
-                <div class="compliance-section">
-                    <div class="compliance-label">Índice de Conformidade</div>
-                    <div class="compliance-bar"><div class="compliance-fill" id="complianceFill"></div></div>
-                    <div class="compliance-row">
-                        <span><strong id="complianceValue">100</strong>/100</span>
-                        <span id="complianceLabel">Excelente</span>
-                    </div>
-                </div>
-                <div class="checks-list" id="checksList"></div>
-                <div class="meta-row">
-                    <span id="metaTime">⏱️ --ms</span>
-                    <span id="metaDate">📅 --/--/----</span>
-                </div>
-                <button class="btn-pdf" id="pdfBtn">📄 Baixar Relatório PDF</button>
-            </div>
-            
-            <!-- HISTORY -->
-            <div class="card">
-                <div class="card-title">
-                    <span><span class="card-title-icon">📋</span> Histórico</span>
-                    <button class="btn-clear-history card-title-right" id="clearHistory">Limpar</button>
-                </div>
-                <div class="history-list" id="historyList">
-                    <div class="history-empty">Nenhuma validação</div>
-                </div>
-            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <button class="close-fullscreen" id="closeFullscreen">✕</button>
+
+        <div class="area-info" id="areaInfo">
+            <div class="area-info-label">Área Selecionada</div>
+            <div class="area-info-value"><span id="areaValue">0</span> <span>ha</span></div>
+            <div class="area-limit-text">Máx: 10.000 ha</div>
+            <div class="area-coords" id="areaCoords"></div>
+            <div class="area-coords" id="areaMeta"></div>
+            <button class="btn-export" id="exportBtn">📥 Exportar GeoJSON</button>
+        </div>
+
+        <div class="map-legend">
+            <div class="map-legend-title">Legenda</div>
+            <div class="legend-row"><div class="legend-dot neutral"></div>Selecionada</div>
+            <div class="legend-row"><div class="legend-dot approved"></div>Conforme</div>
+            <div class="legend-row"><div class="legend-dot warning"></div>Atenção</div>
+            <div class="legend-row"><div class="legend-dot rejected"></div>Não conforme</div>
         </div>
     </div>
 
-    <div class="help-modal" id="helpModal">
-        <div class="help-card">
-            <button class="close-help" id="closeHelp">✕</button>
-            <div class="help-header">
-                <div class="help-icon">🚀</div>
-                <h2>Como usar o GreenGate</h2>
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-title"><span class="card-title-icon">🔑</span> Autenticação</div>
+            <div class="input-wrapper">
+                <input type="password" id="apiKey" placeholder="Cole sua API Key">
+                <button class="input-eye" id="toggleKey">👁️</button>
             </div>
-            <div class="help-steps">
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-content"><h4>Autenticação</h4><p>Insira sua <strong>API Key</strong> no painel lateral.</p></div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-content"><h4>Navegue no Mapa</h4><p>Use a <strong>busca</strong> para encontrar cidades ou estados.</p></div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">3</div>
-                    <div class="step-content"><h4>Defina a Área</h4><p>Use o <strong>Lápis (✏️)</strong> para desenhar ou faça <strong>Upload</strong>. <br><span style="color:var(--accent-yellow); font-size:0.75rem;">Limite: 10.000 hectares.</span></p></div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">4</div>
-                    <div class="step-content"><h4>Validação</h4><p>Clique em <strong>Validar Área</strong> para gerar o relatório.</p></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span class="card-title-icon">📁</span> Upload de Arquivo</div>
+            <label class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" accept=".json,.geojson">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">Toque para selecionar</div>
+                <div class="upload-hint">GeoJSON ou JSON</div>
+            </label>
+            <div class="upload-filename" id="fileName"></div>
+        </div>
+
+        <button class="btn-validate" id="validateBtn" disabled>🔍 Validar Área</button>
+
+        <div class="card result-card" id="resultCard">
+            <div class="result-banner" id="resultBanner">
+                <div class="result-icon" id="resultIcon">✓</div>
+                <div>
+                    <div class="result-title" id="resultTitle">Conforme</div>
+                    <div class="result-subtitle" id="resultSubtitle">Conformidade: --/100</div>
                 </div>
             </div>
-            <button class="btn-start" id="startBtn">Começar a Usar</button>
+            <div class="compliance-section">
+                <div class="compliance-label">Conformidade (0–100 • quanto maior, melhor)</div>
+                <div class="compliance-bar"><div class="compliance-fill" id="complianceFill"></div></div>
+                <div class="compliance-row">
+                    <span><strong id="complianceValue">--</strong>/100</span>
+                    <span id="complianceLabel">--</span>
+                </div>
+            </div>
+            <div class="checks-list" id="checksList"></div>
+            <div class="meta-row">
+                <span id="metaTime">⏱️ --ms</span>
+                <span id="metaDate">📅 --/--/----</span>
+            </div>
+            <button class="btn-pdf" id="pdfBtn">📄 Baixar Relatório PDF</button>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="card">
+            <div class="card-title">
+                <span><span class="card-title-icon">📋</span> Histórico</span>
+                <button class="btn-clear-history card-title-right" id="clearHistory">Limpar</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="history-empty">Nenhuma validação</div>
+            </div>
         </div>
     </div>
-    
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Validando área...</div>
-        <div class="loading-step" id="loadingStep">Conectando</div>
-    </div>
-    
-    <div class="toast" id="toast"></div>
-    
-    <!-- Modal Info Relatório -->
-    <div class="help-modal" id="pdfModal">
-        <div class="help-card" style="max-width: 420px;">
-            <button class="close-help" id="closePdfModal">✕</button>
-            <div class="help-header" style="margin-bottom: 20px;">
-                <div class="help-icon">📄</div>
-                <h2 style="font-size: 1.2rem;">Gerar Relatório PDF</h2>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-                <div>
-                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome da Fazenda *</label>
-                    <input type="text" id="farmName" placeholder="Ex: Fazenda Santa Maria" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
-                </div>
-                <div>
-                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome do Talhão *</label>
-                    <input type="text" id="plotName" placeholder="Ex: Talhão 01 - Soja" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
-                </div> 
-                <div>
-                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Idioma do Relatório</label>
-                    <div style="display: flex; gap: 10px;">
-                        <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
-                            <input type="radio" name="reportLang" value="pt" checked style="accent-color: var(--accent-green);"> 
-                            <span>🇧🇷 Português</span>
-                        </label>
-                        <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
-                            <input type="radio" name="reportLang" value="en" style="accent-color: var(--accent-green);"> 
-                            <span>🇺🇸 English</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px; text-align: center;">
-                📱 O relatório incluirá QR Code para verificação de autenticidade
-            </p>
-            <button class="btn-start" id="confirmPdfBtn">📄 Gerar Relatório PDF</button>
+</div>
+
+<div class="help-modal" id="helpModal">
+    <div class="help-card">
+        <button class="close-help" id="closeHelp">✕</button>
+        <div class="help-header">
+            <div class="help-icon">🚀</div>
+            <h2>Como usar o GreenGate</h2>
         </div>
+        <div class="help-steps">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content"><h4>Autenticação</h4><p>Insira sua <strong>API Key</strong> no painel lateral.</p></div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content"><h4>Navegue no Mapa</h4><p>Use a <strong>busca</strong> para encontrar cidades ou estados.</p></div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content"><h4>Defina a Área</h4><p>Use o <strong>Lápis (✏️)</strong> para desenhar ou faça <strong>Upload</strong>. <br><span style="color:var(--accent-yellow); font-size:0.75rem;">Limite: 10.000 hectares.</span></p></div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content"><h4>Validação</h4><p>Clique em <strong>Validar Área</strong> para gerar o relatório.</p></div>
+            </div>
+        </div>
+        <button class="btn-start" id="startBtn">Começar a Usar</button>
     </div>
-    
-    <script src="https://js.arcgis.com/4.28/"></script>
-    <script>
-        const API_URL = 'https://api.greengate.com.br';
-        const MAX_HISTORY = 5;
-        let map, view, graphicsLayer, sketchVM, currentPolygon = null, currentGraphic = null, geoEngine, webMercatorUtils;
-        let searchTimeout = null;
-        
-        // ===================== HISTORY =====================
-        function getHistory() {
-            try { return JSON.parse(localStorage.getItem('gg_history') || '[]'); } 
-            catch { return []; }
-        }
-        
-        function saveHistory(result, area) {
-            const h = getHistory();
-            h.unshift({
-                id: Date.now(),
-                status: result.status,
-                score: result.risk_score,
-                area: area,
-                date: new Date().toISOString(),
-                polygon: currentPolygon
-            });
-            if (h.length > MAX_HISTORY) h.pop();
-            localStorage.setItem('gg_history', JSON.stringify(h));
-            renderHistory();
-        }
-        
-        function renderHistory() {
-            const el = document.getElementById('historyList');
-            const h = getHistory();
-            if (!h.length) { el.innerHTML = '<div class="history-empty">Nenhuma validação</div>'; return; }
-            el.innerHTML = h.map(i => `
-                <div class="history-item" data-id="${i.id}">
-                    <div class="history-header">
-                        <span class="history-status ${i.status}">${i.status === 'approved' ? 'OK' : i.status === 'rejected' ? 'FAIL' : 'WARN'}</span>
-                        <span class="history-date">${new Date(i.date).toLocaleDateString('pt-BR')}</span>
-                    </div>
-                    <div class="history-info">${i.area.toFixed(1)} ha • Score: ${i.score}</div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Validando área...</div>
+    <div class="loading-step" id="loadingStep">Conectando</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Modal Info Relatório -->
+<div class="help-modal" id="pdfModal">
+    <div class="help-card" style="max-width: 420px;">
+        <button class="close-help" id="closePdfModal">✕</button>
+        <div class="help-header" style="margin-bottom: 20px;">
+            <div class="help-icon">📄</div>
+            <h2 style="font-size: 1.2rem;">Gerar Relatório PDF</h2>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+            <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome da Fazenda *</label>
+                <input type="text" id="farmName" placeholder="Ex: Fazenda Santa Maria" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
+            </div>
+            <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome do Talhão *</label>
+                <input type="text" id="plotName" placeholder="Ex: Talhão 01 - Soja" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
+            </div>
+            <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Idioma do Relatório</label>
+                <div style="display: flex; gap: 10px;">
+                    <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
+                        <input type="radio" name="reportLang" value="pt" checked style="accent-color: var(--accent-green);">
+                        <span>🇧🇷 Português</span>
+                    </label>
+                    <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
+                        <input type="radio" name="reportLang" value="en" style="accent-color: var(--accent-green);">
+                        <span>🇺🇸 English</span>
+                    </label>
                 </div>
-            `).join('');
-            el.querySelectorAll('.history-item').forEach(item => {
-                item.onclick = () => {
-                    const found = h.find(x => x.id === +item.dataset.id);
-                    if (found?.polygon) { loadGeoJSON(found.polygon); showToast('Polígono carregado', 'success'); }
-                };
-            });
-        }
-        
-        // ===================== CLEAR =====================
-        function clearAll() {
-            if (sketchVM) sketchVM.cancel();
-            currentPolygon = null; currentGraphic = null;
-            if (graphicsLayer) graphicsLayer.removeAll();
-            const ai = document.getElementById('areaInfo');
-            ai.classList.remove('show', 'limit-exceeded');
-            document.getElementById('resultCard').classList.remove('show');
-            document.getElementById('validateBtn').disabled = true;
-            document.getElementById('uploadArea').classList.remove('has-file');
-            document.getElementById('fileName').classList.remove('show');
-            document.getElementById('fileInput').value = '';
-            document.getElementById('drawBtn').classList.remove('active');
-            document.getElementById('drawOptions').classList.remove('show');
-        }
-        
-        // ===================== INIT =====================
-        document.addEventListener('DOMContentLoaded', () => {
-            const k = localStorage.getItem('gg_api_key');
-            if (k) document.getElementById('apiKey').value = k;
-            renderHistory();
-            if (!localStorage.getItem('gg_tutorial')) setTimeout(() => document.getElementById('helpModal').classList.add('show'), 1000);
+            </div>
+        </div>
+        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px; text-align: center;">
+            📱 O relatório incluirá QR Code para verificação de autenticidade
+        </p>
+        <button class="btn-start" id="confirmPdfBtn">📄 Gerar Relatório PDF</button>
+    </div>
+</div>
+
+<script src="https://js.arcgis.com/4.28/"></script>
+<script>
+    const API_URL = 'https://api.greengate.com.br';
+    const MAX_HISTORY = 5;
+
+    let map, view, graphicsLayer, sketchVM, currentPolygon = null, currentGraphic = null, geoEngine, webMercatorUtils;
+    let searchTimeout = null;
+
+    // meta da área (para PDF / UI)
+    let currentMeta = { municipality: null, state: null, address: null };
+
+    // ===================== HELPERS =====================
+    function clampConf(x) {
+        const n = Number(x);
+        if (!Number.isFinite(n)) return 0;
+        return Math.max(0, Math.min(100, n));
+    }
+
+    function confLabel(conf) {
+        if (conf >= 90) return 'Excelente';
+        if (conf >= 70) return 'Bom';
+        if (conf >= 40) return 'Regular';
+        return 'Crítico';
+    }
+
+    function fmtCheckType(c) {
+        return {
+            deforestation_prodes: 'Desmatamento PRODES',
+            deforestation_mapbiomas: 'Alertas MapBiomas',
+            terra_indigena: 'Terras Indígenas',
+            embargo_ibama: 'Embargos IBAMA',
+            quilombola: 'Quilombolas',
+            uc: 'Unidades de Conservação',
+            app_water: 'APP Hidrografia'
+        }[c] || c;
+    }
+
+    function fmtCheckStatusBadge(s) {
+        return {
+            pass: 'Conforme',
+            fail: 'Não conforme',
+            warning: 'Atenção',
+            skip: 'N/A'
+        }[s] || s;
+    }
+
+    function fmtHistoryStatusLabel(s) {
+        return s === 'approved' ? 'OK' : s === 'rejected' ? 'FAIL' : 'WARN';
+    }
+
+    function showToast(m, t = 'error') {
+        const el = document.getElementById('toast');
+        el.textContent = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m;
+        el.className = 'toast ' + t;
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 4000);
+    }
+
+    function setValidateAvailability() {
+        const ai = document.getElementById('areaInfo');
+        const overLimit = ai.classList.contains('limit-exceeded');
+        document.getElementById('validateBtn').disabled = !(currentPolygon && !overLimit);
+    }
+
+    // ===================== HISTORY =====================
+    function getHistory() {
+        try { return JSON.parse(localStorage.getItem('gg_history') || '[]'); }
+        catch { return []; }
+    }
+
+    function saveHistory(result, area) {
+        const conf = clampConf(result.risk_score);
+        const h = getHistory();
+        h.unshift({
+            id: Date.now(),
+            status: result.status,
+            score: conf,
+            area: area,
+            date: new Date().toISOString(),
+            polygon: currentPolygon,
+            meta: currentMeta
         });
-        
-        // ===================== ESRI =====================
-        require([
-            "esri/Map", "esri/views/MapView", "esri/layers/GraphicsLayer",
-            "esri/widgets/Sketch/SketchViewModel", "esri/Graphic",
-            "esri/geometry/geometryEngine", "esri/geometry/Polygon",
-            "esri/widgets/BasemapGallery", "esri/widgets/Expand",
-            "esri/geometry/support/webMercatorUtils", "esri/rest/locator"
-        ], function(Map, MapView, GraphicsLayer, SketchVM, Graphic, geoEng, Polygon, BasemapGallery, Expand, wmUtils, locator) {
-            geoEngine = geoEng; webMercatorUtils = wmUtils;
-            map = new Map({ basemap: "hybrid" });
-            view = new MapView({ container: "map", map, center: [-55.5, -12.5], zoom: 6, ui: { padding: { bottom: 200 } } });
-            view.ui.move("zoom", "bottom-right");
-            view.ui.add(new Expand({ view, content: new BasemapGallery({ view }), expandIconClass: "esri-icon-basemap", autoCollapse: true }), "top-right");
-            
-            graphicsLayer = new GraphicsLayer(); map.add(graphicsLayer);
-            sketchVM = new SketchVM({ view, layer: graphicsLayer, polygonSymbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } } });
-            
-            // ========== SEARCH ==========
-            const GEOCODE = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-            const sInput = document.getElementById('searchInput');
-            const sResults = document.getElementById('searchResults');
-            const sClear = document.getElementById('searchClear');
-            
-            sInput.oninput = (e) => {
-                const q = e.target.value.trim();
-                sClear.classList.toggle('show', q.length > 0);
-                if (searchTimeout) clearTimeout(searchTimeout);
-                if (q.length < 2) { sResults.classList.remove('show'); return; }
-                sResults.innerHTML = '<div class="search-loading">Buscando...</div>';
-                sResults.classList.add('show');
-                searchTimeout = setTimeout(() => {
-                    locator.addressToLocations(GEOCODE, {
-                        address: { SingleLine: q + ", Brasil" },
-                        countryCode: "BRA",
-                        maxLocations: 5,
-                        outFields: ["Addr_type", "City", "Region"]
-                    }).then(res => {
-                        if (!res.length) { sResults.innerHTML = '<div class="search-empty">Nenhum resultado</div>'; return; }
-                        sResults.innerHTML = res.map((r, i) => `
-                            <div class="search-item" data-i="${i}">
-                                <div class="search-item-name">${r.address}</div>
-                                <div class="search-item-type">${r.attributes.Addr_type || 'Local'}</div>
-                            </div>
-                        `).join('');
-                        sResults.querySelectorAll('.search-item').forEach(el => {
-                            el.onclick = () => {
-                                const r = res[+el.dataset.i];
-                                view.goTo({ center: [r.location.longitude, r.location.latitude], zoom: r.attributes.Addr_type === 'Locality' ? 12 : 8 });
-                                sInput.value = r.address;
-                                sResults.classList.remove('show');
-                            };
-                        });
-                    }).catch(() => sResults.innerHTML = '<div class="search-empty">Erro na busca</div>');
-                }, 350);
-            };
-            sClear.onclick = () => { sInput.value = ''; sClear.classList.remove('show'); sResults.classList.remove('show'); };
-            document.addEventListener('click', e => { if (!e.target.closest('.search-box')) sResults.classList.remove('show'); });
-            
-            // ========== AREA ==========
-            const checkArea = (geo) => {
-                if (!geo) return false;
-                const area = Math.abs(geoEngine.geodesicArea(geo, "square-meters")) / 10000;
-                const c = geo.centroid;
-                const ai = document.getElementById('areaInfo');
-                document.getElementById('areaValue').textContent = area.toFixed(2);
-                document.getElementById('areaCoords').textContent = c ? `${c.latitude.toFixed(5)}, ${c.longitude.toFixed(5)}` : '';
-                ai.classList.add('show');
-                if (area > 10000) { ai.classList.add('limit-exceeded'); document.getElementById('validateBtn').disabled = true; return false; }
-                ai.classList.remove('limit-exceeded'); return true;
-            };
-            
-            sketchVM.on(["create", "update"], e => {
-                if (e.state === "active") checkArea(e.graphic.geometry);
-                if (e.state === "complete") {
-                    currentGraphic = e.graphic;
-                    let geo = e.graphic.geometry;
-                    if (geo.spatialReference.isWebMercator) geo = webMercatorUtils.webMercatorToGeographic(geo);
-                    const simp = geoEngine.simplify(geo);
-                    currentPolygon = { type: "Polygon", coordinates: simp.rings };
-                    document.getElementById('drawOptions').classList.remove('show');
-                    document.getElementById('drawBtn').classList.remove('active');
-                    if (checkArea(simp)) document.getElementById('validateBtn').disabled = false;
+        if (h.length > MAX_HISTORY) h.pop();
+        localStorage.setItem('gg_history', JSON.stringify(h));
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const el = document.getElementById('historyList');
+        const h = getHistory();
+        if (!h.length) { el.innerHTML = '<div class="history-empty">Nenhuma validação</div>'; return; }
+        el.innerHTML = h.map(i => `
+            <div class="history-item" data-id="${i.id}">
+                <div class="history-header">
+                    <span class="history-status ${i.status}">${fmtHistoryStatusLabel(i.status)}</span>
+                    <span class="history-date">${new Date(i.date).toLocaleDateString('pt-BR')}</span>
+                </div>
+                <div class="history-info">${i.area.toFixed(1)} ha • Conformidade: ${i.score}/100</div>
+            </div>
+        `).join('');
+        el.querySelectorAll('.history-item').forEach(item => {
+            item.onclick = () => {
+                const found = h.find(x => x.id === +item.dataset.id);
+                if (found?.polygon) {
+                    currentMeta = found.meta || { municipality: null, state: null, address: null };
+                    loadGeoJSON(found.polygon);
+                    showToast('Polígono carregado', 'success');
                 }
-            });
-            
-            window.loadGeoJSON = (geom) => {
-                clearAll();
-                const poly = new Polygon({ rings: geom.coordinates, spatialReference: { wkid: 4326 } });
-                const g = new Graphic({ geometry: poly, symbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } } });
-                graphicsLayer.add(g); currentGraphic = g;
-                view.goTo(g.geometry.extent.expand(1.5));
-                currentPolygon = geom;
-                if (checkArea(poly)) document.getElementById('validateBtn').disabled = false;
             };
-            
-            window.updateColor = (s) => {
-                if (!currentGraphic) return;
-                const c = { approved: [[16,185,129,0.3],[16,185,129]], rejected: [[239,68,68,0.3],[239,68,68]], warning: [[245,158,11,0.3],[245,158,11]] }[s] || [[59,130,246,0.3],[59,130,246]];
-                currentGraphic.symbol = { type: "simple-fill", color: c[0], outline: { color: c[1], width: 2 } };
-            };
-            
-            // ========== BUTTONS ==========
-            document.getElementById('drawBtn').onclick = e => { e.preventDefault(); if (sketchVM.state === "active") sketchVM.cancel(); document.getElementById('drawOptions').classList.toggle('show'); document.getElementById('drawBtn').classList.toggle('active'); };
-            document.getElementById('drawPolygon').onclick = e => { e.preventDefault(); clearAll(); sketchVM.create("polygon"); document.getElementById('drawOptions').classList.remove('show'); };
-            document.getElementById('drawRect').onclick = e => { e.preventDefault(); clearAll(); sketchVM.create("rectangle"); document.getElementById('drawOptions').classList.remove('show'); };
-            document.getElementById('clearBtn').onclick = e => { e.preventDefault(); clearAll(); };
-            document.getElementById('locateBtn').onclick = e => { e.preventDefault(); navigator.geolocation?.getCurrentPosition(p => view.goTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 14 })); };
-            document.getElementById('fullscreenBtn').onclick = e => { e.preventDefault(); document.body.classList.add('fullscreen-mode'); setTimeout(() => view.requestResize(), 100); };
-            document.getElementById('closeFullscreen').onclick = e => { e.preventDefault(); document.body.classList.remove('fullscreen-mode'); view.requestResize(); };
         });
-        
-        // ===================== EXPORT GEOJSON =====================
-        document.getElementById('exportBtn').onclick = () => {
-            if (!currentPolygon) { showToast('Nenhum polígono'); return; }
-            const gj = { type: "Feature", properties: { source: "GreenGate", exported: new Date().toISOString() }, geometry: currentPolygon };
-            const blob = new Blob([JSON.stringify(gj, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `area-${Date.now()}.geojson`; a.click();
-            showToast('GeoJSON exportado!', 'success');
-        };
-        
-        // ===================== UI =====================
-        const modal = document.getElementById('helpModal');
-        const toggleModal = s => { s ? modal.classList.add('show') : (modal.classList.remove('show'), localStorage.setItem('gg_tutorial', '1')); };
-        document.getElementById('helpBtn').onclick = () => toggleModal(true);
-        document.getElementById('closeHelp').onclick = () => toggleModal(false);
-        document.getElementById('startBtn').onclick = () => toggleModal(false);
-        document.getElementById('clearHistory').onclick = () => { if (confirm('Limpar histórico?')) { localStorage.removeItem('gg_history'); renderHistory(); } };
-        document.getElementById('toggleKey').onclick = e => { e.preventDefault(); const i = document.getElementById('apiKey'); i.type = i.type === 'password' ? 'text' : 'password'; e.target.textContent = i.type === 'password' ? '👁️' : '🔒'; };
-        document.getElementById('fileInput').onchange = e => {
-            const f = e.target.files[0]; if (!f) return;
-            document.getElementById('fileName').textContent = f.name;
-            document.getElementById('fileName').classList.add('show');
-            document.getElementById('uploadArea').classList.add('has-file');
-            const r = new FileReader();
-            r.onload = ev => { try { const j = JSON.parse(ev.target.result); loadGeoJSON(j.type === 'FeatureCollection' ? j.features[0].geometry : j.type === 'Feature' ? j.geometry : j); } catch (err) { showToast('Erro: ' + err.message); } };
-            r.readAsText(f);
-        };
-        
-        function showToast(m, t = 'error') { const el = document.getElementById('toast'); el.textContent = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m; el.className = 'toast ' + t; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 4000); }
-        function fmtCheck(c) { return { deforestation_prodes: 'Desmatamento PRODES', deforestation_mapbiomas: 'Alertas MapBiomas', terra_indigena: 'Terras Indígenas', embargo_ibama: 'Embargos IBAMA', quilombola: 'Quilombolas', uc: 'Unidades de Conservação', app_water: 'APP Hidrografia' }[c] || c; }
-        
-        // ===================== VALIDATE =====================
-        async function validate() {
-            const key = document.getElementById('apiKey').value.trim();
-            if (!key) { showToast('Insira a API Key'); return; }
-            if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
-            localStorage.setItem('gg_api_key', key);
-            document.getElementById('loadingOverlay').classList.add('show');
-            document.getElementById('validateBtn').disabled = true;
-            const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando TIs...', 'Verificando Embargos...', 'Analisando UCs...', 'Processando...'];
-            let i = 0; const iv = setInterval(() => { if (i < steps.length) document.getElementById('loadingStep').textContent = steps[i++]; }, 2000);
-            try {
-                const res = await fetch(API_URL + '/api/v1/validations/quick', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': key }, body: JSON.stringify(currentPolygon) });
-                clearInterval(iv);
-                const data = await res.json();
-                if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
-                saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
-                showResult(data);
-            } catch (err) { clearInterval(iv); showToast(err.message); }
-            finally { document.getElementById('loadingOverlay').classList.remove('show'); document.getElementById('validateBtn').disabled = false; }
-        }
-        
-        function showResult(d) {
-            document.getElementById('resultCard').classList.add('show');
-            document.getElementById('resultBanner').className = 'result-banner ' + d.status;
-            document.getElementById('resultIcon').textContent = d.status === 'approved' ? '✓' : d.status === 'rejected' ? '✗' : '⚠';
-            document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
-            document.getElementById('resultSubtitle').textContent = 'Índice: ' + d.risk_score;
-            const fill = document.getElementById('complianceFill'); fill.style.width = d.risk_score + '%'; fill.className = 'compliance-fill ' + (d.risk_score >= 70 ? 'high' : d.risk_score >= 40 ? 'medium' : 'low');
-            document.getElementById('complianceValue').textContent = d.risk_score;
-            document.getElementById('complianceLabel').textContent = d.risk_score >= 90 ? 'Excelente' : d.risk_score >= 70 ? 'Bom' : d.risk_score >= 40 ? 'Regular' : 'Crítico';
-            const list = document.getElementById('checksList'); list.innerHTML = '';
-            d.checks.forEach(c => {
-                const icon = c.status === 'pass' ? '✓' : c.status === 'fail' ? '✗' : c.status === 'warning' ? '⚠' : '○';
-                let det = '<p>' + c.message + '</p>'; if (c.overlap_area_ha > 0) det += '<div class="check-overlap-box"><strong>Sobreposição:</strong> ' + c.overlap_area_ha.toFixed(2) + ' ha (' + c.overlap_percentage.toFixed(1) + '%)</div>';
-                const row = document.createElement('div'); row.className = 'check-row ' + c.status;
-                row.innerHTML = `<div class="check-header" onclick="this.parentElement.classList.toggle('open')"><div class="check-left"><div class="check-status-icon ${c.status}">${icon}</div><span class="check-name">${fmtCheck(c.check_type)}</span></div><div class="check-right"><span class="check-badge ${c.status}">${c.status}</span><span class="check-arrow">▼</span></div></div><div class="check-details">${det}</div>`;
-                list.appendChild(row);
-            });
-            document.getElementById('metaTime').textContent = '⏱️ ' + d.processing_time_ms + 'ms';
-            document.getElementById('metaDate').textContent = '📅 ' + new Date(d.validated_at).toLocaleString('pt-BR');
-            updateColor(d.status);
-            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // ===================== PDF MODAL =====================
-        function openPdfModal() {
-            if (!currentPolygon) { showToast('Nenhum polígono'); return; }
-            document.getElementById('pdfModal').classList.add('show');
-        }
-        
-        function closePdfModal() {
-            document.getElementById('pdfModal').classList.remove('show');
-        }
-        
-        async function downloadPDF() {
-            const farmName = document.getElementById('farmName').value.trim();
-            const plotName = document.getElementById('plotName').value.trim();
-            
-            if (!farmName || !plotName) {
-                showToast('Preencha Fazenda e Talhão');
-                return;
+    }
+
+    // ===================== CLEAR =====================
+    function clearAll() {
+        if (sketchVM) sketchVM.cancel();
+        currentPolygon = null; currentGraphic = null;
+        currentMeta = { municipality: null, state: null, address: null };
+
+        if (graphicsLayer) graphicsLayer.removeAll();
+
+        const ai = document.getElementById('areaInfo');
+        ai.classList.remove('show', 'limit-exceeded');
+
+        document.getElementById('areaValue').textContent = '0';
+        document.getElementById('areaCoords').textContent = '';
+        document.getElementById('areaMeta').textContent = '';
+
+        document.getElementById('resultCard').classList.remove('show');
+        document.getElementById('uploadArea').classList.remove('has-file');
+        document.getElementById('fileName').classList.remove('show');
+        document.getElementById('fileInput').value = '';
+        document.getElementById('drawBtn').classList.remove('active');
+        document.getElementById('drawOptions').classList.remove('show');
+
+        setValidateAvailability();
+    }
+
+    // ===================== INIT =====================
+    document.addEventListener('DOMContentLoaded', () => {
+        const k = localStorage.getItem('gg_api_key');
+        if (k) document.getElementById('apiKey').value = k;
+        renderHistory();
+        if (!localStorage.getItem('gg_tutorial')) setTimeout(() => document.getElementById('helpModal').classList.add('show'), 1000);
+    });
+
+    // ===================== ESRI =====================
+    require([
+        "esri/Map", "esri/views/MapView", "esri/layers/GraphicsLayer",
+        "esri/widgets/Sketch/SketchViewModel", "esri/Graphic",
+        "esri/geometry/geometryEngine", "esri/geometry/Polygon",
+        "esri/widgets/BasemapGallery", "esri/widgets/Expand",
+        "esri/geometry/support/webMercatorUtils", "esri/rest/locator"
+    ], function(Map, MapView, GraphicsLayer, SketchVM, Graphic, geoEng, Polygon, BasemapGallery, Expand, wmUtils, locator) {
+
+        geoEngine = geoEng; webMercatorUtils = wmUtils;
+
+        map = new Map({ basemap: "hybrid" });
+        view = new MapView({
+            container: "map",
+            map,
+            center: [-55.5, -12.5],
+            zoom: 6,
+            ui: { padding: { bottom: 200 } }
+        });
+
+        view.ui.move("zoom", "bottom-right");
+        view.ui.add(new Expand({
+            view,
+            content: new BasemapGallery({ view }),
+            expandIconClass: "esri-icon-basemap",
+            autoCollapse: true
+        }), "top-right");
+
+        graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        sketchVM = new SketchVM({
+            view,
+            layer: graphicsLayer,
+            polygonSymbol: {
+                type: "simple-fill",
+                color: [59,130,246,0.3],
+                outline: { color: [59,130,246], width: 2 }
             }
-            
-            // Obter idioma selecionado
-            const langRadio = document.querySelector('input[name="reportLang"]:checked');
-            const lang = langRadio ? langRadio.value : 'pt';
-            
-            closePdfModal();
-            
-            const key = document.getElementById('apiKey').value.trim();
-            if (!currentPolygon) { showToast('Nenhum polígono'); return; }
-            const btn = document.getElementById('pdfBtn'); btn.disabled = true; btn.textContent = '⏳ Gerando...';
-            
-            try {
-                // Payload com geometry, property_info e idioma
-                const payload = {
-                    geometry: currentPolygon,
-                    property_info: {
-                        farm_name: farmName,
-                        plot_name: plotName,
-                        municipality: null,
-                        state: 'MT'
-                    },
-                    lang: lang
-                };
-                
-                const res = await fetch(API_URL + '/api/v1/reports/due-diligence/quick', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': key }, 
-                    body: JSON.stringify(payload) 
+        });
+
+        // ========= flash polygon (feedback visual ao clicar checks) =========
+        window.flashCurrentGraphic = () => {
+            if (!currentGraphic) return;
+            const original = currentGraphic.symbol;
+            const outline = (original && original.outline) ? original.outline : { color: [255,255,255,1], width: 2 };
+            currentGraphic.symbol = {
+                type: "simple-fill",
+                color: original?.color || [59,130,246,0.3],
+                outline: { color: outline.color, width: 5 }
+            };
+            setTimeout(() => { if (currentGraphic) currentGraphic.symbol = original; }, 250);
+        };
+
+        // ========== SEARCH ==========
+        const GEOCODE = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+        const sInput = document.getElementById('searchInput');
+        const sResults = document.getElementById('searchResults');
+        const sClear = document.getElementById('searchClear');
+
+        let lastSearchResults = [];
+
+        sInput.oninput = (e) => {
+            const q = e.target.value.trim();
+            sClear.classList.toggle('show', q.length > 0);
+            if (searchTimeout) clearTimeout(searchTimeout);
+            if (q.length < 2) { sResults.classList.remove('show'); return; }
+
+            sResults.innerHTML = '<div class="search-loading">Buscando...</div>';
+            sResults.classList.add('show');
+
+            searchTimeout = setTimeout(() => {
+                locator.addressToLocations(GEOCODE, {
+                    address: { SingleLine: q + ", Brasil" },
+                    countryCode: "BRA",
+                    maxLocations: 5,
+                    outFields: ["Addr_type", "City", "Region"]
+                }).then(res => {
+                    lastSearchResults = res || [];
+                    if (!res.length) { sResults.innerHTML = '<div class="search-empty">Nenhum resultado</div>'; return; }
+                    sResults.innerHTML = res.map((r, i) => `
+                        <div class="search-item" data-i="${i}">
+                            <div class="search-item-name">${r.address}</div>
+                            <div class="search-item-type">${r.attributes.Addr_type || 'Local'}</div>
+                        </div>
+                    `).join('');
+                    sResults.querySelectorAll('.search-item').forEach(el => {
+                        el.onclick = () => {
+                            const r = res[+el.dataset.i];
+                            view.goTo({
+                                center: [r.location.longitude, r.location.latitude],
+                                zoom: r.attributes.Addr_type === 'Locality' ? 12 : 8
+                            });
+                            sInput.value = r.address;
+                            sResults.classList.remove('show');
+                        };
+                    });
+                }).catch(() => sResults.innerHTML = '<div class="search-empty">Erro na busca</div>');
+            }, 350);
+        };
+
+        sInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && lastSearchResults.length) {
+                const r = lastSearchResults[0];
+                view.goTo({
+                    center: [r.location.longitude, r.location.latitude],
+                    zoom: r.attributes.Addr_type === 'Locality' ? 12 : 8
                 });
-                
-                if (!res.ok) throw new Error('Erro ao gerar PDF');
-                
-                // Mostrar código do relatório se disponível
-                const reportCode = res.headers.get('X-Report-Code');
-                if (reportCode) {
-                    console.log('Código do relatório:', reportCode);
-                }
-                
-                const blob = await res.blob(); 
-                const filename = `GreenGate-${farmName.replace(/\s+/g, '-')}-${plotName.replace(/\s+/g, '-')}.pdf`;
-                const a = document.createElement('a'); 
-                a.href = URL.createObjectURL(blob); 
-                a.download = filename; 
-                a.click();
-                showToast('PDF gerado com sucesso!', 'success');
-            } catch (err) { showToast(err.message); }
-            finally { btn.disabled = false; btn.textContent = '📄 Baixar Relatório PDF'; }
+                sInput.value = r.address;
+                sResults.classList.remove('show');
+            }
+        });
+
+        sClear.onclick = () => {
+            sInput.value = '';
+            sClear.classList.remove('show');
+            sResults.classList.remove('show');
+        };
+
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.search-box')) sResults.classList.remove('show');
+        });
+
+        // ========== reverse geocode ==========
+        async function fillMetaFromGeometry(geo) {
+            try {
+                if (!geo?.centroid) return;
+                let c = geo.centroid;
+                if (c.spatialReference?.isWebMercator) c = webMercatorUtils.webMercatorToGeographic(c);
+
+                const resp = await locator.locationToAddress(GEOCODE, {
+                    location: c,
+                    outFields: ["City", "Region", "Subregion", "Neighborhood"],
+                    langCode: "pt"
+                });
+
+                const attrs = resp?.attributes || {};
+                const municipality = attrs.City || null;
+                const state = attrs.Region || null;
+
+                currentMeta = {
+                    municipality,
+                    state,
+                    address: resp?.address || null
+                };
+
+                const metaEl = document.getElementById('areaMeta');
+                const parts = [];
+                if (municipality) parts.push(municipality);
+                if (state) parts.push(state);
+                metaEl.textContent = parts.length ? parts.join(' • ') : '';
+            } catch (_) {
+                // silencioso
+            }
         }
-        
-        document.getElementById('closePdfModal').onclick = closePdfModal;
-        document.getElementById('confirmPdfBtn').onclick = downloadPDF;
-        document.getElementById('validateBtn').onclick = validate;
-        document.getElementById('pdfBtn').onclick = openPdfModal;
-    </script>
+
+        // ========== AREA ==========
+        const checkArea = (geo) => {
+            if (!geo) return false;
+            const area = Math.abs(geoEngine.geodesicArea(geo, "square-meters")) / 10000;
+            const c = geo.centroid;
+            const ai = document.getElementById('areaInfo');
+
+            document.getElementById('areaValue').textContent = area.toFixed(2);
+            document.getElementById('areaCoords').textContent = c ? `${c.latitude.toFixed(5)}, ${c.longitude.toFixed(5)}` : '';
+            ai.classList.add('show');
+
+            if (area > 10000) {
+                ai.classList.add('limit-exceeded');
+                setValidateAvailability();
+                return false;
+            }
+            ai.classList.remove('limit-exceeded');
+            setValidateAvailability();
+            return true;
+        };
+
+        sketchVM.on(["create", "update"], e => {
+            if (e.state === "active") checkArea(e.graphic.geometry);
+
+            if (e.state === "complete") {
+                currentGraphic = e.graphic;
+
+                let geo = e.graphic.geometry;
+                if (geo.spatialReference?.isWebMercator) geo = webMercatorUtils.webMercatorToGeographic(geo);
+
+                const simp = geoEngine.simplify(geo) || geo;
+                currentPolygon = { type: "Polygon", coordinates: simp.rings };
+
+                document.getElementById('drawOptions').classList.remove('show');
+                document.getElementById('drawBtn').classList.remove('active');
+
+                const ok = checkArea(simp);
+                if (ok) fillMetaFromGeometry(simp);
+            }
+        });
+
+        window.loadGeoJSON = (geom) => {
+            clearAll();
+            const poly = new Polygon({ rings: geom.coordinates, spatialReference: { wkid: 4326 } });
+            const g = new Graphic({
+                geometry: poly,
+                symbol: { type: "simple-fill", color: [59,130,246,0.3], outline: { color: [59,130,246], width: 2 } }
+            });
+
+            graphicsLayer.add(g);
+            currentGraphic = g;
+            view.goTo(g.geometry.extent.expand(1.5));
+
+            currentPolygon = geom;
+
+            const ok = checkArea(poly);
+            if (ok) fillMetaFromGeometry(poly);
+        };
+
+        window.updateColor = (s) => {
+            if (!currentGraphic) return;
+            const c = {
+                approved: [[16,185,129,0.3],[16,185,129]],
+                rejected: [[239,68,68,0.3],[239,68,68]],
+                warning: [[245,158,11,0.3],[245,158,11]]
+            }[s] || [[59,130,246,0.3],[59,130,246]];
+
+            currentGraphic.symbol = { type: "simple-fill", color: c[0], outline: { color: c[1], width: 2 } };
+        };
+
+        // ========== BUTTONS ==========
+        document.getElementById('drawBtn').onclick = e => {
+            e.preventDefault();
+            if (sketchVM.state === "active") sketchVM.cancel();
+            document.getElementById('drawOptions').classList.toggle('show');
+            document.getElementById('drawBtn').classList.toggle('active');
+        };
+
+        document.getElementById('drawPolygon').onclick = e => {
+            e.preventDefault();
+            clearAll();
+            sketchVM.create("polygon");
+            document.getElementById('drawOptions').classList.remove('show');
+        };
+
+        document.getElementById('drawRect').onclick = e => {
+            e.preventDefault();
+            clearAll();
+            sketchVM.create("rectangle");
+            document.getElementById('drawOptions').classList.remove('show');
+        };
+
+        document.getElementById('clearBtn').onclick = e => { e.preventDefault(); clearAll(); };
+
+        document.getElementById('locateBtn').onclick = e => {
+            e.preventDefault();
+            navigator.geolocation?.getCurrentPosition(p => view.goTo({ center: [p.coords.longitude, p.coords.latitude], zoom: 14 }));
+        };
+
+        document.getElementById('fullscreenBtn').onclick = e => {
+            e.preventDefault();
+            document.body.classList.add('fullscreen-mode');
+            setTimeout(() => view.requestResize(), 100);
+        };
+
+        document.getElementById('closeFullscreen').onclick = e => {
+            e.preventDefault();
+            document.body.classList.remove('fullscreen-mode');
+            view.requestResize();
+        };
+    });
+
+    // ===================== EXPORT GEOJSON =====================
+    document.getElementById('exportBtn').onclick = () => {
+        if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+        const gj = { type: "Feature", properties: { source: "GreenGate", exported: new Date().toISOString() }, geometry: currentPolygon };
+        const blob = new Blob([JSON.stringify(gj, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `area-${Date.now()}.geojson`; a.click();
+        showToast('GeoJSON exportado!', 'success');
+    };
+
+    // ===================== UI =====================
+    const modal = document.getElementById('helpModal');
+    const toggleModal = s => { s ? modal.classList.add('show') : (modal.classList.remove('show'), localStorage.setItem('gg_tutorial', '1')); };
+    document.getElementById('helpBtn').onclick = () => toggleModal(true);
+    document.getElementById('closeHelp').onclick = () => toggleModal(false);
+    document.getElementById('startBtn').onclick = () => toggleModal(false);
+
+    document.getElementById('clearHistory').onclick = () => {
+        if (confirm('Limpar histórico?')) { localStorage.removeItem('gg_history'); renderHistory(); }
+    };
+
+    document.getElementById('toggleKey').onclick = e => {
+        e.preventDefault();
+        const i = document.getElementById('apiKey');
+        i.type = i.type === 'password' ? 'text' : 'password';
+        e.target.textContent = i.type === 'password' ? '👁️' : '🔒';
+    };
+
+    document.getElementById('fileInput').onchange = e => {
+        const f = e.target.files[0]; if (!f) return;
+        document.getElementById('fileName').textContent = f.name;
+        document.getElementById('fileName').classList.add('show');
+        document.getElementById('uploadArea').classList.add('has-file');
+
+        const r = new FileReader();
+        r.onload = ev => {
+            try {
+                const j = JSON.parse(ev.target.result);
+                loadGeoJSON(j.type === 'FeatureCollection' ? j.features[0].geometry : j.type === 'Feature' ? j.geometry : j);
+            } catch (err) { showToast('Erro: ' + err.message); }
+        };
+        r.readAsText(f);
+    };
+
+    // ===================== VALIDATE =====================
+    async function validate() {
+        const key = document.getElementById('apiKey').value.trim();
+        if (!key) { showToast('Insira a API Key'); return; }
+        if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
+
+        localStorage.setItem('gg_api_key', key);
+
+        document.getElementById('loadingOverlay').classList.add('show');
+        document.getElementById('validateBtn').disabled = true;
+
+        const steps = ['Analisando PRODES...', 'Verificando MapBiomas...', 'Consultando TIs...', 'Verificando Embargos...', 'Analisando UCs...', 'Processando...'];
+        let i = 0;
+        const iv = setInterval(() => { if (i < steps.length) document.getElementById('loadingStep').textContent = steps[i++]; }, 2000);
+
+        try {
+            const res = await fetch(API_URL + '/api/v1/validations/quick', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+                body: JSON.stringify(currentPolygon)
+            });
+
+            clearInterval(iv);
+            const data = await res.json();
+            if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
+
+            saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
+            showResult(data);
+
+        } catch (err) {
+            clearInterval(iv);
+            showToast(err.message);
+
+        } finally {
+            document.getElementById('loadingOverlay').classList.remove('show');
+            setValidateAvailability(); // NÃO reabilitar se estiver acima do limite
+        }
+    }
+
+    function showResult(d) {
+        document.getElementById('resultCard').classList.add('show');
+        document.getElementById('resultBanner').className = 'result-banner ' + d.status;
+
+        document.getElementById('resultIcon').textContent = d.status === 'approved' ? '✓' : d.status === 'rejected' ? '✗' : '⚠';
+        document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
+
+        const conf = clampConf(d.risk_score);
+        const label = confLabel(conf);
+
+        document.getElementById('resultSubtitle').textContent = `Conformidade: ${conf}/100 • ${label}`;
+
+        const fill = document.getElementById('complianceFill');
+        fill.style.width = conf + '%';
+        fill.className = 'compliance-fill ' + (conf >= 70 ? 'high' : conf >= 40 ? 'medium' : 'low');
+
+        document.getElementById('complianceValue').textContent = conf;
+        document.getElementById('complianceLabel').textContent = label;
+
+        const list = document.getElementById('checksList');
+        list.innerHTML = '';
+
+        (d.checks || []).forEach(c => {
+            const icon = c.status === 'pass' ? '✓' : c.status === 'fail' ? '✗' : c.status === 'warning' ? '⚠' : '○';
+
+            let det = '<p>' + (c.message || '') + '</p>';
+            if ((c.overlap_area_ha || 0) > 0) {
+                det += '<div class="check-overlap-box"><strong>Sobreposição:</strong> ' +
+                    Number(c.overlap_area_ha).toFixed(2) +
+                    ' ha (' + Number(c.overlap_percentage || 0).toFixed(1) + '%)</div>';
+            }
+
+            const row = document.createElement('div');
+            row.className = 'check-row ' + (c.status || 'skip');
+
+            row.innerHTML =
+                `<div class="check-header" onclick="this.parentElement.classList.toggle('open'); window.flashCurrentGraphic && window.flashCurrentGraphic();">
+                    <div class="check-left">
+                        <div class="check-status-icon ${c.status || 'skip'}">${icon}</div>
+                        <span class="check-name">${fmtCheckType(c.check_type)}</span>
+                    </div>
+                    <div class="check-right">
+                        <span class="check-badge ${c.status || 'skip'}">${fmtCheckStatusBadge(c.status)}</span>
+                        <span class="check-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="check-details">${det}</div>`;
+
+            list.appendChild(row);
+        });
+
+        document.getElementById('metaTime').textContent = '⏱️ ' + (d.processing_time_ms ?? '--') + 'ms';
+        document.getElementById('metaDate').textContent = '📅 ' + (d.validated_at ? new Date(d.validated_at).toLocaleString('pt-BR') : '--');
+
+        updateColor(d.status);
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ===================== PDF MODAL =====================
+    function openPdfModal() {
+        if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+        document.getElementById('pdfModal').classList.add('show');
+    }
+
+    function closePdfModal() {
+        document.getElementById('pdfModal').classList.remove('show');
+    }
+
+    async function downloadPDF() {
+        const farmName = document.getElementById('farmName').value.trim();
+        const plotName = document.getElementById('plotName').value.trim();
+
+        if (!farmName || !plotName) {
+            showToast('Preencha Fazenda e Talhão');
+            return;
+        }
+
+        const langRadio = document.querySelector('input[name="reportLang"]:checked');
+        const lang = langRadio ? langRadio.value : 'pt';
+
+        closePdfModal();
+
+        const key = document.getElementById('apiKey').value.trim();
+        if (!key) { showToast('Insira a API Key'); return; }
+        if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+
+        const btn = document.getElementById('pdfBtn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Gerando...';
+
+        try {
+            const payload = {
+                geometry: currentPolygon,
+                property_info: {
+                    farm_name: farmName,
+                    plot_name: plotName,
+                    municipality: currentMeta?.municipality || null,
+                    state: currentMeta?.state || null
+                },
+                lang: lang
+            };
+
+            const res = await fetch(API_URL + '/api/v1/reports/due-diligence/quick', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error('Erro ao gerar PDF');
+
+            const reportCode = res.headers.get('X-Report-Code');
+            if (reportCode) console.log('Código do relatório:', reportCode);
+
+            const blob = await res.blob();
+            const filename = `GreenGate-${farmName.replace(/\s+/g, '-')}-${plotName.replace(/\s+/g, '-')}.pdf`;
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            a.click();
+
+            showToast('PDF gerado com sucesso!', 'success');
+        } catch (err) {
+            showToast(err.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '📄 Baixar Relatório PDF';
+        }
+    }
+
+    document.getElementById('closePdfModal').onclick = closePdfModal;
+    document.getElementById('confirmPdfBtn').onclick = downloadPDF;
+    document.getElementById('validateBtn').onclick = validate;
+    document.getElementById('pdfBtn').onclick = openPdfModal;
+</script>
 </body>
 </html>
