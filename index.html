@@ -375,6 +375,10 @@
                 <div class="upload-hint">GeoJSON ou JSON</div>
             </label>
             <div class="upload-filename" id="fileName"></div>
+
+            <button class="btn-export" id="testExampleBtn" style="margin-top: 10px; background: var(--accent-blue); color: white; border-color: var(--accent-blue);">
+                🎯 Testar com Área de Exemplo
+            </button>
         </div>
 
         <button class="btn-validate" id="validateBtn" disabled>🔍 Validar Área</button>
@@ -947,10 +951,40 @@
         r.readAsText(f);
     };
 
+    // ===================== TESTE COM EXEMPLO =====================
+    document.getElementById('testExampleBtn').onclick = () => {
+        // Área de exemplo: ~500 ha no Mato Grosso (região de Sinop)
+        const exampleGeometry = {
+            type: "Polygon",
+            coordinates: [[
+                [-55.52, -11.86],
+                [-55.48, -11.86],
+                [-55.48, -11.88],
+                [-55.52, -11.88],
+                [-55.52, -11.86]
+            ]]
+        };
+
+        loadGeoJSON(exampleGeometry);
+        document.getElementById('fileName').textContent = '📍 Área de Exemplo (Sinop, MT)';
+        document.getElementById('fileName').classList.add('show');
+        document.getElementById('uploadArea').classList.add('has-file');
+        showToast('Área de exemplo carregada! Clique em "Validar Área" para testar.', 'success');
+    };
+
     // ===================== VALIDATE =====================
     async function validate() {
         const key = document.getElementById('apiKey').value.trim();
-        if (!key) { showToast('Insira a API Key'); return; }
+
+        // Permitir 1 validação grátis sem API Key
+        const freeValidations = parseInt(localStorage.getItem('gg_free_validations') || '0');
+
+        if (!key && freeValidations >= 1) {
+            showToast('Você já usou sua validação grátis! Adquira uma API Key para continuar.', 'error');
+            // Aqui você pode mostrar um modal de preços depois
+            return;
+        }
+
         if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
 
         localStorage.setItem('gg_api_key', key);
@@ -972,6 +1006,12 @@
             clearInterval(iv);
             const data = await res.json();
             if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
+
+            // Contar validação grátis se não tiver API Key
+            if (!key) {
+                localStorage.setItem('gg_free_validations', '1');
+                showToast('✅ Validação grátis utilizada! Para mais validações, adquira uma API Key.', 'success');
+            }
 
             saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
             showResult(data);
