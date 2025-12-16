@@ -365,7 +365,8 @@
                 <button class="input-eye" id="toggleKey">👁️</button>
             </div>
             <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
-                💡 Obtenha sua API Key: <a href="https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate" style="color: var(--accent-green); text-decoration: none;">WhatsApp</a>
+                💡 <strong>API Key obrigatória para uso.</strong><br>
+                Obtenha sua chave: <a href="https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate" style="color: var(--accent-green); text-decoration: none;">WhatsApp +55 19 9 7104-6171</a>
             </p>
         </div>
 
@@ -433,7 +434,7 @@
         <div class="help-steps">
             <div class="step-item">
                 <div class="step-number">1</div>
-                <div class="step-content"><h4>API Key (Opcional para teste)</h4><p>Insira sua <strong>API Key</strong> ou teste com <strong>1 validação grátis</strong>. Para mais validações, entre em contato.</p></div>
+                <div class="step-content"><h4>API Key</h4><p>Insira sua <strong>API Key</strong> no campo "Autenticação". <br><span style="color:var(--accent-yellow); font-size:0.75rem;">⚠️ Se o backend estiver em produção, a API Key é obrigatória.</span></p></div>
             </div>
             <div class="step-item">
                 <div class="step-number">2</div>
@@ -979,18 +980,15 @@
     async function validate() {
         const key = document.getElementById('apiKey').value.trim();
 
-        // Permitir 1 validação grátis sem API Key
-        const freeValidations = parseInt(localStorage.getItem('gg_free_validations') || '0');
-
-        if (!key && freeValidations >= 1) {
-            showToast('Você já usou sua validação grátis! Entre em contato para obter uma API Key.', 'error');
+        if (!key) {
+            showToast('⚠️ Insira sua API Key para validar. Entre em contato via WhatsApp para obter uma chave.', 'error');
             return;
         }
 
         if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
 
         // Salvar API Key para próximas sessões
-        if (key) localStorage.setItem('gg_api_key', key);
+        localStorage.setItem('gg_api_key', key);
 
         document.getElementById('loadingOverlay').classList.add('show');
         document.getElementById('validateBtn').disabled = true;
@@ -1013,18 +1011,29 @@
             const data = await res.json();
             if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
 
-            // Contar validação grátis se não tiver API Key
-            if (!key) {
-                localStorage.setItem('gg_free_validations', '1');
-                showToast('✅ Validação grátis utilizada! Para mais validações, entre em contato conosco.', 'success');
-            }
-
             saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
             showResult(data);
 
         } catch (err) {
             clearInterval(iv);
-            showToast(err.message);
+
+            // Mensagem de erro mais clara
+            let errorMessage = err.message;
+
+            // Se o erro mencionar API Key
+            if (errorMessage.includes('API Key') || errorMessage.includes('403') || errorMessage.includes('401')) {
+                if (!key) {
+                    errorMessage = '⚠️ Backend requer API Key. Entre em contato para obter uma chave.';
+                } else {
+                    errorMessage = '❌ API Key inválida. Verifique sua chave ou entre em contato conosco.';
+                }
+            }
+            // Se erro de conexão
+            else if (errorMessage.includes('fetch') || errorMessage.includes('Failed') || errorMessage.includes('NetworkError')) {
+                errorMessage = '🔌 Erro de conexão. Verifique se a API está online ou tente novamente.';
+            }
+
+            showToast(errorMessage);
 
         } finally {
             document.getElementById('loadingOverlay').classList.remove('show');
