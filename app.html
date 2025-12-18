@@ -1009,6 +1009,12 @@
 
             clearInterval(iv);
             const data = await res.json();
+
+            // Tratamento específico para quota excedida
+            if (res.status === 429) {
+                throw new Error(data.detail || 'Quota mensal excedida. Faça upgrade do plano ou aguarde o reset mensal.');
+            }
+
             if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
 
             saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
@@ -1020,8 +1026,12 @@
             // Mensagem de erro mais clara
             let errorMessage = err.message;
 
+            // Se o erro mencionar quota excedida
+            if (errorMessage.includes('Quota') || errorMessage.includes('quota') || errorMessage.includes('excedida')) {
+                errorMessage = '🚫 ' + errorMessage;
+            }
             // Se o erro mencionar API Key
-            if (errorMessage.includes('API Key') || errorMessage.includes('403') || errorMessage.includes('401')) {
+            else if (errorMessage.includes('API Key') || errorMessage.includes('403') || errorMessage.includes('401')) {
                 if (!key) {
                     errorMessage = '⚠️ Backend requer API Key. Entre em contato para obter uma chave.';
                 } else {
