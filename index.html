@@ -99,6 +99,73 @@
             transform: scale(0.95);
         }
 
+        /* Dark mode backgrounds */
+        [data-theme="dark"] body {
+            background: var(--white);
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
+        }
+
+        [data-theme="dark"] .stats {
+            background: #0a0e1a;
+        }
+
+        [data-theme="dark"] .features {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .data-sources {
+            background: var(--white);
+        }
+
+        [data-theme="dark"] .roi {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .contact {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .nav {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom-color: var(--gray-lightest);
+        }
+
+        [data-theme="dark"] .nav.scrolled {
+            background: rgba(15, 23, 42, 0.98);
+        }
+
+        [data-theme="dark"] .hero-card,
+        [data-theme="dark"] .feature-card,
+        [data-theme="dark"] .data-card,
+        [data-theme="dark"] .roi-card {
+            background: var(--dark-800);
+            border-color: var(--gray-lightest);
+        }
+
+        [data-theme="dark"] .hero-checklist-item {
+            background: var(--light);
+        }
+
+        [data-theme="dark"] .hero-checklist-item:hover {
+            background: var(--dark-700);
+        }
+
+        [data-theme="dark"] .data-card:hover {
+            background: var(--dark-700);
+        }
+
+        [data-theme="dark"] .roi-example {
+            background: var(--dark-800);
+        }
+
+        [data-theme="dark"] .footer {
+            background: #0a0e1a;
+        }
+
         /* ===============================================
            3D EFFECTS
            =============================================== */
@@ -1385,7 +1452,7 @@
             </div>
             <div class="stat-item">
                 <div class="stat-number">1.200+</div>
-                <div class="stat-label">Áreas Validadas (Zero Falsos Negativos)</div>
+                <div class="stat-label">Áreas Validadas em Produção</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">R$ 1,98</div>
@@ -1407,7 +1474,7 @@
 
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">▸</div>
                     <h3>Validação em até 2 Minutos</h3>
                     <p>
                         API REST de alto desempenho. Valide propriedades rurais em até 2 minutos
@@ -1416,7 +1483,7 @@
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
+                    <div class="feature-icon">◆</div>
                     <h3>Score de Risco 0-100</h3>
                     <p>
                         Algoritmo proprietário que analisa 7 camadas de dados e gera um score de risco
@@ -1425,7 +1492,7 @@
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon">■</div>
                     <h3>Relatórios PDF</h3>
                     <p>
                         Gere dossiês de conformidade profissionais com mapas, estatísticas e QR Code
@@ -1434,7 +1501,7 @@
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
+                    <div class="feature-icon">↻</div>
                     <h3>Dados Atualizados</h3>
                     <p>
                         Integração direta com fontes oficiais: INPE, FUNAI, IBAMA, INCRA, MMA.
@@ -1443,7 +1510,7 @@
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">🔐</div>
+                    <div class="feature-icon">●</div>
                     <h3>Seguro e Escalável</h3>
                     <p>
                         Infraestrutura enterprise com rate limiting, autenticação via API key e
@@ -1452,7 +1519,7 @@
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                    <div class="feature-icon">▬</div>
                     <h3>API RESTful</h3>
                     <p>
                         Documentação completa, endpoints intuitivos e suporte para GeoJSON.
@@ -1546,10 +1613,10 @@
     <section class="roi">
         <div class="roi-container">
             <div class="section-header">
-                <span class="section-label">ROI Comprovado</span>
-                <h2 class="section-title">Economize 98% vs. Análise Manual</h2>
+                <span class="section-label">Economia Comprovada</span>
+                <h2 class="section-title">Reduza Custos com Validação Automatizada</h2>
                 <p class="section-subtitle">
-                    Justifique o investimento com economia real de tempo e recursos
+                    Compare custos e otimize seu processo de due diligence ambiental
                 </p>
             </div>
 
@@ -1576,14 +1643,14 @@
                     <h3>GreenGate API</h3>
                     <p style="color: var(--gray); margin-bottom: 1rem;">Validação automatizada</p>
                     <div class="price">R$ 1,98 <small>/validação</small></div>
-                    <div class="saving">Economia de 98%</div>
+                    <div class="saving">Até 40x mais econômico</div>
                     <ul class="roi-features">
-                        <li>&lt; 2 segundos por validação</li>
-                        <li>7 camadas já integradas</li>
+                        <li>&lt; 2 minutos por validação</li>
+                        <li>7 camadas oficiais integradas</li>
                         <li>API REST pronta para uso</li>
-                        <li>Zero falsos negativos</li>
-                        <li>Geometrias 100% validadas</li>
-                        <li>Sem arquivos quebrados</li>
+                        <li>Alto índice de precisão</li>
+                        <li>Validação geométrica PostGIS</li>
+                        <li>Sem erros de formato</li>
                         <li>Relatório PDF auditável</li>
                         <li>QR Code para verificação</li>
                     </ul>
@@ -1612,9 +1679,9 @@
                 <p style="color: var(--gray); margin-bottom: 1.5rem;">
                     PDF profissional com mapa, estatísticas e QR Code para verificação pública
                 </p>
-                <a href="https://greengate.up.railway.app/api/v1/reports/verify/GG-DEMO12345" class="pdf-link" target="_blank">
-                    <span style="font-size: 1.5rem;">📄</span>
-                    <span>Ver Relatório de Exemplo</span>
+                <a href="#contact" class="pdf-link">
+                    <span style="font-size: 1.5rem;">■</span>
+                    <span>Solicite um Exemplo de Relatório</span>
                 </a>
             </div>
         </div>
@@ -1628,7 +1695,7 @@
                 Junte-se a empresas que já confiam na GreenGate para triagem ambiental.
                 Validação instantânea, relatórios PDF e suporte técnico.
             </p>
-            <a href="https://www.greengate.com.br/app" class="btn-primary">Começar Validação Gratuita</a>
+            <a href="#contact" class="btn-primary">Falar com Especialista</a>
         </div>
     </section>
 
@@ -1652,7 +1719,7 @@
 
                     <div class="contact-details">
                         <div class="contact-detail">
-                            <div class="contact-detail-icon">📧</div>
+                            <div class="contact-detail-icon">✉</div>
                             <div class="contact-detail-text">
                                 <strong>Email</strong>
                                 <span>contato@greengate.com.br</span>
@@ -1660,7 +1727,7 @@
                         </div>
 
                         <div class="contact-detail">
-                            <div class="contact-detail-icon">🚀</div>
+                            <div class="contact-detail-icon">▸</div>
                             <div class="contact-detail-text">
                                 <strong>Plataforma</strong>
                                 <span>www.greengate.com.br/app</span>
@@ -1668,7 +1735,7 @@
                         </div>
 
                         <div class="contact-detail">
-                            <div class="contact-detail-icon">⚡</div>
+                            <div class="contact-detail-icon">▸</div>
                             <div class="contact-detail-text">
                                 <strong>Tempo de Resposta</strong>
                                 <span>Até 24 horas úteis</span>
@@ -1738,7 +1805,7 @@
                     <h4>Recursos</h4>
                     <ul>
                         <li><a href="https://www.greengate.com.br/app">Validar Área</a></li>
-                        <li><a href="https://greengate.up.railway.app/docs" target="_blank">Documentação API</a></li>
+                        <li><a href="docs.html">Documentação API</a></li>
                         <li><a href="#features">Funcionalidades</a></li>
                         <li><a href="#contact">Contato</a></li>
                     </ul>
