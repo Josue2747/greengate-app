@@ -1,0 +1,34 @@
+# ========================================
+# COPIE E COLE NO RAILWAY
+# ========================================
+# Railway → Seu Projeto → Variables → Raw Editor
+# Cole TODAS as linhas abaixo:
+
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD_HASH=ce53b6ca5cb2680187918a97b2523d020094f93f50dae61cbb97ae62bf1a0e0a
+SECRET_KEY=e01d668e74ff4633041539bbbbb93e098b6e5dc98e23b4203a6d01de266ac42a
+
+# ========================================
+# EXPLICAÇÃO:
+# ========================================
+# ADMIN_USERNAME: usuário para login no painel admin
+# ADMIN_PASSWORD_HASH: hash da senha "admin123" (TROCAR EM PRODUÇÃO!)
+# SECRET_KEY: chave secreta para JWT (já gerada de forma segura)
+
+# ========================================
+# PARA TROCAR A SENHA:
+# ========================================
+# 1. No terminal local, execute:
+#    cd backend/backend
+#    python -c "from app.core.auth import hash_password; print(hash_password('SuaSenhaAqui'))"
+#
+# 2. Copie o hash que aparecer
+# 3. Substitua o valor de ADMIN_PASSWORD_HASH acima
+# 4. Cole novamente no Railway
+
+# ========================================
+# IMPORTANTE:
+# ========================================
+# - Não commite este arquivo no git se trocar a senha!
+# - Em produção, use uma senha forte e única
+# - SECRET_KEY já está seguro, pode usar

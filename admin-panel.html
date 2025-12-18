@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenGate - Painel Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header button {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .header button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        /* Login Form */
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 32px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-top: 10px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .actions {
+            margin-bottom: 24px;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+
+        td {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-free {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-professional {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .badge-enterprise {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-active {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .badge-inactive {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h2 {
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .code-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin: 16px 0;
+        }
+
+        .copy-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .copy-btn:hover {
+            background: #0056b3;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔐 GreenGate Admin</h1>
+            <button id="logoutBtn" class="hidden" onclick="logout()">Sair</button>
+        </div>
+
+        <!-- Login Screen -->
+        <div class="content" id="loginScreen">
+            <div class="login-form">
+                <h2>Login Administrativo</h2>
+                <div id="loginError"></div>
+                <form onsubmit="login(event)">
+                    <div class="form-group">
+                        <label>Usuário</label>
+                        <input type="text" id="username" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn">Entrar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="content dashboard" id="dashboard">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total de Keys</h3>
+                    <div class="value" id="totalKeys">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Keys Ativas</h3>
+                    <div class="value" id="activeKeys">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Requisições (Mês)</h3>
+                    <div class="value" id="monthRequests">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Requisições (Total)</h3>
+                    <div class="value" id="totalRequests">-</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button class="btn-action" onclick="showCreateModal()">➕ Criar Nova API Key</button>
+                <button class="btn-action" onclick="loadKeys()">🔄 Atualizar</button>
+                <button class="btn-action" onclick="stampMigrations()" style="background: #28a745;">✅ Marcar Migrations (banco já criado)</button>
+                <button class="btn-action" onclick="runMigrations()" style="background: #ff9800;">⚙️ Rodar Migrations (banco vazio)</button>
+            </div>
+
+            <!-- Keys Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prefixo</th>
+                            <th>Cliente</th>
+                            <th>Plano</th>
+                            <th>Quota</th>
+                            <th>Usado (Mês)</th>
+                            <th>Status</th>
+                            <th>Criado em</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keysTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px;">
+                                Carregando...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Key Modal -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Criar Nova API Key</h2>
+                <button class="modal-close" onclick="closeCreateModal()">×</button>
+            </div>
+            <div id="createResult"></div>
+            <form onsubmit="createKey(event)">
+                <div class="form-group">
+                    <label>Nome do Cliente *</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="clientEmail">
+                </div>
+                <div class="form-group">
+                    <label>CPF/CNPJ</label>
+                    <input type="text" id="clientDocument">
+                </div>
+                <div class="form-group">
+                    <label>Plano *</label>
+                    <select id="plan" required>
+                        <option value="free">Free (1 validação)</option>
+                        <option value="professional">Professional (50 validações/mês)</option>
+                        <option value="enterprise">Enterprise (Ilimitado)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Dias até expirar (opcional)</label>
+                    <input type="number" id="expiresInDays" min="1" placeholder="Deixe vazio para nunca expirar">
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea id="notes" rows="3" placeholder="Informações adicionais..."></textarea>
+                </div>
+                <button type="submit" class="btn">Criar API Key</button>
+                <button type="button" class="btn btn-secondary" onclick="closeCreateModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configuração
+        const API_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8000/api/v1'
+            : 'https://api.greengate.com.br/api/v1';
+
+        let token = localStorage.getItem('admin_token');
+
+        // Verificar se já está logado
+        if (token) {
+            showDashboard();
+            loadStats();
+            loadKeys();
+        }
+
+        // Login
+        async function login(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Erro ao fazer login');
+                }
+
+                token = data.access_token;
+                localStorage.setItem('admin_token', token);
+
+                showDashboard();
+                loadStats();
+                loadKeys();
+
+            } catch (error) {
+                document.getElementById('loginError').innerHTML =
+                    `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('admin_token');
+            token = null;
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('logoutBtn').classList.add('hidden');
+        }
+
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('active');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+        }
+
+        // Load Stats
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_URL}/admin/api-keys/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Erro ao carregar estatísticas');
+                }
+
+                const stats = await response.json();
+                document.getElementById('totalKeys').textContent = stats.total_keys;
+                document.getElementById('activeKeys').textContent = stats.active_keys;
+                document.getElementById('monthRequests').textContent = stats.requests_this_month.toLocaleString();
+                document.getElementById('totalRequests').textContent = stats.total_requests.toLocaleString();
+
+            } catch (error) {
+                console.error('Erro ao carregar stats:', error);
+            }
+        }
+
+        // Load Keys
+        async function loadKeys() {
+            try {
+                const response = await fetch(`${API_URL}/admin/api-keys/?limit=100`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Erro ao carregar keys');
+                }
+
+                const keys = await response.json();
+                renderKeysTable(keys);
+
+            } catch (error) {
+                console.error('Erro ao carregar keys:', error);
+                document.getElementById('keysTableBody').innerHTML =
+                    `<tr><td colspan="8" style="text-align: center; color: red;">${error.message}</td></tr>`;
+            }
+        }
+
+        // Render Keys Table
+        function renderKeysTable(keys) {
+            const tbody = document.getElementById('keysTableBody');
+
+            if (keys.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhuma API key encontrada</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = keys.map(key => `
+                <tr>
+                    <td><code>${key.key_prefix}</code></td>
+                    <td>${key.client_name}</td>
+                    <td><span class="badge badge-${key.plan}">${key.plan}</span></td>
+                    <td>${key.monthly_quota === null ? '∞' : key.monthly_quota}</td>
+                    <td>${key.requests_this_month}</td>
+                    <td><span class="badge badge-${key.is_active && !key.is_revoked ? 'active' : 'inactive'}">
+                        ${key.is_active && !key.is_revoked ? 'Ativa' : 'Inativa'}
+                    </span></td>
+                    <td>${new Date(key.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td>
+                        ${key.is_active && !key.is_revoked ? `
+                            <button onclick="revokeKey('${key.id}', '${key.client_name}')"
+                                    style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 4px;">
+                                🚫 Revogar
+                            </button>
+                        ` : '<span style="color: #999; font-size: 12px;">Revogada</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Show Create Modal
+        function showCreateModal() {
+            document.getElementById('createModal').classList.add('active');
+            document.getElementById('createResult').innerHTML = '';
+            // Reset form
+            document.querySelector('#createModal form').reset();
+        }
+
+        // Close Create Modal
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+        }
+
+        // Create Key
+        async function createKey(event) {
+            event.preventDefault();
+
+            const data = {
+                client_name: document.getElementById('clientName').value,
+                client_email: document.getElementById('clientEmail').value || null,
+                client_document: document.getElementById('clientDocument').value || null,
+                plan: document.getElementById('plan').value,
+                expires_in_days: document.getElementById('expiresInDays').value ?
+                    parseInt(document.getElementById('expiresInDays').value) : null,
+                notes: document.getElementById('notes').value || null,
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/admin/api-keys/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || 'Erro ao criar API key');
+                }
+
+                // Mostrar API key criada (ÚNICA VEZ!)
+                document.getElementById('createResult').innerHTML = `
+                    <div class="alert alert-warning">
+                        <strong>⚠️ ATENÇÃO: Esta é a ÚNICA VEZ que a API key será exibida!</strong><br>
+                        Copie e salve em local seguro.
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>✅ API Key criada com sucesso!</strong>
+                    </div>
+                    <div class="code-box">
+                        <strong>API Key:</strong><br>
+                        <code id="newApiKey">${result.api_key}</code><br>
+                        <button class="copy-btn" onclick="copyApiKey()">📋 Copiar</button>
+                    </div>
+                    <div class="code-box">
+                        <strong>Detalhes:</strong><br>
+                        Cliente: ${result.client_name}<br>
+                        Plano: ${result.plan}<br>
+                        Quota: ${result.monthly_quota === null ? 'Ilimitado' : result.monthly_quota}<br>
+                        Prefixo: ${result.key_prefix}
+                    </div>
+                `;
+
+                // Reload keys
+                loadKeys();
+                loadStats();
+
+                // Scroll to result
+                document.querySelector('.modal-content').scrollTop = 0;
+
+            } catch (error) {
+                document.getElementById('createResult').innerHTML =
+                    `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        // Revoke API Key
+        async function revokeKey(keyId, clientName) {
+            if (!confirm(`⚠️ REVOGAR API KEY\n\nCliente: ${clientName}\n\nEsta ação é IRREVERSÍVEL!\nA API key será desativada imediatamente e não poderá ser reativada.\n\nDeseja continuar?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/api-keys/${keyId}/revoke`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Erro ao revogar API key');
+                }
+
+                alert('✅ API Key revogada com sucesso!\n\nO cliente não poderá mais usar esta key.');
+
+                // Recarregar tabela e stats
+                loadKeys();
+                loadStats();
+
+            } catch (error) {
+                alert('❌ Erro ao revogar API key:\n\n' + error.message);
+                console.error('Revoke error:', error);
+            }
+        }
+
+        // Copy API Key
+        function copyApiKey() {
+            const apiKey = document.getElementById('newApiKey').textContent;
+            navigator.clipboard.writeText(apiKey).then(() => {
+                alert('API Key copiada para a área de transferência!');
+            });
+        }
+
+        // Stamp Migrations (marcar como aplicadas sem executar)
+        async function stampMigrations() {
+            if (!confirm('✅ MARCAR MIGRATIONS COMO APLICADAS\n\nUse isso quando:\n- O banco JÁ TEM as tabelas criadas\n- Você está recebendo erro de "tabela duplicada"\n\nEste comando NÃO altera o banco, apenas marca as migrations como executadas.\n\nContinuar?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/api-keys/stamp-migrations`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Erro ao marcar migrations');
+                }
+
+                const result = await response.json();
+
+                alert('✅ Sucesso!\n\n' + result.message + '\n\n' + result.info);
+                console.log('Stamp output:', result.output);
+
+            } catch (error) {
+                alert('❌ Erro ao marcar migrations:\n\n' + error.message);
+                console.error('Stamp error:', error);
+            }
+        }
+
+        // Run Migrations (executar no banco vazio)
+        async function runMigrations() {
+            if (!confirm('⚠️ RODAR MIGRATIONS NO BANCO\n\nUse isso APENAS se:\n- O banco está VAZIO (sem tabelas)\n- É o primeiro deploy\n\nSe você já tem tabelas, use o botão VERDE "Marcar Migrations" ao invés deste.\n\nContinuar?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/api-keys/run-migrations`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Erro ao rodar migrations');
+                }
+
+                const result = await response.json();
+
+                alert('✅ Migrations aplicadas com sucesso!\n\n' + result.message);
+                console.log('Migration output:', result.output);
+
+            } catch (error) {
+                alert('❌ Erro ao rodar migrations:\n\n' + error.message + '\n\n⚠️ Se recebeu erro de "tabela duplicada", use o botão VERDE "Marcar Migrations" ao invés deste.');
+                console.error('Migration error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
