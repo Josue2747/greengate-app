@@ -647,6 +647,167 @@
         }
 
         /* ===============================================
+           ROI/PRICING - PREMIUM
+           =============================================== */
+        .roi {
+            padding: var(--section-padding) 0;
+            background: var(--lighter);
+        }
+
+        .roi-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .roi-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .roi-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--gray-lightest);
+            position: relative;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .roi-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15);
+            transform: scale(1.05);
+        }
+
+        .roi-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .roi-card.featured:hover {
+            transform: translateY(-8px) scale(1.07);
+        }
+
+        .roi-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .roi-card h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-card .price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 1.5rem 0;
+            line-height: 1;
+        }
+
+        .roi-card .price small {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .roi-card .saving {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-dark);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .roi-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .roi-features li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--dark-600);
+            border-bottom: 1px solid var(--gray-lightest);
+        }
+
+        .roi-features li:last-child {
+            border-bottom: none;
+        }
+
+        .roi-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .roi-example {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gray-lightest);
+            text-align: center;
+        }
+
+        .roi-example h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .roi-example .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--lighter);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s var(--ease-out);
+            border: 2px solid var(--gray-lightest);
+        }
+
+        .roi-example .pdf-link:hover {
+            background: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* ===============================================
            CTA - PREMIUM
            =============================================== */
         .cta {
@@ -900,20 +1061,20 @@
     <section class="stats">
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-number">235.762</div>
-                <div class="stat-label">Polígonos Oficiais</div>
+                <div class="stat-number">7</div>
+                <div class="stat-label">Camadas Oficiais Integradas</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">&lt; 2s</div>
                 <div class="stat-label">Tempo de Validação</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">7</div>
-                <div class="stat-label">Camadas de Dados</div>
+                <div class="stat-number">1.200+</div>
+                <div class="stat-label">Áreas Validadas (Zero Falsos Negativos)</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">99.9%</div>
-                <div class="stat-label">Precisão Geoespacial</div>
+                <div class="stat-number">R$ 1,98</div>
+                <div class="stat-label">Custo por Validação vs. R$ 80-160 (analista)</div>
             </div>
         </div>
     </section>
@@ -992,9 +1153,9 @@
         <div class="data-sources-container">
             <div class="section-header">
                 <span class="section-label">Fontes de Dados</span>
-                <h2 class="section-title">235.762 Polígonos Oficiais</h2>
+                <h2 class="section-title">7 Camadas Oficiais Integradas</h2>
                 <p class="section-subtitle">
-                    Validamos contra as fontes mais confiáveis do Brasil
+                    Bases públicas normalizadas e validadas. Sem arquivos quebrados ou geometrias inválidas.
                 </p>
             </div>
 
@@ -1062,6 +1223,84 @@
                     </div>
                     <p>Cadastro Ambiental Rural. Validação de limites declarados vs. reais.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI/Pricing -->
+    <section class="roi">
+        <div class="roi-container">
+            <div class="section-header">
+                <span class="section-label">ROI Comprovado</span>
+                <h2 class="section-title">Economize 98% vs. Análise Manual</h2>
+                <p class="section-subtitle">
+                    Justifique o investimento com economia real de tempo e recursos
+                </p>
+            </div>
+
+            <div class="roi-comparison">
+                <!-- Análise Manual -->
+                <div class="roi-card">
+                    <h3>Análise Manual</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Método tradicional com analista</p>
+                    <div class="price">R$ 80-160 <small>/validação</small></div>
+                    <ul class="roi-features">
+                        <li>1-2 horas de trabalho manual</li>
+                        <li>Download de múltiplas bases</li>
+                        <li>QGIS/ArcGIS necessário</li>
+                        <li>Risco de erro humano</li>
+                        <li>Arquivos corrompidos comuns</li>
+                        <li>Geometrias inválidas frequentes</li>
+                        <li>Sem auditoria automática</li>
+                    </ul>
+                </div>
+
+                <!-- GreenGate API -->
+                <div class="roi-card featured">
+                    <div class="roi-badge">Recomendado</div>
+                    <h3>GreenGate API</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Validação automatizada</p>
+                    <div class="price">R$ 1,98 <small>/validação</small></div>
+                    <div class="saving">Economia de 98%</div>
+                    <ul class="roi-features">
+                        <li>&lt; 2 segundos por validação</li>
+                        <li>7 camadas já integradas</li>
+                        <li>API REST pronta para uso</li>
+                        <li>Zero falsos negativos</li>
+                        <li>Geometrias 100% validadas</li>
+                        <li>Sem arquivos quebrados</li>
+                        <li>Relatório PDF auditável</li>
+                        <li>QR Code para verificação</li>
+                    </ul>
+                </div>
+
+                <!-- ROI Exemplo -->
+                <div class="roi-card">
+                    <h3>Seu ROI</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Exemplo com 100 validações/mês</p>
+                    <div class="price">R$ 8.000 <small>/mês economizados</small></div>
+                    <ul class="roi-features">
+                        <li>Custo manual: R$ 10.000/mês</li>
+                        <li>Custo GreenGate: R$ 198/mês</li>
+                        <li>Economia: R$ 9.802/mês</li>
+                        <li>ROI: 4.950% ao mês</li>
+                        <li>Payback: Imediato</li>
+                        <li>Liberação de 100-200h/mês</li>
+                        <li>Equipe foca em análises complexas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- PDF Exemplo -->
+            <div class="roi-example">
+                <h4>Veja um Exemplo de Relatório Gerado</h4>
+                <p style="color: var(--gray); margin-bottom: 1.5rem;">
+                    PDF profissional com mapa, estatísticas e QR Code para verificação pública
+                </p>
+                <a href="https://greengate.up.railway.app/api/v1/reports/verify/GG-DEMO12345" class="pdf-link" target="_blank">
+                    <span style="font-size: 1.5rem;">📄</span>
+                    <span>Ver Relatório de Exemplo</span>
+                </a>
             </div>
         </div>
     </section>
