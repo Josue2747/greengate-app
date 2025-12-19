@@ -14,7 +14,7 @@ Casos de uso:
 
     📋 Automação de relatórios regulatórios
 
-    🛰️ Integração de monitoramento de desmatamento em tempo real
+    🛰️ Integração de monitoramento de desmatamento 
 
 Como Funciona
 
@@ -40,18 +40,15 @@ Funcionalidades
 
 Camadas de Referência Suportadas
 
-    Alertas de desmatamento (via satélite) 
+    Alertas de desmatamento  
 
     Terras indígenas
 
     Unidades de conservação
 
-    Áreas de Preservação Permanente (APP) (Não Implementado)
-
     Embargos ambientais (IBAMA)
 
-    Limites de propriedades rurais (CAR) (Não Implementado)
-
+    
 Camadas personalizadas disponíveis sob demanda.
 
 Licença
