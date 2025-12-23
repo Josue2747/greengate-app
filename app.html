@@ -843,6 +843,7 @@
 
         window.loadGeoJSON = (geom) => {
             clearAll();
+            isExampleArea = false; // Resetar flag (área de exemplo vai setar novamente)
             const poly = new Polygon({ rings: geom.coordinates, spatialReference: { wkid: 4326 } });
             const g = new Graphic({
                 geometry: poly,
@@ -881,6 +882,7 @@
         document.getElementById('drawPolygon').onclick = e => {
             e.preventDefault();
             clearAll();
+            isExampleArea = false; // Não é mais área de exemplo
             sketchVM.create("polygon");
             document.getElementById('drawOptions').classList.remove('show');
         };
@@ -888,6 +890,7 @@
         document.getElementById('drawRect').onclick = e => {
             e.preventDefault();
             clearAll();
+            isExampleArea = false; // Não é mais área de exemplo
             sketchVM.create("rectangle");
             document.getElementById('drawOptions').classList.remove('show');
         };
@@ -955,6 +958,9 @@
         r.readAsText(f);
     };
 
+    // Flag global para área de exemplo (permite validação sem API Key)
+    let isExampleArea = false;
+
     // ===================== TESTE COM EXEMPLO =====================
     document.getElementById('testExampleBtn').onclick = () => {
         // Área de exemplo: ~500 ha no Mato Grosso (região de Sinop)
@@ -970,22 +976,29 @@
         };
 
         loadGeoJSON(exampleGeometry);
-        document.getElementById('fileName').textContent = '📍 Área de Exemplo (Sinop, MT)';
+        isExampleArea = true; // Marcar como área de exemplo
+        document.getElementById('fileName').textContent = '📍 Área de Exemplo (Sinop, MT) - Validação livre';
         document.getElementById('fileName').classList.add('show');
         document.getElementById('uploadArea').classList.add('has-file');
-        showToast('Área de exemplo carregada! Clique em "Validar Área" para testar.', 'success');
+        showToast('✨ Área de exemplo carregada! Clique em "Validar Área" para testar sem API Key.', 'success');
     };
 
     // ===================== VALIDATE =====================
     async function validate() {
         const key = document.getElementById('apiKey').value.trim();
 
-        if (!key) {
+        // Permitir validação sem chave APENAS para área de exemplo
+        if (!key && !isExampleArea) {
             showToast('⚠️ Insira sua API Key para validar. Entre em contato via WhatsApp para obter uma chave.', 'error');
             return;
         }
 
         if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
+
+        // Informar se está validando área de exemplo sem chave
+        if (isExampleArea && !key) {
+            showToast('🎯 Validando área de exemplo (sem API Key). Para suas áreas reais, obtenha uma chave.', 'info');
+        }
 
         // Salvar API Key para próximas sessões
         localStorage.setItem('gg_api_key', key);
