@@ -142,8 +142,8 @@
         [data-theme="dark"] .feature-card,
         [data-theme="dark"] .data-card,
         [data-theme="dark"] .roi-card {
-            background: var(--dark-800);
-            border-color: var(--gray-lightest);
+            background: var(--dark-800) !important;
+            border-color: var(--gray-lightest) !important;
         }
 
         [data-theme="dark"] .hero-checklist-item {
@@ -159,7 +159,7 @@
         }
 
         [data-theme="dark"] .roi-example {
-            background: var(--dark-800);
+            background: var(--dark-800) !important;
         }
 
         [data-theme="dark"] .footer {
@@ -178,7 +178,7 @@
 
         [data-theme="dark"] .contact-form-wrapper,
         [data-theme="dark"] .contact-info {
-            background: var(--dark-800);
+            background: var(--dark-800) !important;
         }
 
         [data-theme="dark"] input,
@@ -1134,7 +1134,7 @@
         }
 
         [data-theme="dark"] .contact-content {
-            background: var(--dark-800);
+            background: var(--dark-800) !important;
         }
 
         .contact-info {
@@ -1582,8 +1582,8 @@
                 <div class="stat-label">Áreas Validadas em Produção</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">R$ 1,98</div>
-                <div class="stat-label">Custo por Validação vs. R$ 80-160 (analista)</div>
+                <div class="stat-number">PDF</div>
+                <div class="stat-label">Relatório Auditável com QR Code</div>
             </div>
         </div>
     </section>
@@ -1776,71 +1776,9 @@
         </div>
     </section>
 
-    <!-- ROI/Pricing -->
-    <section class="roi">
-        <div class="roi-container">
-            <div class="section-header">
-                <span class="section-label">Economia Comprovada</span>
-                <h2 class="section-title">Reduza Custos com Validação Automatizada</h2>
-                <p class="section-subtitle">
-                    Compare custos e otimize seu processo de due diligence ambiental
-                </p>
-            </div>
-
-            <div class="roi-comparison">
-                <!-- Análise Manual -->
-                <div class="roi-card">
-                    <h3>Análise Manual</h3>
-                    <p style="color: var(--gray); margin-bottom: 1rem;">Método tradicional com analista</p>
-                    <div class="price">R$ 80-160 <small>/validação</small></div>
-                    <ul class="roi-features">
-                        <li>1-2 horas de trabalho manual</li>
-                        <li>Download de múltiplas bases</li>
-                        <li>QGIS/ArcGIS necessário</li>
-                        <li>Risco de erro humano</li>
-                        <li>Arquivos corrompidos comuns</li>
-                        <li>Geometrias inválidas frequentes</li>
-                        <li>Sem auditoria automática</li>
-                    </ul>
-                </div>
-
-                <!-- GreenGate API -->
-                <div class="roi-card featured">
-                    <div class="roi-badge">Recomendado</div>
-                    <h3>GreenGate API</h3>
-                    <p style="color: var(--gray); margin-bottom: 1rem;">Validação automatizada</p>
-                    <div class="price">R$ 1,98 <small>/validação</small></div>
-                    <div class="saving">Até 40x mais econômico</div>
-                    <ul class="roi-features">
-                        <li>&lt; 2 minutos por validação</li>
-                        <li>7 camadas oficiais integradas</li>
-                        <li>API REST pronta para uso</li>
-                        <li>Fontes oficiais rastreáveis</li>
-                        <li>Sem falhas por arquivos corrompidos</li>
-                        <li>Resultado reprodutível</li>
-                        <li>Relatório PDF auditável</li>
-                        <li>QR Code para verificação</li>
-                    </ul>
-                </div>
-
-                <!-- ROI Exemplo -->
-                <div class="roi-card">
-                    <h3>Seu ROI</h3>
-                    <p style="color: var(--gray); margin-bottom: 1rem;">Exemplo com 100 validações/mês</p>
-                    <div class="price">R$ 8.000 <small>/mês economizados</small></div>
-                    <ul class="roi-features">
-                        <li>Custo manual: R$ 10.000/mês</li>
-                        <li>Custo GreenGate: R$ 198/mês</li>
-                        <li>Economia: R$ 9.802/mês</li>
-                        <li>ROI: 4.950% ao mês</li>
-                        <li>Payback: Imediato</li>
-                        <li>Liberação de 100-200h/mês</li>
-                        <li>Equipe foca em análises complexas</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- PDF Exemplo -->
+    <!-- PDF Exemplo -->
+    <section class="roi" style="padding: 4rem 0;">
+        <div class="roi-container" style="max-width: 800px;">
             <div class="roi-example">
                 <h4>Veja um Exemplo de Relatório Gerado</h4>
                 <p style="color: var(--gray); margin-bottom: 1.5rem;">
@@ -1885,26 +1823,26 @@
                     </p>
 
                     <div class="contact-details">
-                        <div class="contact-detail">
-                            <div class="contact-detail-icon">✉</div>
+                        <div class="contact-detail" style="cursor: pointer;" onclick="window.open('https://wa.me/5519971046171?text=Olá! Gostaria de saber mais sobre o GreenGate', '_blank')">
+                            <div class="contact-detail-icon">💬</div>
                             <div class="contact-detail-text">
-                                <strong>Email</strong>
-                                <span>contato@greengate.com.br</span>
+                                <strong>WhatsApp</strong>
+                                <span>Clique para falar conosco →</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail" style="cursor: pointer;" onclick="window.open('https://www.greengate.com.br/app', '_blank')">
+                            <div class="contact-detail-icon">▸</div>
+                            <div class="contact-detail-text">
+                                <strong>Validar Área</strong>
+                                <span>Acessar plataforma →</span>
                             </div>
                         </div>
 
                         <div class="contact-detail">
-                            <div class="contact-detail-icon">▸</div>
+                            <div class="contact-detail-icon">⏰</div>
                             <div class="contact-detail-text">
-                                <strong>Plataforma</strong>
-                                <span>www.greengate.com.br/app</span>
-                            </div>
-                        </div>
-
-                        <div class="contact-detail">
-                            <div class="contact-detail-icon">▸</div>
-                            <div class="contact-detail-text">
-                                <strong>Tempo de Resposta</strong>
+                                <strong>Resposta</strong>
                                 <span>Até 24 horas úteis</span>
                             </div>
                         </div>
