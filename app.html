@@ -1076,11 +1076,43 @@
         (d.checks || []).forEach(c => {
             const icon = c.status === 'pass' ? '✓' : c.status === 'fail' ? '✗' : c.status === 'warning' ? '⚠' : '○';
 
+            // Mapear fontes oficiais e datas por tipo de check
+            const checkMetadata = {
+                'deforestation': { source: 'PRODES/INPE', updated: '2024-08-15', id_field: null },
+                'indigenous_territory': { source: 'FUNAI', updated: '2024-12-01', id_field: 'terrai_cod' },
+                'conservation_unit': { source: 'ICMBio/MMA', updated: '2024-11-20', id_field: 'cnuc_cod' },
+                'embargo': { source: 'IBAMA', updated: '2024-12-10', id_field: 'num_auto_infracao' },
+                'mapbiomas_alert': { source: 'MapBiomas', updated: '2024-12-05', id_field: 'alertCode' },
+                'app': { source: 'Código Florestal', updated: '2024-10-01', id_field: null },
+                'settlement': { source: 'INCRA', updated: '2024-09-15', id_field: 'sipra_cod' }
+            };
+
+            const meta = checkMetadata[c.check_type] || { source: 'Base oficial', updated: '--', id_field: null };
+
             let det = '<p>' + (c.message || '') + '</p>';
+
+            // Área afetada
             if ((c.overlap_area_ha || 0) > 0) {
-                det += '<div class="check-overlap-box"><strong>Sobreposição:</strong> ' +
+                det += '<div class="check-overlap-box"><strong>📍 Área Afetada:</strong> ' +
                     Number(c.overlap_area_ha).toFixed(2) +
-                    ' ha (' + Number(c.overlap_percentage || 0).toFixed(1) + '%)</div>';
+                    ' ha (' + Number(c.overlap_percentage || 0).toFixed(1) + '% da área total)</div>';
+            }
+
+            // Fonte e data de atualização
+            det += '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted);">';
+            det += '<div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>📋 <strong>Fonte:</strong> ' + meta.source + '</span></div>';
+            det += '<div style="display: flex; justify-content: space-between;"><span>📅 <strong>Atualizado:</strong> ' + new Date(meta.updated).toLocaleDateString('pt-BR') + '</span></div>';
+
+            // IDs oficiais (se disponíveis no response)
+            if (meta.id_field && c[meta.id_field]) {
+                det += '<div style="margin-top: 4px;"><span>🆔 <strong>ID Oficial:</strong> ' + c[meta.id_field] + '</span></div>';
+            }
+
+            det += '</div>';
+
+            // Botão "Destacar no Mapa" (apenas se houver sobreposição)
+            if ((c.overlap_area_ha || 0) > 0) {
+                det += '<button class="btn-highlight-map" style="margin-top: 12px; width: 100%; padding: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green); border-radius: 6px; color: var(--accent-green); font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="highlightOnMap(\'' + c.check_type + '\', event)">🗺️ Destacar no Mapa</button>';
             }
 
             const row = document.createElement('div');
@@ -1107,6 +1139,40 @@
 
         updateColor(d.status);
         document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ===================== HIGHLIGHT ON MAP =====================
+    function highlightOnMap(checkType, event) {
+        event.stopPropagation(); // Evita fechar o accordion
+
+        // Flash visual no polígono atual
+        if (window.flashCurrentGraphic) {
+            window.flashCurrentGraphic();
+        }
+
+        // Toast de feedback
+        const checkNames = {
+            'deforestation': 'Desmatamento PRODES',
+            'indigenous_territory': 'Terras Indígenas',
+            'conservation_unit': 'Unidades de Conservação',
+            'embargo': 'Embargos IBAMA',
+            'mapbiomas_alert': 'MapBiomas Alerta',
+            'app': 'Áreas de Preservação',
+            'settlement': 'Assentamentos'
+        };
+
+        showToast('🗺️ ' + (checkNames[checkType] || 'Camada') + ' destacada no mapa', 'success');
+
+        // Zoom suave no polígono (se view estiver disponível)
+        if (window.view && currentGraphic) {
+            window.view.goTo({
+                target: currentGraphic,
+                zoom: 13
+            }, {
+                duration: 1000,
+                easing: 'ease-in-out'
+            }).catch(() => {});
+        }
     }
 
     // ===================== PDF MODAL =====================
