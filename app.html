@@ -531,8 +531,8 @@
             terra_indigena: 'Terras Indígenas',
             embargo_ibama: 'Embargos IBAMA',
             quilombola: 'Quilombolas',
-            uc: 'Unidades de Conservação',
-            app_water: 'APP Hidrografia'
+            uc: 'Unidades de Conservação'
+            // app_water removido - será reimplementado com dados oficiais MT
         }[c] || c;
     }
 
@@ -963,15 +963,17 @@
 
     // ===================== TESTE COM EXEMPLO =====================
     document.getElementById('testExampleBtn').onclick = () => {
-        // Área de exemplo: ~500 ha no Mato Grosso (região de Sinop)
+        // Área de exemplo: real de validação no Mato Grosso (região de Sinop)
         const exampleGeometry = {
             type: "Polygon",
             coordinates: [[
-                [-55.52, -11.86],
-                [-55.48, -11.86],
-                [-55.48, -11.88],
-                [-55.52, -11.88],
-                [-55.52, -11.86]
+                [-55.3594394984761, -11.86920257487204],
+                [-55.35394633441345, -11.871806426068545],
+                [-55.36038363604937, -11.884783313415083],
+                [-55.36201441913047, -11.88398539967109],
+                [-55.363430625490366, -11.883565444129728],
+                [-55.36549056201385, -11.883271474865357],
+                [-55.3594394984761, -11.86920257487204]
             ]]
         };
 
@@ -1096,7 +1098,7 @@
                 'conservation_unit': { source: 'ICMBio/MMA', updated: '2024-11-20', id_field: 'cnuc_cod' },
                 'embargo': { source: 'IBAMA', updated: '2024-12-10', id_field: 'num_auto_infracao' },
                 'mapbiomas_alert': { source: 'MapBiomas', updated: '2024-12-05', id_field: 'alertCode' },
-                'app': { source: 'Código Florestal', updated: '2024-10-01', id_field: null },
+                // 'app' removido - será reimplementado com dados oficiais MT
                 'settlement': { source: 'INCRA', updated: '2024-09-15', id_field: 'sipra_cod' }
             };
 
