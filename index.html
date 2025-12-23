@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenGate - Triagem Ambiental Automatizada | Validação Geoespacial</title>
+    <meta name="description" content="Plataforma de triagem ambiental automatizada. Valide propriedades rurais contra desmatamento, embargos e áreas protegidas em até 2 minutos.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===============================================
+           DESIGN SYSTEM - PREMIUM
+           =============================================== */
+        :root {
+            /* Colors */
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --primary-light: #34D399;
+            --secondary: #3B82F6;
+            --accent: #F59E0B;
+
+            /* Neutrals */
+            --dark: #0F172A;
+            --dark-800: #1E293B;
+            --dark-700: #334155;
+            --dark-600: #475569;
+            --gray: #64748B;
+            --gray-light: #94A3B8;
+            --gray-lighter: #CBD5E1;
+            --gray-lightest: #E2E8F0;
+            --light: #F1F5F9;
+            --lighter: #F8FAFC;
+            --white: #FFFFFF;
+
+            /* Spacing */
+            --section-padding: clamp(4rem, 8vw, 8rem);
+            --container-padding: clamp(1.5rem, 4vw, 3rem);
+
+            /* Effects */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+            /* Animation */
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-out: cubic-bezier(0, 0, 0.2, 1);
+        }
+
+        /* ===============================================
+           DARK MODE
+           =============================================== */
+        [data-theme="dark"] {
+            --primary: #34D399;
+            --primary-dark: #10B981;
+            --primary-light: #6EE7B7;
+            --dark: #F9FAFB;
+            --dark-800: #F3F4F6;
+            --dark-700: #E5E7EB;
+            --dark-600: #D1D5DB;
+            --gray: #9CA3AF;
+            --gray-light: #6B7280;
+            --gray-lighter: #4B5563;
+            --gray-lightest: #374151;
+            --light: #1F2937;
+            --lighter: #111827;
+            --white: #0F172A;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+            z-index: 999;
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.5);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Dark mode backgrounds */
+        [data-theme="dark"] body {
+            background: var(--white);
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
+        }
+
+        [data-theme="dark"] .stats {
+            background: #0a0e1a;
+        }
+
+        [data-theme="dark"] .features {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .data-sources {
+            background: var(--white);
+        }
+
+        [data-theme="dark"] .roi {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .contact {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .nav {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom-color: var(--gray-lightest);
+        }
+
+        [data-theme="dark"] .nav.scrolled {
+            background: rgba(15, 23, 42, 0.98);
+        }
+
+        [data-theme="dark"] .hero-card,
+        [data-theme="dark"] .feature-card,
+        [data-theme="dark"] .data-card,
+        [data-theme="dark"] .roi-card {
+            background: var(--dark-800);
+            border-color: var(--gray-lightest);
+        }
+
+        [data-theme="dark"] .hero-checklist-item {
+            background: var(--light);
+        }
+
+        [data-theme="dark"] .hero-checklist-item:hover {
+            background: var(--dark-700);
+        }
+
+        [data-theme="dark"] .data-card:hover {
+            background: var(--dark-700);
+        }
+
+        [data-theme="dark"] .roi-example {
+            background: var(--dark-800);
+        }
+
+        [data-theme="dark"] .footer {
+            background: #0a0e1a;
+        }
+
+        [data-theme="dark"] .btn-secondary {
+            background: var(--dark-800);
+            color: var(--dark);
+            border-color: var(--gray-lighter);
+        }
+
+        [data-theme="dark"] .btn-secondary:hover {
+            background: var(--dark-700);
+        }
+
+        [data-theme="dark"] .contact-form-wrapper,
+        [data-theme="dark"] .contact-info {
+            background: var(--dark-800);
+        }
+
+        [data-theme="dark"] input,
+        [data-theme="dark"] textarea,
+        [data-theme="dark"] select {
+            background: var(--lighter);
+            color: var(--dark);
+            border-color: var(--gray-lightest);
+        }
+
+        [data-theme="dark"] input:focus,
+        [data-theme="dark"] textarea:focus,
+        [data-theme="dark"] select:focus {
+            background: var(--light);
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .cta {
+            background: var(--lighter);
+        }
+
+        [data-theme="dark"] .section-label {
+            color: var(--primary-light);
+        }
+
+        [data-theme="dark"] h1,
+        [data-theme="dark"] h2,
+        [data-theme="dark"] h3,
+        [data-theme="dark"] h4 {
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] p,
+        [data-theme="dark"] li,
+        [data-theme="dark"] span,
+        [data-theme="dark"] label {
+            color: var(--gray);
+        }
+
+        [data-theme="dark"] .hero-card-title,
+        [data-theme="dark"] .hero-checklist-text strong,
+        [data-theme="dark"] .feature-card h3,
+        [data-theme="dark"] .data-card h3,
+        [data-theme="dark"] .roi-card h3,
+        [data-theme="dark"] .contact-detail-text strong {
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .stat-number {
+            color: var(--primary-light);
+        }
+
+        [data-theme="dark"] .pdf-link {
+            background: var(--dark-800);
+            border-color: var(--gray-lightest);
+        }
+
+        [data-theme="dark"] .pdf-link:hover {
+            background: var(--dark-700);
+        }
+
+        [data-theme="dark"] .stats {
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .stat-label {
+            color: var(--gray-light);
+        }
+
+        [data-theme="dark"] .hero-card-badge {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--primary-light);
+        }
+
+        [data-theme="dark"] .hero-checklist-text span {
+            color: var(--gray-light);
+        }
+
+        [data-theme="dark"] .feature-card p,
+        [data-theme="dark"] .data-card p,
+        [data-theme="dark"] .roi-card p {
+            color: var(--gray-light);
+        }
+
+        [data-theme="dark"] .contact-detail-text span {
+            color: var(--gray-light);
+        }
+
+        [data-theme="dark"] .footer-section h4 {
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .footer-section a {
+            color: var(--gray-light);
+        }
+
+        [data-theme="dark"] .footer-bottom {
+            border-top-color: var(--gray-lightest);
+            color: var(--gray-light);
+        }
+
+        [data-theme="dark"] .data-check {
+            background: var(--primary);
+            color: var(--dark-800);
+        }
+
+        /* ===============================================
+           3D EFFECTS
+           =============================================== */
+        @keyframes float3d {
+            0%, 100% {
+                transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotateX(5deg) rotateY(-5deg);
+            }
+            50% {
+                transform: translateY(-40px) rotateX(0deg) rotateY(0deg);
+            }
+            75% {
+                transform: translateY(-20px) rotateX(-5deg) rotateY(5deg);
+            }
+        }
+
+        .card-3d {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s var(--ease-out);
+        }
+
+        .card-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
+        }
+
+        .feature-card {
+            transform-style: preserve-3d;
+        }
+
+        .feature-icon {
+            animation: float3d 6s ease-in-out infinite;
+        }
+
+        .hero-card {
+            transform-style: preserve-3d;
+            transition: transform 0.6s var(--ease-out);
+        }
+
+        .hero-card:hover {
+            transform: rotateY(-10deg) rotateX(5deg) translateZ(30px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--dark-700);
+            line-height: 1.7;
+            background: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===============================================
+           NAVIGATION - PREMIUM
+           =============================================== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-lightest);
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.25rem var(--container-padding);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s var(--ease-out);
+        }
+
+        .nav-logo:hover {
+            transform: translateY(-1px);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .nav-logo-text span {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .nav-cta {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s var(--ease-out);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-cta:hover::before {
+            left: 100%;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* ===============================================
+           HERO - PREMIUM
+           =============================================== */
+        .hero {
+            padding-top: calc(80px + var(--section-padding));
+            padding-bottom: var(--section-padding);
+            background: linear-gradient(135deg, #F8FAFC 0%, #E0F2FE 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, 50px); }
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-content {
+            animation: fadeInUp 0.8s var(--ease-out);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 100px;
+            color: var(--primary-dark);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--dark-600);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s var(--ease-out);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: var(--white);
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--gray-lightest);
+            transition: all 0.3s var(--ease-out);
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: var(--lighter);
+            border-color: var(--gray-lighter);
+            transform: translateY(-2px);
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeInUp 0.8s 0.2s var(--ease-out) backwards;
+        }
+
+        .hero-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--gray-lightest);
+        }
+
+        .hero-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .hero-card-badge {
+            padding: 0.375rem 0.875rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-dark);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .hero-checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--lighter);
+            border-radius: 12px;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .hero-checklist-item:hover {
+            background: var(--light);
+            transform: translateX(8px);
+        }
+
+        .hero-checklist-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .hero-checklist-text strong {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-checklist-text span {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* ===============================================
+           STATS - PREMIUM
+           =============================================== */
+        .stats {
+            padding: var(--section-padding) 0;
+            background: var(--dark);
+            color: white;
+        }
+
+        .stats-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            animation: fadeInUp 0.8s var(--ease-out);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray-light);
+            font-weight: 500;
+        }
+
+        /* ===============================================
+           FEATURES - PREMIUM
+           =============================================== */
+        .features {
+            padding: var(--section-padding) 0;
+            background: var(--lighter);
+        }
+
+        .features-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-dark);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--gray-lightest);
+            transition: all 0.4s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-out);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* ===============================================
+           DATA SOURCES - PREMIUM
+           =============================================== */
+        .data-sources {
+            padding: var(--section-padding) 0;
+            background: var(--white);
+        }
+
+        .data-sources-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .data-card {
+            background: var(--lighter);
+            padding: 1.75rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-lightest);
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .data-card:hover {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            transform: translateY(-4px);
+        }
+
+        .data-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .data-check {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .data-card h4 {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .data-card p {
+            color: var(--gray);
+            font-size: 0.925rem;
+            line-height: 1.6;
+        }
+
+        /* ===============================================
+           ROI/PRICING - PREMIUM
+           =============================================== */
+        .roi {
+            padding: var(--section-padding) 0;
+            background: var(--lighter);
+        }
+
+        .roi-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .roi-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .roi-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--gray-lightest);
+            position: relative;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .roi-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15);
+            transform: scale(1.05);
+        }
+
+        .roi-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .roi-card.featured:hover {
+            transform: translateY(-8px) scale(1.07);
+        }
+
+        .roi-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .roi-card h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-card .price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 1.5rem 0;
+            line-height: 1;
+        }
+
+        .roi-card .price small {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .roi-card .saving {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-dark);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .roi-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .roi-features li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--dark-600);
+            border-bottom: 1px solid var(--gray-lightest);
+        }
+
+        .roi-features li:last-child {
+            border-bottom: none;
+        }
+
+        .roi-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .roi-example {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid var(--gray-lightest);
+            text-align: center;
+        }
+
+        .roi-example h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .roi-example .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--lighter);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s var(--ease-out);
+            border: 2px solid var(--gray-lightest);
+        }
+
+        .roi-example .pdf-link:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* ===============================================
+           CONTACT FORM
+           =============================================== */
+        .contact {
+            padding: var(--section-padding) 0;
+            background: var(--lighter);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .contact-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            position: relative;
+        }
+
+        .contact-content {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        [data-theme="dark"] .contact-content {
+            background: var(--dark-800);
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-detail-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .contact-detail-text strong {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-detail-text span {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .contact-form-wrapper {
+            padding: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        [data-theme="dark"] .form-group label {
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--gray-lightest);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s var(--ease-out);
+            background: var(--lighter);
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group textarea,
+        [data-theme="dark"] .form-group select {
+            background: var(--dark-700);
+            border-color: var(--gray-lighter);
+            color: var(--dark);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .form-submit:active {
+            transform: translateY(0);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-dark);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: block;
+        }
+
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            display: block;
+        }
+
+        @media (max-width: 968px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                padding: 2rem;
+            }
+
+            .contact-form-wrapper {
+                padding: 2rem;
+            }
+        }
+
+        /* ===============================================
+           CTA - PREMIUM
+           =============================================== */
+        .cta {
+            padding: var(--section-padding) 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            text-align: center;
+            position: relative;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta .btn-primary {
+            background: var(--white);
+            color: var(--primary-dark);
+        }
+
+        .cta .btn-primary:hover {
+            background: var(--lighter);
+        }
+
+        /* ===============================================
+           FOOTER - PREMIUM
+           =============================================== */
+        .footer {
+            background: var(--dark);
+            color: var(--gray-light);
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--dark-700);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            font-size: 0.875rem;
+        }
+
+        /* ===============================================
+           RESPONSIVE
+           =============================================== */
+        @media (max-width: 968px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-cta {
+                padding: 0.625rem 1.25rem;
+                font-size: 0.875rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">G</div>
+                <div class="nav-logo-text">
+                    <h1>GreenGate</h1>
+                    <span>Triagem Ambiental</span>
+                </div>
+            </a>
+            <a href="https://www.greengate.com.br/app" class="nav-cta" target="_blank">Validar Área</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span></span>
+                    Triagem Ambiental Automatizada
+                </div>
+                <h1>
+                    Valide Propriedades<br>
+                    Rurais em <span class="highlight">Segundos</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Plataforma líder em validação geoespacial para conformidade anti-desmatamento.
+                    Verifique 235.762 polígonos oficiais instantaneamente.
+                </p>
+                <div class="hero-cta">
+                    <a href="https://www.greengate.com.br/app" class="btn-primary">Validar Área Agora</a>
+                    <a href="#features" class="btn-secondary">Ver Funcionalidades</a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <h3 class="hero-card-title">Validação em até 2 Minutos</h3>
+                        <span class="hero-card-badge">API REST</span>
+                    </div>
+                    <div class="hero-checklist">
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong>PRODES Amazônia</strong>
+                                <span>Desmatamento oficial INPE</span>
+                            </div>
+                        </div>
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong>Terras Indígenas</strong>
+                                <span>Base FUNAI atualizada</span>
+                            </div>
+                        </div>
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong>Embargos IBAMA</strong>
+                                <span>Áreas sob restrição</span>
+                            </div>
+                        </div>
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong>MapBiomas Alerta</strong>
+                                <span>Alertas de desmatamento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Camadas Oficiais Integradas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">&lt; 2 min</div>
+                <div class="stat-label">Tempo de Validação</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1.200+</div>
+                <div class="stat-label">Áreas Validadas em Produção</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">R$ 1,98</div>
+                <div class="stat-label">Custo por Validação vs. R$ 80-160 (analista)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <span class="section-label">Funcionalidades</span>
+                <h2 class="section-title">Triagem Ambiental Simplificada</h2>
+                <p class="section-subtitle">
+                    Tudo que você precisa para garantir conformidade com a regulamentação europeia anti-desmatamento
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">▸</div>
+                    <h3>Validação em até 2 Minutos</h3>
+                    <p>
+                        API REST de alto desempenho. Valide propriedades rurais em até 2 minutos
+                        com consultas geoespaciais otimizadas.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">◆</div>
+                    <h3>Score de Risco 0-100</h3>
+                    <p>
+                        Algoritmo proprietário que analisa 6 camadas de dados e gera um score de risco
+                        objetivo e auditável.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">■</div>
+                    <h3>Relatórios PDF</h3>
+                    <p>
+                        Gere dossiês de conformidade profissionais com mapas, estatísticas e QR Code
+                        para verificação pública.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">↻</div>
+                    <h3>Dados Atualizados</h3>
+                    <p>
+                        Integração direta com fontes oficiais: INPE, FUNAI, IBAMA, INCRA, MMA.
+                        Sempre os dados mais recentes.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">●</div>
+                    <h3>Seguro e Escalável</h3>
+                    <p>
+                        Infraestrutura enterprise com rate limiting, autenticação via API key e
+                        banco de dados PostGIS otimizado.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">▬</div>
+                    <h3>API RESTful</h3>
+                    <p>
+                        Documentação completa, endpoints intuitivos e suporte para GeoJSON.
+                        Integre em minutos com qualquer stack.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Sources -->
+    <section class="data-sources">
+        <div class="data-sources-container">
+            <div class="section-header">
+                <span class="section-label">Fontes de Dados</span>
+                <h2 class="section-title">6 Camadas Oficiais Integradas</h2>
+                <p class="section-subtitle">
+                    Bases públicas normalizadas e validadas. Sem arquivos quebrados ou geometrias inválidas.
+                </p>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>PRODES Amazônia</h4>
+                    </div>
+                    <p>Desmatamento oficial do INPE. Satélites LANDSAT com resolução de 30m. Monitoramento oficial.</p>
+                </div>
+
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>MapBiomas Alerta</h4>
+                    </div>
+                    <p>Alertas de desmatamento quase em tempo real. Validação cruzada de imagens satelitais.</p>
+                </div>
+
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>Terras Indígenas (FUNAI)</h4>
+                    </div>
+                    <p>421 terras indígenas homologadas e em processo. Proibição total de exploração.</p>
+                </div>
+
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>Territórios Quilombolas</h4>
+                    </div>
+                    <p>Base INCRA de comunidades tradicionais. Proteção especial pela Constituição.</p>
+                </div>
+
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>Unidades de Conservação</h4>
+                    </div>
+                    <p>333 UCs federais (MMA). Restrições variadas por categoria de proteção.</p>
+                </div>
+
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>Embargos IBAMA</h4>
+                    </div>
+                    <p>Áreas sob embargo ambiental. Proibição de comercialização de produtos.</p>
+                </div>
+
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <div class="data-check">✓</div>
+                        <h4>CAR (Em breve)</h4>
+                    </div>
+                    <p>Cadastro Ambiental Rural. Validação de limites declarados vs. reais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI/Pricing -->
+    <section class="roi">
+        <div class="roi-container">
+            <div class="section-header">
+                <span class="section-label">Economia Comprovada</span>
+                <h2 class="section-title">Reduza Custos com Validação Automatizada</h2>
+                <p class="section-subtitle">
+                    Compare custos e otimize seu processo de due diligence ambiental
+                </p>
+            </div>
+
+            <div class="roi-comparison">
+                <!-- Análise Manual -->
+                <div class="roi-card">
+                    <h3>Análise Manual</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Método tradicional com analista</p>
+                    <div class="price">R$ 80-160 <small>/validação</small></div>
+                    <ul class="roi-features">
+                        <li>1-2 horas de trabalho manual</li>
+                        <li>Download de múltiplas bases</li>
+                        <li>QGIS/ArcGIS necessário</li>
+                        <li>Risco de erro humano</li>
+                        <li>Arquivos corrompidos comuns</li>
+                        <li>Geometrias inválidas frequentes</li>
+                        <li>Sem auditoria automática</li>
+                    </ul>
+                </div>
+
+                <!-- GreenGate API -->
+                <div class="roi-card featured">
+                    <div class="roi-badge">Recomendado</div>
+                    <h3>GreenGate API</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Validação automatizada</p>
+                    <div class="price">R$ 1,98 <small>/validação</small></div>
+                    <div class="saving">Até 40x mais econômico</div>
+                    <ul class="roi-features">
+                        <li>&lt; 2 minutos por validação</li>
+                        <li>6 camadas oficiais integradas</li>
+                        <li>API REST pronta para uso</li>
+                        <li>Alto índice de precisão</li>
+                        <li>Validação geométrica PostGIS</li>
+                        <li>Sem erros de formato</li>
+                        <li>Relatório PDF auditável</li>
+                        <li>QR Code para verificação</li>
+                    </ul>
+                </div>
+
+                <!-- ROI Exemplo -->
+                <div class="roi-card">
+                    <h3>Seu ROI</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Exemplo com 100 validações/mês</p>
+                    <div class="price">R$ 8.000 <small>/mês economizados</small></div>
+                    <ul class="roi-features">
+                        <li>Custo manual: R$ 10.000/mês</li>
+                        <li>Custo GreenGate: R$ 198/mês</li>
+                        <li>Economia: R$ 9.802/mês</li>
+                        <li>ROI: 4.950% ao mês</li>
+                        <li>Payback: Imediato</li>
+                        <li>Liberação de 100-200h/mês</li>
+                        <li>Equipe foca em análises complexas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- PDF Exemplo -->
+            <div class="roi-example">
+                <h4>Veja um Exemplo de Relatório Gerado</h4>
+                <p style="color: var(--gray); margin-bottom: 1.5rem;">
+                    PDF profissional com mapa, estatísticas e QR Code para verificação pública
+                </p>
+                <a href="GreenGate-1-1-10.pdf" target="_blank" class="pdf-link">
+                    <span style="font-size: 1.5rem;">📄</span>
+                    <span>Baixar Exemplo de Relatório (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Pronto para Garantir Conformidade?</h2>
+            <p>
+                Junte-se a empresas que já confiam na GreenGate para triagem ambiental.
+                Validação instantânea, relatórios PDF e suporte técnico.
+            </p>
+            <a href="#contact" class="btn-primary">Falar com Especialista</a>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <div class="section-header" style="margin-bottom: 3rem;">
+                <span class="section-label">Entre em Contato</span>
+                <h2 class="section-title">Pronto para Começar?</h2>
+                <p class="section-subtitle">
+                    Fale conosco para mais informações ou solicite acesso à API
+                </p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Vamos Conversar</h3>
+                    <p>
+                        Nossa equipe está pronta para ajudar você a implementar triagem ambiental automatizada no seu negócio.
+                    </p>
+
+                    <div class="contact-details">
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">✉</div>
+                            <div class="contact-detail-text">
+                                <strong>Email</strong>
+                                <span>contato@greengate.com.br</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">▸</div>
+                            <div class="contact-detail-text">
+                                <strong>Plataforma</strong>
+                                <span>www.greengate.com.br/app</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">▸</div>
+                            <div class="contact-detail-text">
+                                <strong>Tempo de Resposta</strong>
+                                <span>Até 24 horas úteis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrapper">
+                    <form id="contactForm" onsubmit="handleSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Nome Completo *</label>
+                            <input type="text" id="name" name="name" required placeholder="João Silva">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Corporativo *</label>
+                            <input type="email" id="email" name="email" required placeholder="joao@empresa.com.br">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company">Empresa</label>
+                            <input type="text" id="company" name="company" placeholder="Nome da sua empresa">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="interest">Interesse *</label>
+                            <select id="interest" name="interest" required>
+                                <option value="">Selecione...</option>
+                                <option value="api">Acesso à API</option>
+                                <option value="demo">Solicitar Demo</option>
+                                <option value="integration">Integração Customizada</option>
+                                <option value="pricing">Informações de Preços</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Mensagem *</label>
+                            <textarea id="message" name="message" required placeholder="Conte-nos sobre seu caso de uso..."></textarea>
+                        </div>
+
+                        <button type="submit" class="form-submit" id="submitBtn">
+                            Enviar Mensagem
+                        </button>
+
+                        <div class="form-message" id="formMessage"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>GreenGate</h3>
+                    <p>
+                        Plataforma de triagem ambiental automatizada para validação geoespacial.
+                        Desenvolvida com tecnologia brasileira para o agronegócio sustentável.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="https://www.greengate.com.br/app">Validar Área</a></li>
+                        <li><a href="docs.html">Documentação API</a></li>
+                        <li><a href="#features">Funcionalidades</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Fontes de Dados</h4>
+                    <ul>
+                        <li>PRODES (INPE)</li>
+                        <li>MapBiomas Alerta</li>
+                        <li>FUNAI / INCRA</li>
+                        <li>IBAMA / MMA</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 GreenGate. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia brasileira</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+
+    <script>
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Contact Form Handler
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const submitBtn = document.getElementById('submitBtn');
+            const formMessage = document.getElementById('formMessage');
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            // Simulate API call (replace with actual endpoint)
+            setTimeout(() => {
+                // Success
+                formMessage.className = 'form-message success';
+                formMessage.textContent = '✓ Mensagem enviada com sucesso! Entraremos em contato em breve.';
+
+                // Reset form
+                form.reset();
+
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Mensagem';
+
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+
+                // Log data (for now)
+                console.log('Form data:', data);
+
+            }, 1500);
+        }
+
+        // Scroll behavior for navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-item, .feature-card, .data-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
