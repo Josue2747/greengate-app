@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação API - GreenGate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #0F172A;
+            background: #F8FAFC;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.125rem;
+            opacity: 0.95;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #10B981;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E2E8F0;
+        }
+
+        h3 {
+            color: #0F172A;
+            font-size: 1.25rem;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        code {
+            background: #F1F5F9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #059669;
+        }
+
+        pre {
+            background: #0F172A;
+            color: #E2E8F0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background: none;
+            color: #34D399;
+            padding: 0;
+        }
+
+        .endpoint {
+            background: #F1F5F9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #10B981;
+        }
+
+        .method {
+            display: inline-block;
+            background: #10B981;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+
+        .method.post { background: #3B82F6; }
+        .method.get { background: #10B981; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        th {
+            background: #F1F5F9;
+            font-weight: 600;
+            color: #0F172A;
+        }
+
+        .note {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #10B981;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Documentação API GreenGate</h1>
+        <p>Integre triagem ambiental automatizada em sua aplicação</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>Introdução</h2>
+            <p>A API GreenGate permite validar propriedades rurais contra desmatamento, áreas protegidas, embargos ambientais e outras restrições. Nossa API processa geometrias GeoJSON e retorna análises completas em até 2 minutos.</p>
+
+            <h3>Base URL</h3>
+            <code>https://greengate.up.railway.app/api/v1</code>
+
+            <h3>Autenticação</h3>
+            <p>Todas as requisições requerem uma API key no header:</p>
+            <pre><code>x-api-key: gg_live_xxxxxxxxxxxxxxxxx</code></pre>
+
+            <div class="note">
+                <strong>Como obter uma API key:</strong> Entre em contato através do formulário em
+                <a href="https://www.greengate.com.br#contact" style="color: #10B981;">www.greengate.com.br</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Endpoints Principais</h2>
+
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> /validate/quick</h3>
+                <p>Valida uma geometria e retorna análise completa com score de risco.</p>
+
+                <h4>Request Body:</h4>
+                <pre><code>{
+  "type": "Polygon",
+  "coordinates": [
+    [
+      [-54.1234, -12.5678],
+      [-54.1244, -12.5678],
+      [-54.1244, -12.5688],
+      [-54.1234, -12.5688],
+      [-54.1234, -12.5678]
+    ]
+  ]
+}</code></pre>
+
+                <h4>Response:</h4>
+                <pre><code>{
+  "property_id": "uuid",
+  "risk_score": 25,
+  "compliance_status": "compliant",
+  "alerts": [],
+  "validation_summary": {
+    "deforestation_detected": false,
+    "protected_areas": false,
+    "indigenous_lands": false,
+    "environmental_embargoes": false
+  }
+}</code></pre>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> /validate/{property_id}/report</h3>
+                <p>Gera relatório PDF completo com mapa e estatísticas.</p>
+
+                <h4>Response:</h4>
+                <p>Retorna arquivo PDF para download.</p>
+            </div>
+
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> /health/detailed</h3>
+                <p>Verifica status do sistema e datasets disponíveis.</p>
+
+                <h4>Response:</h4>
+                <pre><code>{
+  "status": "healthy",
+  "datasets": {
+    "municipalities": 5570,
+    "protected_areas": 235762,
+    "deforestation_alerts": "updated"
+  }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Camadas de Dados</h2>
+            <p>A API GreenGate analisa 7 camadas de dados oficiais:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Camada</th>
+                        <th>Fonte</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Desmatamento</td>
+                        <td>INPE/PRODES</td>
+                        <td>Alertas de desmatamento detectados por satélite</td>
+                    </tr>
+                    <tr>
+                        <td>Áreas Protegidas</td>
+                        <td>MMA/CNUC</td>
+                        <td>Unidades de Conservação federais e estaduais</td>
+                    </tr>
+                    <tr>
+                        <td>Terras Indígenas</td>
+                        <td>FUNAI</td>
+                        <td>Terras indígenas demarcadas e em processo</td>
+                    </tr>
+                    <tr>
+                        <td>Embargos Ambientais</td>
+                        <td>IBAMA</td>
+                        <td>Áreas com embargo ambiental ativo</td>
+                    </tr>
+                    <tr>
+                        <td>Assentamentos</td>
+                        <td>INCRA</td>
+                        <td>Projetos de assentamento da reforma agrária</td>
+                    </tr>
+                    <tr>
+                        <td>Quilombolas</td>
+                        <td>INCRA</td>
+                        <td>Territórios quilombolas certificados</td>
+                    </tr>
+                    <tr>
+                        <td>CAR</td>
+                        <td>SICAR</td>
+                        <td>Cadastro Ambiental Rural (quando disponível)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Rate Limits</h2>
+            <p>Os limites de requisição dependem do seu plano:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Plano</th>
+                        <th>Requisições/Mês</th>
+                        <th>Rate Limit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Free</td>
+                        <td>1</td>
+                        <td>1 req/min</td>
+                    </tr>
+                    <tr>
+                        <td>Professional</td>
+                        <td>100</td>
+                        <td>10 req/min</td>
+                    </tr>
+                    <tr>
+                        <td>Enterprise</td>
+                        <td>Ilimitado</td>
+                        <td>100 req/min</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Códigos de Erro</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>400</td>
+                        <td>Geometria inválida ou parâmetros incorretos</td>
+                    </tr>
+                    <tr>
+                        <td>401</td>
+                        <td>API key ausente ou inválida</td>
+                    </tr>
+                    <tr>
+                        <td>403</td>
+                        <td>API key revogada ou limite excedido</td>
+                    </tr>
+                    <tr>
+                        <td>429</td>
+                        <td>Rate limit excedido</td>
+                    </tr>
+                    <tr>
+                        <td>500</td>
+                        <td>Erro interno do servidor</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Suporte</h2>
+            <p>Para dúvidas, suporte técnico ou solicitar acesso à API, entre em contato:</p>
+            <ul style="list-style: none; padding-left: 0; margin-top: 1rem;">
+                <li style="margin-bottom: 0.5rem;"><strong>Email:</strong> contato@greengate.com.br</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Website:</strong> <a href="https://www.greengate.com.br" style="color: #10B981;">www.greengate.com.br</a></li>
+                <li><strong>Plataforma:</strong> <a href="https://www.greengate.com.br/app" style="color: #10B981;">www.greengate.com.br/app</a></li>
+            </ul>
+        </div>
+
+        <a href="/" class="back-link">← Voltar para Home</a>
+    </div>
+</body>
+</html>

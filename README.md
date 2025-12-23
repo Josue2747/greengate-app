@@ -1,121 +1,58 @@
-# 🌿 GreenGate
+🌿 GreenGate
 
-**Universal Geo-Compliance API** — Validate land parcels against environmental and regulatory datasets in seconds.
+API Universal de Geoconformidade — Valide imóveis rurais e parcelas de terra contra bases de dados ambientais e regulatórias.
 
-[![API Status](https://img.shields.io/badge/API-Live-brightgreen)]()
-[![License](https://img.shields.io/badge/License-Proprietary-blue)]()
+O que é o GreenGate?
 
----
+O GreenGate é um motor de validação geoespacial que verifica se parcelas de terra se sobrepõem a áreas protegidas, alertas de desmatamento, terras indígenas e outras camadas regulatórias.
 
-## What is GreenGate?
+Casos de uso:
 
-GreenGate is a geospatial validation engine that checks if land parcels overlap with protected areas, deforestation alerts, indigenous territories, and other regulatory layers.
+    🌱 Conformidade na cadeia de suprimentos agrícola
 
-**Use cases:**
-- 🌱 Agricultural supply chain compliance
-- 🏦 ESG due diligence for land-based investments
-- 📋 Regulatory reporting automation
-- 🛰️ Real-time deforestation monitoring integration
+    🏦 Due diligence ESG para investimentos fundiários
 
----
+    📋 Automação de relatórios regulatórios
 
-## How It Works
+    🛰️ Integração de monitoramento de desmatamento 
 
-```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  Your App   │────▶│  GreenGate  │────▶│   Result    │
-│  (GeoJSON)  │     │     API     │     │  (JSON/PDF) │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                    ┌──────┴──────┐
-                    │  Reference  │
-                    │   Layers    │
-                    │  (PostGIS)  │
-                    └─────────────┘
-```
+Como Funciona
 
-1. **Send** a polygon (farm, plot, concession)
-2. **Receive** compliance status + risk score + detailed report
+ 
+ Seu App   ────▶  GreenGate  ────▶  Resultado  
+(GeoJSON)            API             (JSON/PDF) 
 
----
+                   
+    Envie um polígono (fazenda, talhão, concessão)
 
-## Quick Start
+    Receba status de conformidade + pontuação de risco + relatório detalhado
 
-### Validate a Parcel
 
-```bash
-curl -X POST https://api.greengate.app/v1/validations/quick \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: YOUR_API_KEY" \
-  -d '{
-    "type": "Polygon",
-    "coordinates": [[[-46.5,-23.5],[-46.5,-23.51],[-46.49,-23.51],[-46.49,-23.5],[-46.5,-23.5]]]
-  }'
-```
+Funcionalidades
 
-### Response
+🔒 Seguro	Autenticação por chave de API, rate limiting
 
-```json
-{
-  "status": "approved",
-  "risk_score": 100,
-  "checks": [
-    {"type": "deforestation", "status": "pass"},
-    {"type": "indigenous_territory", "status": "pass"},
-    {"type": "protected_areas", "status": "pass"}
-  ]
-}
-```
+📊 Auditável	Trilha de auditoria completa com hashes criptográficos
 
----
+📄 Relatórios	Geração de PDF para due diligence
 
-## Features
+🌍 Escalável	Cloud-native, PostgreSQL + PostGIS
 
-| Feature | Description |
-|---------|-------------|
-| ⚡ Fast | ~150ms average response time |
-| 🔒 Secure | API key authentication, rate limiting |
-| 📊 Auditable | Full audit trail with cryptographic hashes |
-| 📄 Reports | PDF generation for due diligence |
-| 🌍 Scalable | Cloud-native, PostgreSQL + PostGIS |
+Camadas de Referência Suportadas
 
----
+    Alertas de desmatamento  
 
-## Supported Reference Layers
+    Terras indígenas
 
-- Deforestation alerts (satellite-based)
-- Indigenous territories
-- Conservation units
-- Water protection areas (APP)
-- Environmental embargoes
-- Rural property boundaries
+    Unidades de conservação
 
-*Custom layers available on request.*
+    Embargos ambientais (IBAMA)
 
----
+    
+Camadas personalizadas disponíveis sob demanda.
 
-## API Documentation
+Licença
 
-📚 Full API docs available at `/docs` endpoint.
+Proprietária. Entre em contato para informações sobre licenciamento.
 
----
-
-## Self-Hosted Deployment
-
-See [`docs/deploy.md`](docs/deploy.md) for deployment instructions.
-
-**Requirements:**
-- Docker + Docker Compose
-- PostgreSQL 14+ with PostGIS
-
----
-
-## License
-
-Proprietary. Contact for licensing information.
-
----
-
-<p align="center">
-  <sub>Built with 🌱 for a sustainable future</sub>
-</p>
+Construído para um futuro sustentável. 🌱
