@@ -54,21 +54,69 @@
         /* ===============================================
            DARK MODE
            =============================================== */
+        /* ===============================================
+           DARK MODE - LÓGICA CORRETA
+           =============================================== */
         [data-theme="dark"] {
             --primary: #34D399;
             --primary-dark: #10B981;
             --primary-light: #6EE7B7;
-            --dark: #0F172A;
-            --dark-800: #1E293B;
-            --dark-700: #334155;
-            --dark-600: #475569;
+            
+            /* TEXTO - Variáveis "dark" = CORES CLARAS */
+            --dark: #F9FAFB;        /* Texto principal - quase branco */
+            --dark-800: #E5E7EB;    /* Texto secundário - cinza claro */
+            --dark-700: #D1D5DB;    /* Texto terciário */
+            --dark-600: #9CA3AF;    /* Texto desabilitado */
+            
+            /* FUNDOS - Variáveis "light/white" = CORES ESCURAS */
+            --light: #1E293B;       /* Fundo de seções - Slate-800 */
+            --lighter: #0F172A;     /* Fundo mais escuro - Slate-900 */
+            --white: #0F172A;       /* Fundo de cards - Slate-900 */
+            
+            /* GRAYS - Invertidos para dark mode */
             --gray: #9CA3AF;
             --gray-light: #6B7280;
             --gray-lighter: #4B5563;
             --gray-lightest: #374151;
-            --light: #F3F4F6;
-            --lighter: #F9FAFB;
-            --white: #0F172A;
+        }
+
+        /* Forçar fundo escuro em TODOS os cards */
+        [data-theme="dark"] .hero-card,
+        [data-theme="dark"] .feature-card,
+        [data-theme="dark"] .data-card,
+        [data-theme="dark"] .roi-card,
+        [data-theme="dark"] .roi-example,
+        [data-theme="dark"] .contact-content,
+        [data-theme="dark"] .data-sources,
+        [data-theme="dark"] .btn-secondary {
+            background: #1E293B !important;
+            border-color: #374151 !important;
+        }
+
+        /* Forçar fundo escuro em inputs e formulários */
+        [data-theme="dark"] input,
+        [data-theme="dark"] textarea,
+        [data-theme="dark"] select {
+            background: #1E293B !important;
+            border-color: #374151 !important;
+            color: #F9FAFB !important;
+        }
+
+        [data-theme="dark"] input::placeholder,
+        [data-theme="dark"] textarea::placeholder {
+            color: #9CA3AF !important;
+        }
+
+        /* Body com fundo escuro profundo */
+        [data-theme="dark"] body {
+            background: #0F172A !important;
+            color: #F9FAFB !important;
+        }
+
+        /* Garantir que nenhuma seção fique branca */
+        [data-theme="dark"] section {
+            background: transparent !important;
+        }
         }
 
         .theme-toggle {
@@ -177,19 +225,6 @@
             transform: scale(0.95);
         }
 
-        [data-theme="dark"] .lang-toggle {
-            background: var(--dark-800);
-            border-color: var(--primary-light);
-            color: var(--primary-light);
-        }
-
-        [data-theme="dark"] .lang-toggle:hover {
-            background: var(--primary-light);
-            color: var(--dark);
-        }
-        /* Dark mode backgrounds */
-        [data-theme="dark"] body {
-            background: var(--white);
             color: var(--dark);
         }
 
@@ -2195,5 +2230,6 @@
         });
 
     </script>
+    <script src="translations.js"></script>
 </body>
 </html>
