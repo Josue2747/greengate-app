@@ -300,9 +300,12 @@
             background: var(--dark-700);
         }
 
-        [data-theme="dark"] .contact-form-wrapper,
-        [data-theme="dark"] .contact-info {
+        [data-theme="dark"] .contact-form-wrapper {
             background: var(--dark-800);
+        }
+
+        [data-theme="dark"] .contact-info {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         }
 
         [data-theme="dark"] input,
@@ -1123,6 +1126,10 @@
             color: var(--primary);
             margin: 1.5rem 0;
             line-height: 1;
+        }
+
+        .roi-card .price span {
+            color: inherit;
         }
 
         .roi-card .price small {
@@ -2180,9 +2187,12 @@
     </button>
     <!-- Language Toggle Button -->
     <button class="lang-toggle" id="langToggle" aria-label="Change language">
-        <span id="langText">EN</span>
+        <span id="langText">PT</span>
     </button>
 
+    <!-- Load translation scripts FIRST -->
+    <script src="translations.js"></script>
+    <script src="apply_translations.js"></script>
 
     <script>
         // Dark Mode Toggle
@@ -2294,54 +2304,6 @@
             observer.observe(el);
         });
 
-        // Language Toggle
-        const langToggle = document.getElementById('langToggle');
-        const langText = document.getElementById('langText');
-
-        // Traduções simplificadas (principais elementos)
-        const translations = {
-            pt: {
-                lang: 'PT',
-                title: 'GreenGate',
-                tagline: 'Validação Geoespacial para Conformidade Ambiental',
-                cta: 'Começar Agora',
-                features: 'Funcionalidades',
-                pricing: 'Preços',
-                contact: 'Contato'
-            },
-            en: {
-                lang: 'EN',
-                title: 'GreenGate',
-                tagline: 'Geospatial Validation for Environmental Compliance',
-                cta: 'Get Started',
-                features: 'Features',
-                pricing: 'Pricing',
-                contact: 'Contact'
-            }
-        };
-
-        // Detectar idioma inicial
-        let currentLang = localStorage.getItem('language') || 'pt';
-
-        // Aplicar idioma ao carregar
-        if (currentLang === 'en') {
-            langText.textContent = 'EN';
-            // Aqui você pode adicionar mais traduções conforme necessário
-        }
-
-        // Toggle de idioma
-        langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'pt' ? 'en' : 'pt';
-            langText.textContent = translations[currentLang].lang;
-            localStorage.setItem('language', currentLang);
-
-            // Aplicar traduções (implementar conforme necessário)
-            console.log('Language changed to:', currentLang);
-            // TODO: Implementar tradução completa da página
-        });
-
     </script>
-    <script src="translations.js"></script>
-    <script src="apply_translations.js"></script>
 </body>
 </html>
