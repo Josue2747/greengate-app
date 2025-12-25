@@ -14,7 +14,7 @@ const translations = {
 
         // Hero
         hero_title: 'Validação Geoespacial para Conformidade Ambiental',
-        hero_subtitle: 'Desenhe ou envie sua área e cruze com 7 camadas oficiais de dados ambientais brasileiros. Gere relatório PDF auditável em até 2 minutos.',
+        hero_subtitle: 'Desenhe ou envie sua área e cruze com 6 camadas oficiais de dados ambientais brasileiros. Gere relatório PDF auditável em até 2 minutos.',
         hero_cta: 'Testar Gratuitamente',
         hero_docs: 'Ver Documentação',
         hero_check1: 'Desmatamento (PRODES)',
@@ -23,7 +23,6 @@ const translations = {
         hero_check4: 'Embargos Ambientais (IBAMA)',
         hero_check5: 'Territórios Quilombolas (INCRA)',
         hero_check6: 'Amazônia Legal',
-        hero_check7: 'Recursos Hídricos (ANA)',
 
         // Features
         features_title: 'Por Que GreenGate?',
@@ -36,7 +35,7 @@ const translations = {
         feature2_desc: 'Validação geométrica automática via PostGIS. Polígonos inválidos são detectados e corrigidos antes do processamento.',
 
         feature3_title: 'Fontes Oficiais Rastreáveis',
-        feature3_desc: 'Todas as camadas provêm de órgãos oficiais (INPE, FUNAI, IBAMA, ICMBio, INCRA, ANA, MapBiomas). Auditável e defensável.',
+        feature3_desc: 'Todas as camadas provêm de órgãos oficiais (INPE, FUNAI, IBAMA, ICMBio, INCRA, MapBiomas). Auditável e defensável.',
 
         // How We Validate
         validate_title: 'Como Validamos',
@@ -46,7 +45,7 @@ const translations = {
         validate1_desc: 'Mesma área + mesma data = mesmo resultado sempre',
 
         validate2_title: 'Fontes Oficiais',
-        validate2_desc: 'INPE, FUNAI, IBAMA, ICMBio, INCRA, ANA, MapBiomas',
+        validate2_desc: 'INPE, FUNAI, IBAMA, ICMBio, INCRA, MapBiomas',
 
         validate3_title: 'Data de Atualização',
         validate3_desc: 'Cada camada exibe quando foi atualizada pela última vez',
@@ -184,7 +183,7 @@ const translations = {
 
         // Hero
         hero_title: 'Geospatial Validation for Environmental Compliance',
-        hero_subtitle: 'Draw or upload your area and cross-check with 7 official Brazilian environmental data layers. Generate auditable PDF report in under 2 minutes.',
+        hero_subtitle: 'Draw or upload your area and cross-check with 6 official Brazilian environmental data layers. Generate auditable PDF report in under 2 minutes.',
         hero_cta: 'Try Free',
         hero_docs: 'View Documentation',
         hero_check1: 'Deforestation (PRODES)',
@@ -193,7 +192,6 @@ const translations = {
         hero_check4: 'Environmental Embargoes (IBAMA)',
         hero_check5: 'Quilombola Territories (INCRA)',
         hero_check6: 'Legal Amazon',
-        hero_check7: 'Water Resources (ANA)',
 
         // Features
         features_title: 'Why GreenGate?',
@@ -206,7 +204,7 @@ const translations = {
         feature2_desc: 'Automatic geometric validation via PostGIS. Invalid polygons are detected and corrected before processing.',
 
         feature3_title: 'Traceable Official Sources',
-        feature3_desc: 'All layers come from official agencies (INPE, FUNAI, IBAMA, ICMBio, INCRA, ANA, MapBiomas). Auditable and defensible.',
+        feature3_desc: 'All layers come from official agencies (INPE, FUNAI, IBAMA, ICMBio, INCRA, MapBiomas). Auditable and defensible.',
 
         // How We Validate
         validate_title: 'How We Validate',
@@ -216,7 +214,7 @@ const translations = {
         validate1_desc: 'Same area + same date = same result always',
 
         validate2_title: 'Official Sources',
-        validate2_desc: 'INPE, FUNAI, IBAMA, ICMBio, INCRA, ANA, MapBiomas',
+        validate2_desc: 'INPE, FUNAI, IBAMA, ICMBio, INCRA, MapBiomas',
 
         validate3_title: 'Update Date',
         validate3_desc: 'Each layer displays when it was last updated',
