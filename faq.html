@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Perguntas Frequentes - GreenGate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--dark);
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: var(--gray-light);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--gray);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>❓ Perguntas Frequentes (FAQ)</h1>
+            <p>Tire suas dúvidas sobre a GreenGate</p>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>O que é a GreenGate?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>A GreenGate é uma plataforma de validação geoespacial automatizada que cruza coordenadas de propriedades rurais com 6 camadas oficiais de dados ambientais brasileiros (PRODES, FUNAI, IBAMA, ICMBio, INCRA, Amazônia Legal). Geramos relatórios PDF auditáveis em menos de 2 minutos, com score de risco 0-100 e QR Code para verificação pública.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Quais camadas de dados vocês validam?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>6 camadas oficiais:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>PRODES (INPE) - Desmatamento na Amazônia Legal</li>
+                        <li>Terras Indígenas (FUNAI) - Demarcações homologadas</li>
+                        <li>Unidades de Conservação (ICMBio) - Áreas protegidas</li>
+                        <li>Embargos IBAMA - Restrições ambientais</li>
+                        <li>Territórios Quilombolas (INCRA) - Comunidades tradicionais</li>
+                        <li>Amazônia Legal - Legislação especial</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Como funciona o score de risco 0-100?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Nosso algoritmo proprietário analisa:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li><strong>Sobreposições:</strong> Área total sobreposta com cada camada</li>
+                        <li><strong>Gravidade:</strong> Peso diferenciado (ex: PRODES tem peso maior que Amazônia Legal)</li>
+                        <li><strong>Múltiplas violações:</strong> Penalização progressiva</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;"><strong>Classificação:</strong> 90-100 (Baixo), 70-89 (Médio), 50-69 (Alto), 0-49 (Crítico)</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Quanto tempo demora uma validação?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Menos de 2 minutos</strong> do envio da geometria até a geração do PDF completo. O processamento é feito via PostGIS otimizado em banco PostgreSQL.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Quanto custa usar a API?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>R$ 15,90 por validação</strong> (preço fixo, sem variação por volume).</p>
+                    <p style="margin-top: 0.5rem;">Comparado a análises técnicas manuais (R$ 265 em média), representa <strong>94% de economia</strong>.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Como obtenho acesso à API?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Entre em contato via:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>📧 Email: <a href="mailto:greengate@gmail.com">greengate@gmail.com</a></li>
+                        <li>📱 WhatsApp: <a href="https://wa.me/5519971046171">+55 19 97104-6171</a></li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Fornecemos sua API key em até 24 horas úteis após aprovação.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Os dados são atualizados?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Sim.</strong> Sincronizamos com as fontes oficiais mensalmente:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>PRODES: Atualização anual (agosto)</li>
+                        <li>FUNAI: Trimestral</li>
+                        <li>IBAMA: Mensal</li>
+                        <li>ICMBio: Semestral</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Cada relatório indica a data de atualização de cada camada.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>O relatório é válido para EUDR?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>A GreenGate fornece uma <strong>ferramenta de validação geoespacial</strong> que pode ser usada como parte da due diligence do Artigo 9 da EUDR.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Importante:</strong> Não somos uma certificadora. Fornecemos dados técnicos auditáveis baseados em fontes oficiais brasileiras. A conformidade final com EUDR deve ser avaliada por auditor qualificado.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Posso verificar a autenticidade de um relatório?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Sim.</strong> Todos os PDFs incluem um QR Code que leva a uma URL pública de verificação:</p>
+                    <p style="margin-top: 0.5rem;"><code>https://api.greengate.com.br/reports/verify/{codigo}</code></p>
+                    <p style="margin-top: 0.5rem;">Qualquer pessoa pode escanear o QR Code e confirmar que o relatório é autêntico e não foi adulterado.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Há limites de uso da API?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Rate limits padrão:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>100 requisições por minuto</li>
+                        <li>1000 validações por dia</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Para volumes maiores, entre em contato para planos customizados.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Quais formatos de geometria são aceitos?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>GeoJSON</strong> com tipos:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Polygon</li>
+                        <li>MultiPolygon</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Sistema de coordenadas: <strong>WGS84 (EPSG:4326)</strong></p>
+                    <p style="margin-top: 0.5rem;">Validamos e corrigimos automaticamente geometrias inválidas (auto-interseções, buracos, etc).</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Vocês armazenam os dados enviados?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Sim, por motivos de auditoria.</strong> Armazenamos:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Geometria enviada</li>
+                        <li>Resultados da validação</li>
+                        <li>Metadados (timestamp, API key usada)</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Dados sensíveis (CPF, CNPJ, CAR) podem ser omitidos do metadata se preferir.</p>
+                    <p style="margin-top: 0.5rem;">Veja nossa <a href="privacy.html">Política de Privacidade</a> para mais detalhes.</p>
+                </div>
+            </div>
+
+            <a href="index.html" class="btn">← Voltar para Home</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const wasActive = item.classList.contains('active');
+
+                // Fecha todos
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+
+                // Abre o clicado (se não estava ativo)
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
