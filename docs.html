@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação API - GreenGate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+            --code-bg: #1E293B;
+            --code-text: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav {
+            background: var(--white);
+            border-bottom: 1px solid #E5E7EB;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .nav-list a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-list a:hover {
+            color: var(--primary);
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin: 2rem 0 1rem;
+        }
+
+        .section h4 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            color: var(--gray);
+            font-size: 1.05rem;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .inline-code {
+            background: #F3F4F6;
+            color: #DC2626;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+        }
+
+        .endpoint {
+            background: var(--gray-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .method {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+
+        .method.post {
+            background: #3B82F6;
+            color: white;
+        }
+
+        .method.get {
+            background: #10B981;
+            color: white;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .param-table th,
+        .param-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .param-table th {
+            background: var(--gray-light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .param-table td {
+            color: var(--gray);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.required {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .badge.optional {
+            background: #E0E7FF;
+            color: #4F46E5;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .alert.info {
+            background: #DBEAFE;
+            border-left: 4px solid #3B82F6;
+            color: #1E40AF;
+        }
+
+        .alert.warning {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            color: #92400E;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>📘 Documentação API GreenGate</h1>
+            <p>API REST para validação geoespacial ambiental</p>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#overview">Visão Geral</a></li>
+                <li><a href="#auth">Autenticação</a></li>
+                <li><a href="#endpoints">Endpoints</a></li>
+                <li><a href="#examples">Exemplos</a></li>
+                <li><a href="#errors">Erros</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <!-- Visão Geral -->
+            <section id="overview" class="section">
+                <h2>Visão Geral</h2>
+                <p>A API GreenGate permite validar áreas rurais brasileiras contra 6 camadas oficiais de dados ambientais, gerando relatórios PDF auditáveis em menos de 2 minutos.</p>
+
+                <h3>Base URL</h3>
+                <div class="code-block">https://api.greengate.com.br/api/v1</div>
+
+                <h3>Características</h3>
+                <ul style="margin-left: 2rem; color: var(--gray);">
+                    <li>✅ <strong>6 Camadas Oficiais:</strong> PRODES, FUNAI, ICMBio, IBAMA, INCRA, Amazônia Legal</li>
+                    <li>✅ <strong>Validação Rápida:</strong> Resultados em menos de 2 minutos</li>
+                    <li>✅ <strong>Relatórios PDF:</strong> Documentos auditáveis com QR Code</li>
+                    <li>✅ <strong>Score de Risco:</strong> Algoritmo proprietário 0-100</li>
+                    <li>✅ <strong>RESTful:</strong> Arquitetura padrão HTTP</li>
+                </ul>
+
+                <div class="alert info">
+                    <strong>💡 Nota:</strong> Esta API está em produção e é utilizada por empresas para conformidade EUDR e triagem ambiental.
+                </div>
+            </section>
+
+            <!-- Autenticação -->
+            <section id="auth" class="section">
+                <h2>Autenticação</h2>
+                <p>A API utiliza autenticação via <strong>API Key</strong> enviada no header de cada requisição.</p>
+
+                <h3>Obtendo sua API Key</h3>
+                <p>Entre em contato via <a href="mailto:greengate@gmail.com">greengate@gmail.com</a> ou pelo telefone <strong>+5519971046171</strong> para solicitar acesso.</p>
+
+                <h3>Como usar</h3>
+                <p>Inclua o header <span class="inline-code">x-api-key</span> em todas as requisições:</p>
+
+                <div class="code-block">curl -H "x-api-key: SUA_API_KEY_AQUI" \
+     https://api.greengate.com.br/api/v1/validations</div>
+
+                <div class="alert warning">
+                    <strong>⚠️ Segurança:</strong> Nunca exponha sua API key em código público (frontend, repositórios Git, etc). Use variáveis de ambiente.
+                </div>
+            </section>
+
+            <!-- Endpoints -->
+            <section id="endpoints" class="section">
+                <h2>Endpoints Principais</h2>
+
+                <!-- POST /validations -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        /validations
+                    </h3>
+                    <p>Cria uma nova validação geoespacial a partir de um polígono GeoJSON.</p>
+
+                    <h4>Headers</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Parâmetro</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="inline-code">x-api-key</span> <span class="badge required">obrigatório</span></td>
+                                <td>string</td>
+                                <td>Sua chave de autenticação</td>
+                            </tr>
+                            <tr>
+                                <td><span class="inline-code">Content-Type</span></td>
+                                <td>string</td>
+                                <td>application/json</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Body (JSON)</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Campo</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="inline-code">geometry</span> <span class="badge required">obrigatório</span></td>
+                                <td>GeoJSON</td>
+                                <td>Polígono no formato GeoJSON (type: Polygon ou MultiPolygon)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="inline-code">property_name</span> <span class="badge optional">opcional</span></td>
+                                <td>string</td>
+                                <td>Nome da propriedade/fazenda</td>
+                            </tr>
+                            <tr>
+                                <td><span class="inline-code">metadata</span> <span class="badge optional">opcional</span></td>
+                                <td>object</td>
+                                <td>Metadados adicionais (CAR, CPF/CNPJ, etc)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Exemplo de Requisição</h4>
+                    <div class="code-block">{
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-54.123, -12.456],
+      [-54.123, -12.467],
+      [-54.134, -12.467],
+      [-54.134, -12.456],
+      [-54.123, -12.456]
+    ]]
+  },
+  "property_name": "Fazenda Exemplo",
+  "metadata": {
+    "car": "MT-1234567890123456789012345678901234",
+    "owner": "João Silva"
+  }
+}</div>
+
+                    <h4>Resposta (201 Created)</h4>
+                    <div class="code-block">{
+  "validation_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "processing",
+  "created_at": "2025-12-25T10:30:00Z",
+  "estimated_completion": "2025-12-25T10:32:00Z"
+}</div>
+                </div>
+
+                <!-- GET /validations/{id} -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method get">GET</span>
+                        /validations/{validation_id}
+                    </h3>
+                    <p>Retorna o status e resultado de uma validação.</p>
+
+                    <h4>Parâmetros de URL</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Parâmetro</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="inline-code">validation_id</span></td>
+                                <td>UUID</td>
+                                <td>ID da validação retornado no POST</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Resposta (200 OK)</h4>
+                    <div class="code-block">{
+  "validation_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "score": 87,
+  "risk_level": "low",
+  "area_ha": 1234.56,
+  "results": {
+    "prodes": { "overlap": false, "area_ha": 0 },
+    "indigenous_lands": { "overlap": true, "area_ha": 45.2, "names": ["TI Xingu"] },
+    "conservation_units": { "overlap": false, "area_ha": 0 },
+    "ibama_embargoes": { "overlap": false, "count": 0 },
+    "quilombola": { "overlap": false, "area_ha": 0 },
+    "legal_amazon": { "inside": true }
+  },
+  "pdf_url": "https://api.greengate.com.br/reports/550e8400.pdf",
+  "qr_code_url": "https://api.greengate.com.br/reports/verify/GG-20251225-ABCD",
+  "completed_at": "2025-12-25T10:31:45Z"
+}</div>
+                </div>
+
+                <!-- GET /reports/verify/{code} -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method get">GET</span>
+                        /reports/verify/{report_code}
+                    </h3>
+                    <p>Verificação pública de autenticidade de relatórios via QR Code.</p>
+
+                    <div class="alert info">
+                        <strong>📌 Nota:</strong> Este endpoint é público (não requer API key) e pode ser acessado por qualquer pessoa com o código do relatório.
+                    </div>
+
+                    <h4>Parâmetros de URL</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Parâmetro</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="inline-code">report_code</span></td>
+                                <td>string</td>
+                                <td>Código do relatório (formato: GG-YYYYMMDD-XXXX)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Resposta (200 OK)</h4>
+                    <div class="code-block">{
+  "verified": true,
+  "report_code": "GG-20251225-ABCD",
+  "property_name": "Fazenda Exemplo",
+  "validation_date": "2025-12-25T10:31:45Z",
+  "score": 87,
+  "risk_level": "low",
+  "pdf_url": "https://api.greengate.com.br/reports/550e8400.pdf"
+}</div>
+                </div>
+            </section>
+
+            <!-- Exemplos -->
+            <section id="examples" class="section">
+                <h2>Exemplos de Código</h2>
+
+                <h3>Python (requests)</h3>
+                <div class="code-block">import requests
+import json
+
+API_KEY = "sua_api_key_aqui"
+BASE_URL = "https://api.greengate.com.br/api/v1"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# Criar validação
+payload = {
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+            [-54.123, -12.456],
+            [-54.123, -12.467],
+            [-54.134, -12.467],
+            [-54.134, -12.456],
+            [-54.123, -12.456]
+        ]]
+    },
+    "property_name": "Fazenda Teste"
+}
+
+response = requests.post(
+    f"{BASE_URL}/validations",
+    headers=headers,
+    json=payload
+)
+
+validation = response.json()
+validation_id = validation["validation_id"]
+
+# Consultar resultado
+result = requests.get(
+    f"{BASE_URL}/validations/{validation_id}",
+    headers=headers
+).json()
+
+print(f"Score: {result['score']}")
+print(f"PDF: {result['pdf_url']}")</div>
+
+                <h3>JavaScript (fetch)</h3>
+                <div class="code-block">const API_KEY = 'sua_api_key_aqui';
+const BASE_URL = 'https://api.greengate.com.br/api/v1';
+
+// Criar validação
+const response = await fetch(`${BASE_URL}/validations`, {
+  method: 'POST',
+  headers: {
+    'x-api-key': API_KEY,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    geometry: {
+      type: 'Polygon',
+      coordinates: [[
+        [-54.123, -12.456],
+        [-54.123, -12.467],
+        [-54.134, -12.467],
+        [-54.134, -12.456],
+        [-54.123, -12.456]
+      ]]
+    },
+    property_name: 'Fazenda Teste'
+  })
+});
+
+const validation = await response.json();
+const validationId = validation.validation_id;
+
+// Aguardar processamento (2 minutos)
+await new Promise(r => setTimeout(r, 120000));
+
+// Consultar resultado
+const result = await fetch(
+  `${BASE_URL}/validations/${validationId}`,
+  { headers: { 'x-api-key': API_KEY } }
+).json();
+
+console.log(`Score: ${result.score}`);
+console.log(`PDF: ${result.pdf_url}`);</div>
+
+                <h3>cURL</h3>
+                <div class="code-block">#!/bin/bash
+
+API_KEY="sua_api_key_aqui"
+BASE_URL="https://api.greengate.com.br/api/v1"
+
+# Criar validação
+RESPONSE=$(curl -s -X POST "$BASE_URL/validations" \
+  -H "x-api-key: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [[
+        [-54.123, -12.456],
+        [-54.123, -12.467],
+        [-54.134, -12.467],
+        [-54.134, -12.456],
+        [-54.123, -12.456]
+      ]]
+    },
+    "property_name": "Fazenda Teste"
+  }')
+
+VALIDATION_ID=$(echo $RESPONSE | jq -r '.validation_id')
+
+# Aguardar processamento
+sleep 120
+
+# Consultar resultado
+curl -s "$BASE_URL/validations/$VALIDATION_ID" \
+  -H "x-api-key: $API_KEY" | jq '.'</div>
+            </section>
+
+            <!-- Erros -->
+            <section id="errors" class="section">
+                <h2>Códigos de Erro</h2>
+
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Código HTTP</th>
+                            <th>Erro</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>400</strong></td>
+                            <td>Bad Request</td>
+                            <td>Geometria inválida ou parâmetros incorretos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>401</strong></td>
+                            <td>Unauthorized</td>
+                            <td>API key inválida ou ausente</td>
+                        </tr>
+                        <tr>
+                            <td><strong>404</strong></td>
+                            <td>Not Found</td>
+                            <td>Validação não encontrada</td>
+                        </tr>
+                        <tr>
+                            <td><strong>429</strong></td>
+                            <td>Too Many Requests</td>
+                            <td>Rate limit excedido (máx 100 req/min)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>500</strong></td>
+                            <td>Internal Server Error</td>
+                            <td>Erro interno do servidor</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Formato de Resposta de Erro</h3>
+                <div class="code-block">{
+  "error": {
+    "code": "INVALID_GEOMETRY",
+    "message": "O polígono fornecido não é válido",
+    "details": "Self-intersection detected at coordinates [-54.123, -12.456]"
+  }
+}</div>
+
+                <h3>Rate Limits</h3>
+                <div class="alert info">
+                    <strong>📊 Limites:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                        <li>100 requisições por minuto por API key</li>
+                        <li>1000 validações por dia</li>
+                        <li>Headers de resposta incluem: <span class="inline-code">X-RateLimit-Remaining</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Suporte -->
+            <section id="support" class="section">
+                <h2>Suporte</h2>
+                <p>Precisa de ajuda? Entre em contato:</p>
+                <ul style="margin-left: 2rem; color: var(--gray);">
+                    <li>📧 Email: <a href="mailto:greengate@gmail.com">greengate@gmail.com</a></li>
+                    <li>📱 WhatsApp: <a href="https://wa.me/5519971046171">+55 19 97104-6171</a></li>
+                    <li>🌐 Site: <a href="https://www.greengate.com.br">www.greengate.com.br</a></li>
+                </ul>
+
+                <div style="margin-top: 2rem;">
+                    <a href="index.html" class="btn">← Voltar para Home</a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. Todos os direitos reservados.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Plataforma de validação geoespacial para conformidade ambiental</p>
+        </div>
+    </footer>
+</body>
+</html>
