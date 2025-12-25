@@ -119,6 +119,7 @@
         }
         }
 
+        /* Fixed Floating Buttons - Bottom Right */
         .theme-toggle {
             position: fixed;
             bottom: 2rem;
@@ -146,13 +147,13 @@
         .theme-toggle:active {
             transform: scale(0.95);
         }
-        /* Language Toggle Button */
+
         .lang-toggle {
             position: fixed;
-            bottom: 140px;
-            right: 24px;
-            width: 50px;
-            height: 50px;
+            bottom: 2rem;
+            right: 5.5rem;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: var(--white);
             border: 2px solid var(--primary);
@@ -161,17 +162,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            z-index: 10000;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(52, 211, 153, 0.2);
             font-weight: 700;
-            font-size: 13px;
+            font-size: 0.9rem;
         }
 
         .lang-toggle:hover {
             background: var(--primary);
             color: var(--white);
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.1);
             box-shadow: 0 6px 16px rgba(52, 211, 153, 0.3);
         }
 
@@ -187,44 +188,6 @@
 
         [data-theme="dark"] .lang-toggle:hover {
             background: var(--primary-light);
-            color: var(--dark);
-        }
-
-
-
-        /* Language Toggle Button */
-        .lang-toggle {
-            position: fixed;
-            bottom: 140px;
-            right: 24px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--white);
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(52, 211, 153, 0.2);
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .lang-toggle:hover {
-            background: var(--primary);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(52, 211, 153, 0.3);
-        }
-
-        .lang-toggle:active {
-            transform: scale(0.95);
-        }
-
             color: var(--dark);
         }
 
