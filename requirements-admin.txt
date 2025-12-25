@@ -1,5 +1,0 @@
-# Dependências adicionais para Painel Admin
-# Instalar com: pip install -r requirements-admin.txt
-
-# JWT Authentication
-python-jose[cryptography]==3.3.0
