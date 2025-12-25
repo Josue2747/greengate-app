@@ -1,6 +1,10 @@
 // Sistema de tradução PT/EN completo
 const translations = {
     pt: {
+        // EUDR Banner
+        eudr_title: 'Ferramenta de Validação Geoespacial para EUDR',
+        eudr_subtitle: 'Due Diligence Artigo 9 para Sourcing Brasileiro • Prazo Dezembro 2024',
+        eudr_cta: 'Saiba Mais',
         // Navigation
         nav_features: 'Funcionalidades',
         nav_pricing: 'Preços',
@@ -167,6 +171,10 @@ const translations = {
         form_error: '✗ Erro ao enviar mensagem. Tente novamente.'
     },
     en: {
+        // EUDR Banner
+        eudr_title: 'EUDR Geospatial Validation Tool',
+        eudr_subtitle: 'Article 9 Due Diligence for Brazilian Sourcing • December 2024 Deadline',
+        eudr_cta: 'Learn More',
         // Navigation
         nav_features: 'Features',
         nav_pricing: 'Pricing',
