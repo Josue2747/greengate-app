@@ -270,12 +270,26 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         }
 
+        /* Corrigir inputs no dark mode - usar fundo bem escuro */
         [data-theme="dark"] input,
         [data-theme="dark"] textarea,
         [data-theme="dark"] select {
-            background: var(--lighter);
-            color: var(--dark);
-            border-color: var(--gray-lightest);
+            background-color: #0F172A !important;
+            border-color: #334155 !important;
+            color: #F8FAFC !important;
+        }
+
+        /* Corrigir botão CTA no dark mode */
+        [data-theme="dark"] .cta .btn-primary {
+            background-color: #0F172A !important;
+            color: #10B981 !important;
+            border: 2px solid #334155 !important;
+        }
+
+        [data-theme="dark"] .cta .btn-primary:hover {
+            background-color: #10B981 !important;
+            color: #0F172A !important;
+            border-color: #10B981 !important;
         }
 
         [data-theme="dark"] input:focus,
@@ -1670,7 +1684,7 @@
                 <div class="nav-logo-icon">G</div>
                 <div class="nav-logo-text">
                     <h1>GreenGate</h1>
-                    <span>Triagem Ambiental</span>
+                    <span data-i18n="nav_logo_tagline">Triagem Ambiental</span>
                 </div>
             </a>
             <a href="https://www.greengate.com.br/app" class="nav-cta" target="_blank" data-i18n="nav_cta">Validar Área</a>
@@ -1695,7 +1709,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span></span>
-                    Triagem Ambiental Automatizada
+                    <span data-i18n="hero_badge">Triagem Ambiental Automatizada</span>
                 </div>
                 <h1 data-i18n="hero_title">
                     Validação Geoespacial para Conformidade Ambiental
@@ -1712,7 +1726,7 @@
             <div class="hero-visual">
                 <div class="hero-card">
                     <div class="hero-card-header">
-                        <h3 class="hero-card-title">Validação em até 2 Minutos</h3>
+                        <h3 class="hero-card-title" data-i18n="hero_card_title">Validação em até 2 Minutos</h3>
                         <span class="hero-card-badge">API REST</span>
                     </div>
                     <div class="hero-checklist">
@@ -1762,20 +1776,20 @@
     <section class="stats">
         <div class="stats-container">
             <div class="stat-item">
-                <div class="stat-number">6</div>
-                <div class="stat-label">Camadas Oficiais Integradas</div>
+                <div class="stat-number" data-i18n="stat1_number">6</div>
+                <div class="stat-label" data-i18n="stat1_label">Camadas Oficiais Integradas</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">&lt; 2 min</div>
-                <div class="stat-label">Tempo de Validação</div>
+                <div class="stat-number" data-i18n="stat2_number">&lt; 2 min</div>
+                <div class="stat-label" data-i18n="stat2_label">Tempo de Validação</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">95%</div>
-                <div class="stat-label">Redução de Custos vs. Análise Manual</div>
+                <div class="stat-number" data-i18n="stat3_number">95%</div>
+                <div class="stat-label" data-i18n="stat3_label">Redução de Custos vs. Análise Manual</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">R$ 15,90</div>
-                <div class="stat-label">Preço por Validação</div>
+                <div class="stat-number" data-i18n="stat4_number">R$ 15,90</div>
+                <div class="stat-label" data-i18n="stat4_label">Preço por Validação</div>
             </div>
         </div>
     </section>
@@ -1864,7 +1878,7 @@
     <section class="data-sources">
         <div class="data-sources-container">
             <div class="section-header">
-                <span class="section-label">Fontes de Dados</span>
+                <span class="section-label" data-i18n="data_section_label">Fontes de Dados</span>
                 <h2 class="section-title" data-i18n="data_title">Camadas de Dados Oficiais</h2>
                 <p class="section-subtitle" data-i18n="data_subtitle">
                     Integração com as principais fontes governamentais
@@ -2008,12 +2022,12 @@
     <!-- CTA -->
     <section class="cta">
         <div class="cta-container">
-            <h2>Pronto para Garantir Conformidade?</h2>
-            <p>
+            <h2 data-i18n="cta_title">Pronto para Garantir Conformidade?</h2>
+            <p data-i18n="cta_subtitle">
                 Junte-se a empresas que já confiam na GreenGate para triagem ambiental.
                 Validação instantânea, relatórios PDF e suporte técnico.
             </p>
-            <a href="#contact" class="btn-primary">Falar com Especialista</a>
+            <a href="#contact" class="btn-primary" data-i18n="cta_button">Falar com Especialista</a>
         </div>
     </section>
 
@@ -2048,7 +2062,7 @@
                             <div class="contact-detail-icon">☎</div>
                             <div class="contact-detail-text">
                                 <strong data-i18n="contact_phone">Telefone</strong>
-                                <span>+55 (61) 99999-9999</span>
+                                <span data-i18n="contact_phone_value">+55 (61) 99999-9999</span>
                             </div>
                         </div>
 

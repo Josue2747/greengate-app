@@ -6,11 +6,34 @@ const translations = {
         eudr_subtitle: 'Due Diligence Artigo 9 para Sourcing Brasileiro • Prazo Dezembro 2024',
         eudr_cta: 'Saiba Mais',
         // Navigation
+        nav_logo_tagline: 'Triagem Ambiental',
         nav_features: 'Funcionalidades',
         nav_pricing: 'Preços',
         nav_contact: 'Contato',
         nav_docs: 'Documentação API',
         nav_cta: 'Começar Agora',
+
+        // Hero Badge
+        hero_badge: 'Triagem Ambiental Automatizada',
+        hero_card_title: 'Validação em até 2 Minutos',
+
+        // Stats
+        stat1_number: '6',
+        stat1_label: 'Camadas Oficiais Integradas',
+        stat2_number: '< 2 min',
+        stat2_label: 'Tempo de Validação',
+        stat3_number: '95%',
+        stat3_label: 'Redução de Custos vs. Análise Manual',
+        stat4_number: 'R$ 15,90',
+        stat4_label: 'Preço por Validação',
+
+        // Data Sources
+        data_section_label: 'Fontes de Dados',
+
+        // CTA
+        cta_title: 'Pronto para Garantir Conformidade?',
+        cta_subtitle: 'Junte-se a empresas que já confiam na GreenGate para triagem ambiental. Validação instantânea, relatórios PDF e suporte técnico.',
+        cta_button: 'Falar com Especialista',
 
         // Hero
         hero_title: 'Validação Geoespacial para Conformidade Ambiental',
@@ -147,6 +170,7 @@ const translations = {
         contact_info_title: 'Informações de Contato',
         contact_email: 'E-mail',
         contact_phone: 'Telefone',
+        contact_phone_value: '+55 (61) 99999-9999',
         contact_hours: 'Horário',
         contact_hours_value: 'Seg-Sex: 9h-18h (horário de Brasília)',
 
@@ -175,11 +199,34 @@ const translations = {
         eudr_subtitle: 'Article 9 Due Diligence for Brazilian Sourcing • December 2024 Deadline',
         eudr_cta: 'Learn More',
         // Navigation
+        nav_logo_tagline: 'Environmental Screening',
         nav_features: 'Features',
         nav_pricing: 'Pricing',
         nav_contact: 'Contact',
         nav_docs: 'API Documentation',
         nav_cta: 'Get Started',
+
+        // Hero Badge
+        hero_badge: 'Automated Environmental Screening',
+        hero_card_title: 'Validation in Under 2 Minutes',
+
+        // Stats
+        stat1_number: '6',
+        stat1_label: 'Integrated Official Layers',
+        stat2_number: '< 2 min',
+        stat2_label: 'Validation Time',
+        stat3_number: '95%',
+        stat3_label: 'Cost Reduction vs. Manual Analysis',
+        stat4_number: 'R$ 15.90',
+        stat4_label: 'Price per Validation',
+
+        // Data Sources
+        data_section_label: 'Data Sources',
+
+        // CTA
+        cta_title: 'Ready to Ensure Compliance?',
+        cta_subtitle: 'Join companies that already trust GreenGate for environmental screening. Instant validation, PDF reports, and technical support.',
+        cta_button: 'Talk to a Specialist',
 
         // Hero
         hero_title: 'Geospatial Validation for Environmental Compliance',
@@ -316,6 +363,7 @@ const translations = {
         contact_info_title: 'Contact Information',
         contact_email: 'Email',
         contact_phone: 'Phone',
+        contact_phone_value: '+55 19 97104-6171',
         contact_hours: 'Hours',
         contact_hours_value: 'Mon-Fri: 9am-6pm (Brasília time)',
 
