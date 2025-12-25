@@ -170,7 +170,7 @@ const translations = {
         contact_info_title: 'Informações de Contato',
         contact_email: 'E-mail',
         contact_phone: 'Telefone',
-        contact_phone_value: '+55 (61) 99999-9999',
+        contact_phone_value: '+5519971046171',
         contact_hours: 'Horário',
         contact_hours_value: 'Seg-Sex: 9h-18h (horário de Brasília)',
 
@@ -363,7 +363,7 @@ const translations = {
         contact_info_title: 'Contact Information',
         contact_email: 'Email',
         contact_phone: 'Phone',
-        contact_phone_value: '+55 19 97104-6171',
+        contact_phone_value: '+5519971046171',
         contact_hours: 'Hours',
         contact_hours_value: 'Mon-Fri: 9am-6pm (Brasília time)',
 
