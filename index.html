@@ -1708,7 +1708,7 @@
                     <span>Triagem Ambiental</span>
                 </div>
             </a>
-            <a href="https://www.greengate.com.br/app" class="nav-cta" target="_blank">Validar Área</a>
+            <a href="https://www.greengate.com.br/app" class="nav-cta" target="_blank" data-i18n="nav_cta">Validar Área</a>
         </div>
     </nav>
 
@@ -1732,17 +1732,15 @@
                     <span></span>
                     Triagem Ambiental Automatizada
                 </div>
-                <h1>
-                    Valide Propriedades<br>
-                    Rurais em <span class="highlight">Segundos</span>
+                <h1 data-i18n="hero_title">
+                    Validação Geoespacial para Conformidade Ambiental
                 </h1>
-                <p class="hero-subtitle">
-                    Plataforma de validação geoespacial para conformidade ambiental e anti-desmatamento.
-                    Cruze sua área com 6 camadas oficiais em menos de 2 minutos.
+                <p class="hero-subtitle" data-i18n="hero_subtitle">
+                    Desenhe ou envie sua área e cruze com 7 camadas oficiais de dados ambientais brasileiros. Gere relatório PDF auditável em até 2 minutos.
                 </p>
                 <div class="hero-cta">
-                    <a href="https://www.greengate.com.br/app" class="btn-primary">Validar Área Agora</a>
-                    <a href="#features" class="btn-secondary">Ver Funcionalidades</a>
+                    <a href="https://www.greengate.com.br/app" class="btn-primary" data-i18n="hero_cta">Testar Gratuitamente</a>
+                    <a href="https://api.greengate.com.br/redoc" target="_blank" class="btn-secondary" data-i18n="hero_docs">Ver Documentação</a>
                 </div>
             </div>
 
@@ -1756,29 +1754,43 @@
                         <div class="hero-checklist-item">
                             <div class="hero-checklist-icon">✓</div>
                             <div class="hero-checklist-text">
-                                <strong>PRODES Amazônia</strong>
-                                <span>Desmatamento oficial INPE</span>
+                                <strong data-i18n="hero_check1">Desmatamento (PRODES)</strong>
                             </div>
                         </div>
                         <div class="hero-checklist-item">
                             <div class="hero-checklist-icon">✓</div>
                             <div class="hero-checklist-text">
-                                <strong>Terras Indígenas</strong>
-                                <span>Base FUNAI atualizada</span>
+                                <strong data-i18n="hero_check2">Terras Indígenas (FUNAI)</strong>
                             </div>
                         </div>
                         <div class="hero-checklist-item">
                             <div class="hero-checklist-icon">✓</div>
                             <div class="hero-checklist-text">
-                                <strong>Embargos IBAMA</strong>
-                                <span>Áreas sob restrição</span>
+                                <strong data-i18n="hero_check3">Unidades de Conservação</strong>
                             </div>
                         </div>
                         <div class="hero-checklist-item">
                             <div class="hero-checklist-icon">✓</div>
                             <div class="hero-checklist-text">
-                                <strong>MapBiomas Alerta</strong>
-                                <span>Alertas de desmatamento</span>
+                                <strong data-i18n="hero_check4">Embargos Ambientais (IBAMA)</strong>
+                            </div>
+                        </div>
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong data-i18n="hero_check5">Territórios Quilombolas (INCRA)</strong>
+                            </div>
+                        </div>
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong data-i18n="hero_check6">Amazônia Legal</strong>
+                            </div>
+                        </div>
+                        <div class="hero-checklist-item">
+                            <div class="hero-checklist-icon">✓</div>
+                            <div class="hero-checklist-text">
+                                <strong data-i18n="hero_check7">Recursos Hídricos (ANA)</strong>
                             </div>
                         </div>
                     </div>
@@ -1813,65 +1825,76 @@
     <section class="features" id="features">
         <div class="features-container">
             <div class="section-header">
-                <span class="section-label">Funcionalidades</span>
-                <h2 class="section-title">Triagem Ambiental Simplificada</h2>
-                <p class="section-subtitle">
-                    Tudo que você precisa para garantir conformidade com a regulamentação europeia anti-desmatamento
+                <span class="section-label" data-i18n="nav_features">Funcionalidades</span>
+                <h2 class="section-title" data-i18n="features_title">Por Que GreenGate?</h2>
+                <p class="section-subtitle" data-i18n="features_subtitle">
+                    Transparência e auditabilidade em conformidade ambiental
                 </p>
             </div>
 
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">▸</div>
-                    <h3>Validação em até 2 Minutos</h3>
-                    <p>
-                        API REST de alto desempenho. Valide propriedades rurais em até 2 minutos
-                        com consultas geoespaciais otimizadas.
+                    <h3 data-i18n="feature1_title">Resultado Reproduzível</h3>
+                    <p data-i18n="feature1_desc">
+                        Mesma área + mesma data = mesmo resultado. Validações determinísticas sem margem para interpretação.
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">◆</div>
-                    <h3>Score de Risco 0-100</h3>
-                    <p>
-                        Algoritmo proprietário que analisa 6 camadas de dados e gera um score de risco
-                        objetivo e auditável.
+                    <h3 data-i18n="feature2_title">Sem Falhas por Arquivos Corrompidos</h3>
+                    <p data-i18n="feature2_desc">
+                        Validação geométrica automática via PostGIS. Polígonos inválidos são detectados e corrigidos antes do processamento.
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">■</div>
-                    <h3>Relatórios PDF</h3>
-                    <p>
-                        Gere dossiês de conformidade profissionais com mapas, estatísticas e QR Code
-                        para verificação pública.
+                    <h3 data-i18n="feature3_title">Fontes Oficiais Rastreáveis</h3>
+                    <p data-i18n="feature3_desc">
+                        Todas as camadas provêm de órgãos oficiais (INPE, FUNAI, IBAMA, ICMBio, INCRA, ANA, MapBiomas). Auditável e defensável.
                     </p>
                 </div>
+            </div>
 
+            <div class="section-header" style="margin-top: 4rem;">
+                <h2 class="section-title" data-i18n="validate_title">Como Validamos</h2>
+                <p class="section-subtitle" data-i18n="validate_subtitle">
+                    Metodologia transparente e auditável
+                </p>
+            </div>
+
+            <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">↻</div>
-                    <h3>Fontes Oficiais</h3>
-                    <p>
-                        Integração direta com bases governamentais: INPE, FUNAI, IBAMA, INCRA, MMA.
-                        Dados processados e normalizados.
+                    <h3 data-i18n="validate1_title">Método Reproduzível</h3>
+                    <p data-i18n="validate1_desc">
+                        Mesma área + mesma data = mesmo resultado sempre
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">●</div>
-                    <h3>Seguro e Escalável</h3>
-                    <p>
-                        Infraestrutura enterprise com rate limiting, autenticação via API key e
-                        banco de dados PostGIS otimizado.
+                    <h3 data-i18n="validate2_title">Fontes Oficiais</h3>
+                    <p data-i18n="validate2_desc">
+                        INPE, FUNAI, IBAMA, ICMBio, INCRA, ANA, MapBiomas
                     </p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">▬</div>
-                    <h3>API RESTful</h3>
-                    <p>
-                        Documentação completa, endpoints intuitivos e suporte para GeoJSON.
-                        Integre em minutos com qualquer stack.
+                    <h3 data-i18n="validate3_title">Data de Atualização</h3>
+                    <p data-i18n="validate3_desc">
+                        Cada camada exibe quando foi atualizada pela última vez
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3 data-i18n="validate4_title">Validação Automática</h3>
+                    <p data-i18n="validate4_desc">
+                        Geometrias validadas via PostGIS antes do cruzamento
                     </p>
                 </div>
             </div>
@@ -1883,9 +1906,9 @@
         <div class="data-sources-container">
             <div class="section-header">
                 <span class="section-label">Fontes de Dados</span>
-                <h2 class="section-title">6 Camadas Oficiais Integradas</h2>
-                <p class="section-subtitle">
-                    Bases públicas normalizadas e validadas. Sem arquivos quebrados ou geometrias inválidas.
+                <h2 class="section-title" data-i18n="data_title">Camadas de Dados Oficiais</h2>
+                <p class="section-subtitle" data-i18n="data_subtitle">
+                    Integração com as principais fontes governamentais
                 </p>
             </div>
 
@@ -1893,121 +1916,115 @@
                 <div class="data-card">
                     <div class="data-card-header">
                         <div class="data-check">✓</div>
-                        <h4>PRODES Amazônia</h4>
+                        <h4 data-i18n="data1_title">PRODES (INPE)</h4>
                     </div>
-                    <p>Desmatamento oficial do INPE. Satélites LANDSAT com resolução de 30m. Monitoramento oficial.</p>
+                    <p data-i18n="data1_desc">Desmatamento na Amazônia Legal</p>
                 </div>
 
                 <div class="data-card">
                     <div class="data-card-header">
                         <div class="data-check">✓</div>
-                        <h4>MapBiomas Alerta</h4>
+                        <h4 data-i18n="data2_title">Terras Indígenas (FUNAI)</h4>
                     </div>
-                    <p>Alertas de desmatamento quase em tempo real. Validação cruzada de imagens satelitais.</p>
+                    <p data-i18n="data2_desc">Demarcações homologadas e em processo</p>
                 </div>
 
                 <div class="data-card">
                     <div class="data-card-header">
                         <div class="data-check">✓</div>
-                        <h4>Terras Indígenas (FUNAI)</h4>
+                        <h4 data-i18n="data3_title">Unidades de Conservação (ICMBio)</h4>
                     </div>
-                    <p>421 terras indígenas homologadas e em processo. Proibição total de exploração.</p>
+                    <p data-i18n="data3_desc">Proteção integral e uso sustentável</p>
                 </div>
 
                 <div class="data-card">
                     <div class="data-card-header">
                         <div class="data-check">✓</div>
-                        <h4>Territórios Quilombolas</h4>
+                        <h4 data-i18n="data4_title">Embargos IBAMA</h4>
                     </div>
-                    <p>Base INCRA de comunidades tradicionais. Proteção especial pela Constituição.</p>
+                    <p data-i18n="data4_desc">Áreas com restrição ambiental</p>
                 </div>
 
                 <div class="data-card">
                     <div class="data-card-header">
                         <div class="data-check">✓</div>
-                        <h4>Unidades de Conservação</h4>
+                        <h4 data-i18n="data5_title">Territórios Quilombolas (INCRA)</h4>
                     </div>
-                    <p>333 UCs federais (MMA). Restrições variadas por categoria de proteção.</p>
+                    <p data-i18n="data5_desc">Comunidades tradicionais tituladas</p>
                 </div>
 
                 <div class="data-card">
                     <div class="data-card-header">
                         <div class="data-check">✓</div>
-                        <h4>Embargos IBAMA</h4>
+                        <h4 data-i18n="data6_title">Amazônia Legal</h4>
                     </div>
-                    <p>Áreas sob embargo ambiental. Proibição de comercialização de produtos.</p>
+                    <p data-i18n="data6_desc">Área sujeita a legislação especial</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ROI/Pricing -->
-    <section class="roi">
+    <section class="roi" id="pricing">
         <div class="roi-container">
             <div class="section-header">
-                <span class="section-label">Economia Comprovada</span>
-                <h2 class="section-title">Reduza Custos com Validação Automatizada</h2>
-                <p class="section-subtitle">
-                    Precificação transparente por volume - quanto mais usa, menos paga
+                <span class="section-label" data-i18n="nav_pricing">Preços</span>
+                <h2 class="section-title" data-i18n="pricing_title">Preços</h2>
+                <p class="section-subtitle" data-i18n="pricing_subtitle">
+                    Transparente e previsível
                 </p>
             </div>
 
             <div class="roi-comparison">
                 <!-- Análise Manual -->
                 <div class="roi-card">
-                    <h3>Análise Técnica Manual</h3>
-                    <p style="color: var(--gray); margin-bottom: 1rem;">Método tradicional especializado</p>
-                    <div class="price">R$ 180-350 <small>/validação</small></div>
+                    <h3 data-i18n="pricing_manual_title">Análise Técnica Manual</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;" data-i18n="pricing_manual_desc">Processo tradicional</p>
+                    <div class="price"><span data-i18n="pricing_manual_price">R$ 265</span> <small data-i18n="pricing_manual_per">/validação</small></div>
+                    <p style="margin: 1rem 0; color: var(--gray);" data-i18n="pricing_manual_time">2-5 dias por validação</p>
                     <ul class="roi-features">
-                        <li>2-4 horas de trabalho técnico</li>
-                        <li>Download de 6 bases oficiais</li>
-                        <li>Software GIS licenciado necessário</li>
-                        <li>Conhecimento especializado</li>
-                        <li>Processamento manual de geometrias</li>
-                        <li>Risco de inconsistências</li>
-                        <li>Sem rastreabilidade automática</li>
+                        <li data-i18n="pricing_manual_feat1">Análise técnica especializada</li>
+                        <li data-i18n="pricing_manual_feat2">Verificação manual de cada camada</li>
+                        <li data-i18n="pricing_manual_feat3">Relatório técnico descritivo</li>
+                        <li data-i18n="pricing_manual_feat4">Custo de equipe especializada</li>
+                        <li data-i18n="pricing_manual_feat5">Escalabilidade limitada</li>
                     </ul>
-                    <p style="font-size: 0.8rem; color: var(--gray); margin-top: 1rem; font-style: italic;">
-                        * Baseado em salário médio de analista GIS: R$ 4.838/mês
-                    </p>
                 </div>
 
                 <!-- GreenGate API -->
                 <div class="roi-card featured">
                     <div class="roi-badge">Recomendado</div>
-                    <h3>GreenGate API</h3>
-                    <p style="color: var(--gray); margin-bottom: 1rem;">Validação automatizada</p>
-                    <div class="price">R$ 15,90 <small>/validação</small></div>
-                    <div class="saving">Preço fixo por validação</div>
+                    <h3 data-i18n="pricing_api_title">GreenGate API</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;" data-i18n="pricing_api_desc">Validação automatizada</p>
+                    <div class="price"><span data-i18n="pricing_api_price">R$ 15,90</span> <small data-i18n="pricing_api_per">/validação</small></div>
+                    <div class="saving" data-i18n="pricing_api_saving">Preço fixo por validação</div>
                     <ul class="roi-features">
-                        <li>&lt; 2 minutos por validação</li>
-                        <li>6 camadas oficiais integradas</li>
-                        <li>API REST pronta para uso</li>
-                        <li>Processamento otimizado PostGIS</li>
-                        <li>Geometrias sempre validadas</li>
-                        <li>Relatório PDF auditável</li>
-                        <li>QR Code para verificação pública</li>
-                        <li>Rastreabilidade completa</li>
+                        <li data-i18n="pricing_api_feat1">&lt; 2 minutos por validação</li>
+                        <li data-i18n="pricing_api_feat2">6 camadas oficiais integradas</li>
+                        <li data-i18n="pricing_api_feat3">API REST pronta para uso</li>
+                        <li data-i18n="pricing_api_feat4">Processamento otimizado PostGIS</li>
+                        <li data-i18n="pricing_api_feat5">Geometrias sempre validadas</li>
+                        <li data-i18n="pricing_api_feat6">Relatório PDF auditável</li>
+                        <li data-i18n="pricing_api_feat7">QR Code para verificação pública</li>
+                        <li data-i18n="pricing_api_feat8">Rastreabilidade completa</li>
                     </ul>
-                    <p style="font-size: 0.85rem; color: var(--primary-dark); margin-top: 1.5rem; font-weight: 600; background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px;">
-                    </p>
                 </div>
 
                 <!-- ROI Exemplo -->
                 <div class="roi-card">
-                    <h3>Seu ROI</h3>
-                    <p style="color: var(--gray); margin-bottom: 1rem;">Exemplo: 100 validações/mês</p>
-                    <div class="price">R$ 24.910 <small>/mês economizados</small></div>
+                    <h3 data-i18n="pricing_roi_title">Seu ROI</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;" data-i18n="pricing_roi_desc">Exemplo: 100 validações/mês</p>
+                    <div class="price">R$ 24.910 <small data-i18n="pricing_roi_saved">/mês economizados</small></div>
                     <ul class="roi-features">
-                        <li>Custo análise técnica: R$ 26.500/mês</li>
-                        <li>Custo GreenGate: R$ 1.590/mês</li>
-                        <li>Economia: R$ 24.910/mês</li>
-                        <li>Redução de custos: 94%</li>
-                        <li>Payback: Imediato (1ª validação)</li>
-                        <li>Tempo economizado: 200-400h/mês</li>
-                        <li>Equipe livre para análises estratégicas</li>
+                        <li data-i18n="pricing_roi_feat1">Custo análise técnica: R$ 26.500/mês</li>
+                        <li data-i18n="pricing_roi_feat2">Custo GreenGate: R$ 1.590/mês</li>
+                        <li data-i18n="pricing_roi_feat3">Economia: R$ 24.910/mês</li>
+                        <li data-i18n="pricing_roi_feat4">Redução de custos: 94%</li>
+                        <li data-i18n="pricing_roi_feat5">Payback: Imediato (1ª validação)</li>
+                        <li data-i18n="pricing_roi_feat6">Tempo economizado: 200-400h/mês</li>
+                        <li data-i18n="pricing_roi_feat7">Equipe livre para análises estratégicas</li>
                     </ul>
-                    <p style="font-size: 0.8rem; color: var(--gray); margin-top: 1rem; font-style: italic;">
+                    <p style="font-size: 0.8rem; color: var(--gray); margin-top: 1rem; font-style: italic;" data-i18n="pricing_roi_note">
                         * Cálculo baseado em R$ 265 médio por validação manual e preço fixo de R$ 15,90/validação
                     </p>
                 </div>
@@ -2015,14 +2032,17 @@
 
             <!-- PDF Exemplo -->
             <div class="roi-example">
-                <h4>Veja um Exemplo de Relatório Gerado</h4>
-                <p style="color: var(--gray); margin-bottom: 1.5rem;">
-                    PDF profissional com mapa, estatísticas e QR Code para verificação pública
+                <h4 data-i18n="pricing_example_title">Ver Exemplo de Relatório</h4>
+                <p style="color: var(--gray); margin-bottom: 1.5rem;" data-i18n="pricing_example_desc">
+                    PDF de demonstração com validação real
                 </p>
                 <a href="GreenGate-Fazenda-Teste-Talhao-12.pdf" target="_blank" class="pdf-link">
                     <span style="font-size: 1.5rem;">📄</span>
-                    <span>Baixar Exemplo de Relatório (PDF)</span>
+                    <span data-i18n="pricing_example_link">Baixar PDF de Exemplo</span>
                 </a>
+                <p style="font-size: 0.85rem; color: var(--gray); margin-top: 1rem;" data-i18n="pricing_example_info">
+                    Relatório real de fazenda exemplo com QR Code funcional para verificação pública.
+                </p>
             </div>
         </div>
     </section>
@@ -2042,42 +2062,42 @@
     <section class="contact" id="contact">
         <div class="contact-container">
             <div class="section-header" style="margin-bottom: 3rem;">
-                <span class="section-label">Entre em Contato</span>
-                <h2 class="section-title">Pronto para Começar?</h2>
-                <p class="section-subtitle">
-                    Fale conosco para mais informações ou solicite acesso à API
+                <span class="section-label" data-i18n="nav_contact">Contato</span>
+                <h2 class="section-title" data-i18n="contact_title">Fale Conosco</h2>
+                <p class="section-subtitle" data-i18n="contact_subtitle">
+                    Tire suas dúvidas ou solicite acesso à API
                 </p>
             </div>
 
             <div class="contact-content">
                 <div class="contact-info">
-                    <h3>Vamos Conversar</h3>
-                    <p>
-                        Nossa equipe está pronta para ajudar você a implementar triagem ambiental automatizada no seu negócio.
+                    <h3 data-i18n="contact_info_title">Informações de Contato</h3>
+                    <p data-i18n="contact_subtitle">
+                        Tire suas dúvidas ou solicite acesso à API
                     </p>
 
                     <div class="contact-details">
                         <div class="contact-detail">
                             <div class="contact-detail-icon">✉</div>
                             <div class="contact-detail-text">
-                                <strong>Email</strong>
+                                <strong data-i18n="contact_email">E-mail</strong>
                                 <span>greengate@gmail.com</span>
                             </div>
                         </div>
 
                         <div class="contact-detail">
-                            <div class="contact-detail-icon">▸</div>
+                            <div class="contact-detail-icon">☎</div>
                             <div class="contact-detail-text">
-                                <strong>Plataforma</strong>
-                                <span>www.greengate.com.br/app</span>
+                                <strong data-i18n="contact_phone">Telefone</strong>
+                                <span>+55 (61) 99999-9999</span>
                             </div>
                         </div>
 
                         <div class="contact-detail">
-                            <div class="contact-detail-icon">▸</div>
+                            <div class="contact-detail-icon">⏰</div>
                             <div class="contact-detail-text">
-                                <strong>Tempo de Resposta</strong>
-                                <span>Até 24 horas úteis</span>
+                                <strong data-i18n="contact_hours">Horário</strong>
+                                <span data-i18n="contact_hours_value">Seg-Sex: 9h-18h (horário de Brasília)</span>
                             </div>
                         </div>
                     </div>
@@ -2086,38 +2106,26 @@
                 <div class="contact-form-wrapper">
                     <form id="contactForm" onsubmit="handleSubmit(event)">
                         <div class="form-group">
-                            <label for="name">Nome Completo *</label>
-                            <input type="text" id="name" name="name" required placeholder="João Silva">
+                            <label for="name" data-i18n="contact_label_name">Nome</label>
+                            <input type="text" id="name" name="name" required data-i18n="contact_placeholder_name" placeholder="João Silva">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email Corporativo *</label>
-                            <input type="email" id="email" name="email" required placeholder="joao@empresa.com.br">
+                            <label for="email" data-i18n="contact_label_email">E-mail</label>
+                            <input type="email" id="email" name="email" required data-i18n="contact_placeholder_email" placeholder="joao@empresa.com.br">
                         </div>
 
                         <div class="form-group">
-                            <label for="company">Empresa</label>
-                            <input type="text" id="company" name="company" placeholder="Nome da sua empresa">
+                            <label for="company" data-i18n="contact_label_company">Empresa</label>
+                            <input type="text" id="company" name="company" data-i18n="contact_placeholder_company" placeholder="Sua Empresa Ltda">
                         </div>
 
                         <div class="form-group">
-                            <label for="interest">Interesse *</label>
-                            <select id="interest" name="interest" required>
-                                <option value="">Selecione...</option>
-                                <option value="api">Acesso à API</option>
-                                <option value="demo">Solicitar Demo</option>
-                                <option value="integration">Integração Customizada</option>
-                                <option value="pricing">Informações de Preços</option>
-                                <option value="other">Outro</option>
-                            </select>
+                            <label for="message" data-i18n="contact_label_message">Mensagem</label>
+                            <textarea id="message" name="message" required data-i18n="contact_placeholder_message" placeholder="Como podemos ajudar?"></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="message">Mensagem *</label>
-                            <textarea id="message" name="message" required placeholder="Conte-nos sobre seu caso de uso..."></textarea>
-                        </div>
-
-                        <button type="submit" class="form-submit" id="submitBtn">
+                        <button type="submit" class="form-submit" id="submitBtn" data-i18n="contact_submit">
                             Enviar Mensagem
                         </button>
 
@@ -2134,36 +2142,40 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <h3>GreenGate</h3>
-                    <p>
-                        Plataforma de triagem ambiental automatizada para validação geoespacial.
-                        Desenvolvida com tecnologia brasileira para o agronegócio sustentável.
+                    <p data-i18n="footer_desc">
+                        Plataforma de validação geoespacial para conformidade ambiental e anti-desmatamento.
                     </p>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Recursos</h4>
+                    <h4 data-i18n="footer_product">Produto</h4>
                     <ul>
-                        <li><a href="https://www.greengate.com.br/app">Validar Área</a></li>
-                        <li><a href="https://api.greengate.com.br/redoc" target="_blank">Documentação API</a></li>
-                        <li><a href="#features">Funcionalidades</a></li>
-                        <li><a href="#contact">Contato</a></li>
+                        <li><a href="https://www.greengate.com.br/app" data-i18n="nav_cta">Começar Agora</a></li>
+                        <li><a href="https://api.greengate.com.br/redoc" target="_blank" data-i18n="footer_docs">Documentação</a></li>
+                        <li><a href="#features" data-i18n="footer_features">Funcionalidades</a></li>
+                        <li><a href="#pricing" data-i18n="footer_pricing">Preços</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Fontes de Dados</h4>
+                    <h4 data-i18n="footer_support">Suporte</h4>
                     <ul>
-                        <li>PRODES (INPE)</li>
-                        <li>MapBiomas Alerta</li>
-                        <li>FUNAI / INCRA</li>
-                        <li>IBAMA / MMA</li>
+                        <li><a href="#contact" data-i18n="footer_contact">Contato</a></li>
+                        <li><a href="#" data-i18n="footer_faq">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_legal">Legal</h4>
+                    <ul>
+                        <li><a href="#" data-i18n="footer_privacy">Política de Privacidade</a></li>
+                        <li><a href="#" data-i18n="footer_terms">Termos de Uso</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 GreenGate. Todos os direitos reservados.</p>
-                <p>Desenvolvido com tecnologia brasileira</p>
+                <p data-i18n="footer_rights">&copy; 2025 GreenGate. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
@@ -2206,9 +2218,13 @@
             const submitBtn = document.getElementById('submitBtn');
             const formMessage = document.getElementById('formMessage');
 
+            // Get current language
+            const currentLang = localStorage.getItem('language') || 'pt';
+            const t = translations[currentLang];
+
             // Disable submit button
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando...';
+            submitBtn.textContent = t.form_sending;
 
             // Get form data
             const formData = new FormData(form);
@@ -2218,14 +2234,14 @@
             setTimeout(() => {
                 // Success
                 formMessage.className = 'form-message success';
-                formMessage.textContent = '✓ Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                formMessage.textContent = t.form_success;
 
                 // Reset form
                 form.reset();
 
                 // Re-enable button
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Enviar Mensagem';
+                submitBtn.textContent = t.contact_submit;
 
                 // Hide message after 5 seconds
                 setTimeout(() => {
