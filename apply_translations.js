@@ -48,7 +48,7 @@
         // ROI savings
         const roiSaved = document.querySelector('[data-i18n="pricing_roi_saved"]');
         if (roiSaved && t.pricing_roi_saved) {
-            const savingsAmount = lang === 'en' ? '€3,510' : 'R$ 24.910';
+            const savingsAmount = lang === 'en' ? '€5,010' : 'R$ 7.910';
             roiSaved.innerHTML = savingsAmount + ' <small>' + t.pricing_roi_saved + '</small>';
         }
 
