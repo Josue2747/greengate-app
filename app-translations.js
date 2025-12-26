@@ -252,6 +252,11 @@ const appTranslations = {
         const newLang = currentLang === 'pt' ? 'en' : 'pt';
         applyAppTranslations(newLang);
         updateLangButton(newLang);
+
+        // Re-renderizar histórico com novo idioma
+        if (typeof renderHistory === 'function') {
+            renderHistory();
+        }
     };
 
     window.getCurrentAppLang = function() {
