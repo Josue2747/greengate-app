@@ -360,24 +360,24 @@
 
     <div class="sidebar">
         <div class="card">
-            <div class="card-title"><span class="card-title-icon">🔑</span> Autenticação</div>
+            <div class="card-title"><span class="card-title-icon">🔑</span> <span data-i18n-app="authTitle">Autenticação</span></div>
             <div class="input-wrapper">
-                <input type="password" id="apiKey" placeholder="Cole sua API Key">
+                <input type="password" id="apiKey" data-i18n-app="apiKeyPlaceholder" placeholder="Cole sua API Key">
                 <button class="input-eye" id="toggleKey">👁️</button>
             </div>
             <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
-                💡 <strong>API Key obrigatória para uso.</strong><br>
-                Obtenha sua chave: <a href="https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate" style="color: var(--accent-green); text-decoration: none;">WhatsApp +55 19 9 7104-6171</a>
+                💡 <strong><span data-i18n-app="apiKeyRequired">API Key obrigatória para uso.</span></strong><br>
+                <span data-i18n-app="getApiKey">Obtenha sua chave:</span> <a href="https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate" style="color: var(--accent-green); text-decoration: none;">WhatsApp +55 19 9 7104-6171</a>
             </p>
         </div>
 
         <div class="card">
-            <div class="card-title"><span class="card-title-icon">📁</span> Upload de Arquivo</div>
+            <div class="card-title"><span class="card-title-icon">📁</span> <span data-i18n-app="uploadTitle">Upload de Arquivo</span></div>
             <label class="upload-area" id="uploadArea">
                 <input type="file" id="fileInput" accept=".json,.geojson">
                 <div class="upload-icon">📄</div>
-                <div class="upload-text">Toque para selecionar</div>
-                <div class="upload-hint">GeoJSON ou JSON</div>
+                <div class="upload-text" data-i18n-app="uploadText">Toque para selecionar</div>
+                <div class="upload-hint" data-i18n-app="uploadHint">GeoJSON ou JSON</div>
             </label>
             <div class="upload-filename" id="fileName"></div>
 
@@ -452,8 +452,8 @@
 
 <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-spinner"></div>
-    <div class="loading-text">Validando área...</div>
-    <div class="loading-step" id="loadingStep">Conectando</div>
+    <div class="loading-text" data-i18n-app="validatingArea">Validando área...</div>
+    <div class="loading-step" id="loadingStep" data-i18n-app="connecting">Conectando</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -586,7 +586,7 @@
     function renderHistory() {
         const el = document.getElementById('historyList');
         const h = getHistory();
-        if (!h.length) { el.innerHTML = '<div class="history-empty">Nenhuma validação</div>'; return; }
+        if (!h.length) { el.innerHTML = `<div class="history-empty">${window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação'}</div>`; return; }
         el.innerHTML = h.map(i => `
             <div class="history-item" data-id="${i.id}">
                 <div class="history-header">
@@ -602,7 +602,7 @@
                 if (found?.polygon) {
                     currentMeta = found.meta || { municipality: null, state: null, address: null };
                     loadGeoJSON(found.polygon);
-                    showToast('Polígono carregado', 'success');
+                    showToast(window.getAppTranslation ? window.getAppTranslation('polygonLoaded') : 'Polígono carregado', 'success');
                 }
             };
         });
@@ -709,7 +709,7 @@
             if (searchTimeout) clearTimeout(searchTimeout);
             if (q.length < 2) { sResults.classList.remove('show'); return; }
 
-            sResults.innerHTML = '<div class="search-loading">Buscando...</div>';
+            sResults.innerHTML = `<div class="search-loading">${window.getAppTranslation ? window.getAppTranslation('searching') : 'Buscando...'}</div>`;
             sResults.classList.add('show');
 
             searchTimeout = setTimeout(() => {
@@ -720,7 +720,7 @@
                     outFields: ["Addr_type", "City", "Region"]
                 }).then(res => {
                     lastSearchResults = res || [];
-                    if (!res.length) { sResults.innerHTML = '<div class="search-empty">Nenhum resultado</div>'; return; }
+                    if (!res.length) { sResults.innerHTML = `<div class="search-empty">${window.getAppTranslation ? window.getAppTranslation('noResults') : 'Nenhum resultado'}</div>`; return; }
                     sResults.innerHTML = res.map((r, i) => `
                         <div class="search-item" data-i="${i}">
                             <div class="search-item-name">${r.address}</div>
@@ -738,7 +738,7 @@
                             sResults.classList.remove('show');
                         };
                     });
-                }).catch(() => sResults.innerHTML = '<div class="search-empty">Erro na busca</div>');
+                }).catch(() => sResults.innerHTML = `<div class="search-empty">${window.getAppTranslation ? window.getAppTranslation('searchError') : 'Erro na busca'}</div>`);
             }, 350);
         };
 
@@ -914,11 +914,11 @@
 
     // ===================== EXPORT GEOJSON =====================
     document.getElementById('exportBtn').onclick = () => {
-        if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+        if (!currentPolygon) { showToast(window.getAppTranslation ? window.getAppTranslation('noPolygon') : 'Nenhum polígono'); return; }
         const gj = { type: "Feature", properties: { source: "GreenGate", exported: new Date().toISOString() }, geometry: currentPolygon };
         const blob = new Blob([JSON.stringify(gj, null, 2)], { type: 'application/json' });
         const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `area-${Date.now()}.geojson`; a.click();
-        showToast('GeoJSON exportado!', 'success');
+        showToast(window.getAppTranslation ? window.getAppTranslation('geojsonExported') : 'GeoJSON exportado!', 'success');
     };
 
     // ===================== UI =====================
@@ -929,7 +929,7 @@
     document.getElementById('startBtn').onclick = () => toggleModal(false);
 
     document.getElementById('clearHistory').onclick = () => {
-        if (confirm('Limpar histórico?')) { localStorage.removeItem('gg_history'); renderHistory(); }
+        if (confirm(window.getAppTranslation ? window.getAppTranslation('clearHistoryConfirm') : 'Limpar histórico?')) { localStorage.removeItem('gg_history'); renderHistory(); }
     };
 
     document.getElementById('toggleKey').onclick = e => {
@@ -950,7 +950,7 @@
             try {
                 const j = JSON.parse(ev.target.result);
                 loadGeoJSON(j.type === 'FeatureCollection' ? j.features[0].geometry : j.type === 'Feature' ? j.geometry : j);
-            } catch (err) { showToast('Erro: ' + err.message); }
+            } catch (err) { showToast((window.getAppTranslation ? window.getAppTranslation('errorUpload') : 'Erro: ') + err.message); }
         };
         r.readAsText(f);
     };
@@ -976,10 +976,10 @@
 
         loadGeoJSON(exampleGeometry);
         isExampleArea = true; // Marcar como área de exemplo
-        document.getElementById('fileName').textContent = '📍 Área de Exemplo (Sinop, MT) - Validação livre';
+        document.getElementById('fileName').textContent = window.getAppTranslation ? window.getAppTranslation('areaFileName') : '📍 Área de Exemplo (Sinop, MT) - Validação livre';
         document.getElementById('fileName').classList.add('show');
         document.getElementById('uploadArea').classList.add('has-file');
-        showToast('✨ Área de exemplo carregada! Clique em "Validar Área" para testar sem API Key.', 'success');
+        showToast(window.getAppTranslation ? window.getAppTranslation('sampleLoaded') : '✨ Área de exemplo carregada! Clique em "Validar Área" para testar sem API Key.', 'success');
     };
 
     // ===================== VALIDATE =====================
@@ -992,7 +992,7 @@
             return;
         }
 
-        if (!currentPolygon) { showToast('Desenhe ou carregue um polígono'); return; }
+        if (!currentPolygon) { showToast(window.getAppTranslation ? window.getAppTranslation('noPolygon') : 'Nenhum polígono'); return; }
 
         // Informar se está validando área de exemplo sem chave
         if (isExampleArea && !key) {
@@ -1202,7 +1202,7 @@
         const plotName = document.getElementById('plotName').value.trim();
 
         if (!farmName || !plotName) {
-            showToast('Preencha Fazenda e Talhão');
+            showToast(window.getAppTranslation ? window.getAppTranslation('fillFarmPlot') : 'Preencha Fazenda e Talhão');
             return;
         }
 
@@ -1213,15 +1213,15 @@
 
         const key = document.getElementById('apiKey').value.trim();
         if (!key) {
-            showToast('Insira sua API Key para gerar o PDF');
+            showToast(window.getAppTranslation ? window.getAppTranslation('insertApiKey') : 'Insira sua API Key para gerar o PDF');
             return;
         }
 
-        if (!currentPolygon) { showToast('Nenhum polígono'); return; }
+        if (!currentPolygon) { showToast(window.getAppTranslation ? window.getAppTranslation('noPolygon') : 'Nenhum polígono'); return; }
 
         const btn = document.getElementById('pdfBtn');
         btn.disabled = true;
-        btn.textContent = '⏳ Gerando...';
+        btn.textContent = window.getAppTranslation ? window.getAppTranslation('pdfGenerating') : '⏳ Gerando...';
 
         try {
             const payload = {
@@ -1244,7 +1244,7 @@
                 body: JSON.stringify(payload)
             });
 
-            if (!res.ok) throw new Error('Erro ao gerar PDF');
+            if (!res.ok) throw new Error(window.getAppTranslation ? window.getAppTranslation('pdfError') : 'Erro ao gerar PDF');
 
             const reportCode = res.headers.get('X-Report-Code');
             if (reportCode) console.log('Código do relatório:', reportCode);
@@ -1256,7 +1256,7 @@
             a.download = filename;
             a.click();
 
-            showToast('PDF gerado com sucesso!', 'success');
+            showToast(window.getAppTranslation ? window.getAppTranslation('pdfSuccess') : 'PDF gerado com sucesso!', 'success');
         } catch (err) {
             showToast(err.message);
         } finally {

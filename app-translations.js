@@ -71,6 +71,32 @@ const appTranslations = {
         checkConservation: 'Unidades de Conservação',
         checkAmazon: 'Amazônia Legal',
         checkApp: 'Áreas de Preservação',
+
+        // Sidebar cards
+        authTitle: 'Autenticação',
+        apiKeyPlaceholder: 'Cole sua API Key',
+        apiKeyRequired: 'API Key obrigatória para uso.',
+        getApiKey: 'Obtenha sua chave:',
+        uploadTitle: 'Upload de Arquivo',
+        uploadText: 'Toque para selecionar',
+        uploadHint: 'GeoJSON ou JSON',
+
+        // Dynamic messages
+        noPolygon: 'Nenhum polígono',
+        polygonLoaded: 'Polígono carregado',
+        geojsonExported: 'GeoJSON exportado!',
+        validatingArea: 'Validando área...',
+        connecting: 'Conectando',
+        searching: 'Buscando...',
+        noResults: 'Nenhum resultado',
+        searchError: 'Erro na busca',
+        historyEmpty: 'Nenhuma validação',
+        fillFarmPlot: 'Preencha Fazenda e Talhão',
+        insertApiKey: 'Insira sua API Key para gerar o PDF',
+        pdfGenerating: '⏳ Gerando...',
+        pdfError: 'Erro ao gerar PDF',
+        pdfSuccess: 'PDF gerado com sucesso!',
+        errorUpload: 'Erro: ',
     },
     en: {
         // Header
@@ -143,6 +169,32 @@ const appTranslations = {
         checkConservation: 'Conservation Units',
         checkAmazon: 'Legal Amazon',
         checkApp: 'Preservation Areas',
+
+        // Sidebar cards
+        authTitle: 'Authentication',
+        apiKeyPlaceholder: 'Paste your API Key',
+        apiKeyRequired: 'API Key required for use.',
+        getApiKey: 'Get your key:',
+        uploadTitle: 'File Upload',
+        uploadText: 'Tap to select',
+        uploadHint: 'GeoJSON or JSON',
+
+        // Dynamic messages
+        noPolygon: 'No polygon',
+        polygonLoaded: 'Polygon loaded',
+        geojsonExported: 'GeoJSON exported!',
+        validatingArea: 'Validating area...',
+        connecting: 'Connecting',
+        searching: 'Searching...',
+        noResults: 'No results',
+        searchError: 'Search error',
+        historyEmpty: 'No validations',
+        fillFarmPlot: 'Fill in Farm and Plot',
+        insertApiKey: 'Insert your API Key to generate PDF',
+        pdfGenerating: '⏳ Generating...',
+        pdfError: 'Error generating PDF',
+        pdfSuccess: 'PDF generated successfully!',
+        errorUpload: 'Error: ',
     }
 };
 
@@ -202,5 +254,10 @@ const appTranslations = {
 
     window.getCurrentAppLang = function() {
         return currentLang;
+    };
+
+    // Função para obter tradução de uma chave específica
+    window.getAppTranslation = function(key) {
+        return appTranslations[currentLang]?.[key] || appTranslations['pt'][key] || key;
     };
 })();
