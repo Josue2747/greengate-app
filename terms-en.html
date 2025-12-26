@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Use - GreenGate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .lang-switcher a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .update-date {
+            background: var(--gray-light);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .alert {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container" style="position: relative;">
+            <div class="lang-switcher">
+                <a href="terms.html">🇧🇷 Português</a>
+            </div>
+            <h1>📜 Terms of Use</h1>
+            <p>GreenGate API usage conditions</p>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="container">
+            <div class="update-date">
+                <strong>Last updated:</strong> December 25, 2025
+            </div>
+
+            <p>These Terms of Use ("Terms") govern access to and use of the GreenGate geospatial validation API ("Service"). By using our API, you ("Customer", "you") fully agree to these Terms.</p>
+
+            <h2>1. Acceptance of Terms</h2>
+
+            <p>By requesting an API key or making your first request, you declare that:</p>
+            <ul>
+                <li>You have read and understood these Terms</li>
+                <li>You have legal capacity to contract (individual over 18 years or registered company)</li>
+                <li>The information provided during registration is truthful</li>
+            </ul>
+
+            <h2>2. Service Description</h2>
+
+            <h3>2.1. What We Provide</h3>
+            <p>GreenGate is a <strong>geospatial validation API</strong> that:</p>
+            <ul>
+                <li>Cross-references polygons with 6 official Brazilian environmental databases</li>
+                <li>Generates PDF reports with risk scores (0-100)</li>
+                <li>Provides public verification via QR Code</li>
+            </ul>
+
+            <h3>2.2. What We Do NOT Provide</h3>
+            <div class="alert">
+                <strong>Important:</strong>
+                <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                    <li>We are <strong>not a certification body</strong></li>
+                    <li>We do not guarantee EUDR compliance (consult a qualified auditor)</li>
+                    <li>We do not provide legal advice on environmental regulations</li>
+                    <li>Reports are informational based on available official data</li>
+                </ul>
+            </div>
+
+            <h3>2.3. Geographic Coverage</h3>
+            <p>Currently specialized in <strong>Mato Grosso state, Brazil</strong> (27% of Brazil's soy exports). Coverage may expand based on data availability.</p>
+
+            <h2>3. API Key and Account</h2>
+
+            <h3>3.1. API Key Security</h3>
+            <p>You are responsible for:</p>
+            <ul>
+                <li>Keeping your API key confidential</li>
+                <li>Not sharing keys with unauthorized third parties</li>
+                <li>Immediately reporting suspected key compromise</li>
+                <li>All activity performed with your key</li>
+            </ul>
+
+            <h3>3.2. Account Suspension</h3>
+            <p>We may suspend or revoke access without prior notice in case of:</p>
+            <ul>
+                <li>Violation of these Terms</li>
+                <li>Fraudulent or illegal use</li>
+                <li>API abuse (attacks, excessive load)</li>
+                <li>Non-payment of invoices</li>
+            </ul>
+
+            <h2>4. Pricing and Payment</h2>
+
+            <h3>4.1. Pricing</h3>
+            <ul>
+                <li><strong>Brazilian market:</strong> R$ 15.90 per validation</li>
+                <li><strong>International/European market:</strong> €19.90 per validation
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>100+ validations/month: €16.90</li>
+                        <li>500+ validations/month: €14.90</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>4.2. Billing</h3>
+            <ul>
+                <li>Billing occurs monthly based on actual usage</li>
+                <li>Invoices sent on the 1st business day of each month</li>
+                <li>Payment due within 15 days</li>
+                <li>Accepted methods: Bank transfer, credit card, PayPal</li>
+            </ul>
+
+            <h3>4.3. Price Changes</h3>
+            <p>We may adjust prices with 30 days' advance notice via email. Continued use after notification constitutes acceptance.</p>
+
+            <h2>5. Acceptable Use</h2>
+
+            <h3>5.1. Permitted Use</h3>
+            <ul>
+                <li>Internal environmental compliance validation</li>
+                <li>Integration into your own platforms (white-label allowed)</li>
+                <li>Supply chain due diligence</li>
+                <li>EUDR documentation support</li>
+            </ul>
+
+            <h3>5.2. Prohibited Use</h3>
+            <p>You may <strong>NOT</strong>:</p>
+            <ul>
+                <li>Resell raw API access without our written authorization</li>
+                <li>Reverse engineer or attempt to access source code</li>
+                <li>Overload systems (exceeding rate limits)</li>
+                <li>Use for illegal purposes or regulatory fraud</li>
+                <li>Submit false or manipulated geometries</li>
+                <li>Scrape or mass download reference data layers</li>
+            </ul>
+
+            <h2>6. Rate Limits and SLA</h2>
+
+            <h3>6.1. Rate Limits</h3>
+            <ul>
+                <li><strong>Authenticated:</strong> 100 requests per minute</li>
+                <li><strong>Anonymous (public verification):</strong> 20 requests per minute</li>
+            </ul>
+
+            <h3>6.2. Service Availability</h3>
+            <p><strong>Target SLA:</strong> 99.5% uptime (monthly)</p>
+            <p>We do not guarantee uninterrupted service. Scheduled maintenance will be communicated 48 hours in advance.</p>
+
+            <h2>7. Intellectual Property</h2>
+
+            <h3>7.1. Our Property</h3>
+            <p>GreenGate retains all rights to:</p>
+            <ul>
+                <li>Source code and algorithms</li>
+                <li>Risk score calculation methodology</li>
+                <li>API architecture and design</li>
+                <li>Brand and logos</li>
+            </ul>
+
+            <h3>7.2. Your Data</h3>
+            <p>You retain ownership of geometries and metadata you submit. By using the Service, you grant us a limited license to:</p>
+            <ul>
+                <li>Process and store data for validation purposes</li>
+                <li>Generate and archive reports</li>
+                <li>Provide public verification via QR Code</li>
+            </ul>
+
+            <h3>7.3. Official Data Sources</h3>
+            <p>Environmental layers (PRODES, FUNAI, IBAMA, ICMBio, INCRA) are <strong>public domain data from Brazilian government agencies</strong>. GreenGate does not claim ownership of this data.</p>
+
+            <h2>8. Warranties and Limitations</h2>
+
+            <h3>8.1. Service "As Is"</h3>
+            <p>The Service is provided <strong>"AS IS"</strong> without warranties of:</p>
+            <ul>
+                <li>Absolute data accuracy (depends on official source updates)</li>
+                <li>Suitability for specific legal purposes</li>
+                <li>Uninterrupted or error-free operation</li>
+            </ul>
+
+            <h3>8.2. Data Accuracy</h3>
+            <p>We strive for accuracy but <strong>do not guarantee</strong>:</p>
+            <ul>
+                <li>100% precision of official databases (errors may exist at source)</li>
+                <li>Real-time data (updates occur monthly/quarterly)</li>
+                <li>Coverage of all environmental risks</li>
+            </ul>
+
+            <p><strong>Recommendation:</strong> Use GreenGate as an initial screening tool. For critical decisions, complement with on-site audits and specialized legal counsel.</p>
+
+            <h2>9. Limitation of Liability</h2>
+
+            <p>To the maximum extent permitted by law:</p>
+            <ul>
+                <li>GreenGate's liability is limited to amounts paid by you in the past 12 months</li>
+                <li>We are not liable for indirect, incidental, or consequential damages</li>
+                <li>We are not liable for regulatory fines or penalties resulting from your use of reports</li>
+            </ul>
+
+            <h2>10. Confidentiality</h2>
+
+            <p>Both parties agree to:</p>
+            <ul>
+                <li>Maintain confidentiality of non-public information</li>
+                <li>Not disclose technical details of the API</li>
+                <li>Protect API keys and access credentials</li>
+            </ul>
+
+            <h2>11. Term and Termination</h2>
+
+            <h3>11.1. Term</h3>
+            <p>These Terms remain in effect while you use the Service.</p>
+
+            <h3>11.2. Termination by You</h3>
+            <p>You may terminate at any time by ceasing to use the API and requesting account deletion.</p>
+
+            <h3>11.3. Termination by Us</h3>
+            <p>We may terminate immediately for cause (Terms violation) or with 30 days' notice without cause.</p>
+
+            <h3>11.4. Effects of Termination</h3>
+            <ul>
+                <li>API key will be revoked</li>
+                <li>Outstanding invoices remain due</li>
+                <li>Archived validations remain accessible for public verification (unless you request deletion)</li>
+            </ul>
+
+            <h2>12. Changes to Terms</h2>
+
+            <p>We may modify these Terms with 30 days' notice via email. Continued use after changes constitutes acceptance. If you disagree, you must terminate your account.</p>
+
+            <h2>13. Applicable Law and Jurisdiction</h2>
+
+            <p>These Terms are governed by <strong>Brazilian law</strong>.</p>
+
+            <p>For disputes:</p>
+            <ul>
+                <li><strong>Brazilian customers:</strong> Courts of São Paulo, Brazil</li>
+                <li><strong>International customers:</strong> Parties agree to attempt good-faith negotiation before litigation. If unsuccessful, courts of São Paulo, Brazil</li>
+            </ul>
+
+            <h2>14. Contact</h2>
+
+            <p>Questions about these Terms:</p>
+            <ul>
+                <li><strong>Email:</strong> <a href="mailto:greengate@gmail.com">greengate@gmail.com</a></li>
+                <li><strong>Subject:</strong> "Terms of Use - Question"</li>
+            </ul>
+
+            <h2>15. Entire Agreement</h2>
+
+            <p>These Terms, together with the Privacy Policy, constitute the entire agreement between you and GreenGate regarding the Service.</p>
+
+            <a href="index.html" class="btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

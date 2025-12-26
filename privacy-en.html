@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - GreenGate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .lang-switcher a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .update-date {
+            background: var(--gray-light);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container" style="position: relative;">
+            <div class="lang-switcher">
+                <a href="privacy.html">🇧🇷 Português</a>
+            </div>
+            <h1>🔒 Privacy Policy</h1>
+            <p>How we collect, use and protect your data</p>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="container">
+            <div class="update-date">
+                <strong>Last updated:</strong> December 25, 2025
+            </div>
+
+            <p><strong>GreenGate</strong> ("we", "our") is committed to protecting the privacy and security of our users' data. This Privacy Policy describes how we collect, use, store, and protect information when you use our geospatial validation API.</p>
+
+            <h2>1. Information We Collect</h2>
+
+            <h3>1.1. Technical Data</h3>
+            <p>When you use our API, we collect:</p>
+            <ul>
+                <li><strong>GeoJSON geometries:</strong> Geographic coordinates of validated areas</li>
+                <li><strong>Validation metadata:</strong> Results, scores, overlaps with official layers</li>
+                <li><strong>API logs:</strong> Timestamps, API key used, IP address, user-agent</li>
+                <li><strong>Generated reports:</strong> PDFs with maps and statistics</li>
+            </ul>
+
+            <h3>1.2. Optional Data Provided</h3>
+            <p>You may optionally include in the <code>metadata</code> field:</p>
+            <ul>
+                <li>Property/farm name</li>
+                <li>CAR code (Rural Environmental Registry)</li>
+                <li>Owner identification</li>
+                <li>Other internal identifiers</li>
+            </ul>
+            <p><strong>Recommendation:</strong> Only send data strictly necessary for your operation.</p>
+
+            <h3>1.3. Contact Data</h3>
+            <p>When requesting API access, we collect:</p>
+            <ul>
+                <li>Name and corporate email</li>
+                <li>Company name</li>
+                <li>Phone (optional)</li>
+            </ul>
+
+            <h2>2. How We Use Information</h2>
+
+            <h3>2.1. Purposes</h3>
+            <ul>
+                <li><strong>Process validations:</strong> Execute geospatial analyses and generate reports</li>
+                <li><strong>Audit and traceability:</strong> Ensure public verification via QR Code</li>
+                <li><strong>Technical support:</strong> Diagnose errors and improve performance</li>
+                <li><strong>Security:</strong> Detect and prevent API misuse</li>
+                <li><strong>Billing:</strong> Calculate monthly usage per API key</li>
+                <li><strong>Compliance:</strong> Meet legal and regulatory obligations</li>
+            </ul>
+
+            <h3>2.2. Legal Basis (GDPR)</h3>
+            <p>We process your data based on:</p>
+            <ul>
+                <li><strong>Contract performance:</strong> Provision of validation service (Art. 6(1)(b) GDPR)</li>
+                <li><strong>Legitimate interest:</strong> Security, audit, and service improvement (Art. 6(1)(f) GDPR)</li>
+                <li><strong>Legal obligation:</strong> Retention for tax purposes (Art. 6(1)(c) GDPR)</li>
+            </ul>
+
+            <h2>3. Data Sharing</h2>
+
+            <h3>3.1. We Do Not Sell Your Data</h3>
+            <p>GreenGate <strong>never sells</strong> customer data to third parties.</p>
+
+            <h3>3.2. Limited Sharing</h3>
+            <p>We may share data only with:</p>
+            <ul>
+                <li><strong>Infrastructure providers:</strong> Railway (hosting), Supabase (database) - subject to DPA (Data Processing Agreement)</li>
+                <li><strong>Authorities:</strong> When legally required (court order, regulatory agencies, etc.)</li>
+            </ul>
+
+            <h3>3.3. Public Verification</h3>
+            <p>Reports verified via QR Code publicly expose:</p>
+            <ul>
+                <li>Property name (if provided)</li>
+                <li>Risk score</li>
+                <li>Validation date</li>
+                <li>PDF download link</li>
+            </ul>
+            <p><strong>Important:</strong> We do not include personal identification data in public verification.</p>
+
+            <h2>4. Storage and Retention</h2>
+
+            <h3>4.1. Retention Period</h3>
+            <ul>
+                <li><strong>Active validations:</strong> Maintained while QR Code needs to remain valid for public audit and traceability. You may request deletion at any time, understanding that the PDF report and QR Code will cease to function.</li>
+                <li><strong>API logs:</strong> 12 months</li>
+                <li><strong>Billing data:</strong> 7 years (tax obligation)</li>
+            </ul>
+
+            <h3>4.2. Data Location</h3>
+            <p>Data stored on servers located in the <strong>United States</strong> (Railway/Supabase), with daily encrypted backups.</p>
+
+            <h2>5. Security</h2>
+
+            <h3>5.1. Technical Measures</h3>
+            <ul>
+                <li><strong>Encryption:</strong> TLS 1.3 in transit, AES-256 at rest</li>
+                <li><strong>Authentication:</strong> API keys with bcrypt hash</li>
+                <li><strong>Rate limiting:</strong> Abuse protection (100 req/min)</li>
+                <li><strong>Firewall:</strong> Suspicious IPs blocked automatically</li>
+                <li><strong>Backups:</strong> Daily replication across multiple zones</li>
+            </ul>
+
+            <h3>5.2. Restricted Access</h3>
+            <p>Only 2 authorized engineers have direct access to the production database, with audit logs.</p>
+
+            <h2>6. Your Rights (GDPR)</h2>
+
+            <p>You have the right to:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of all validations from your API key</li>
+                <li><strong>Rectification:</strong> Update incorrect metadata</li>
+                <li><strong>Erasure:</strong> Delete specific validations (QR Code will cease to function)</li>
+                <li><strong>Data portability:</strong> Export data in JSON format</li>
+                <li><strong>Object:</strong> Contest processing based on legitimate interest</li>
+                <li><strong>Restriction:</strong> Limit processing in certain circumstances</li>
+            </ul>
+
+            <p><strong>To exercise your rights:</strong> Email <a href="mailto:greengate@gmail.com">greengate@gmail.com</a> with subject "GDPR - [Requested right]"</p>
+
+            <h2>7. Cookies and Tracking</h2>
+
+            <h3>7.1. REST API</h3>
+            <p>Our API <strong>does not use cookies</strong>. Authentication via <code>x-api-key</code> header.</p>
+
+            <h3>7.2. Website (www.greengate.com.br)</h3>
+            <p>We only use:</p>
+            <ul>
+                <li><strong>localStorage:</strong> Language preference (PT/EN) and theme (light/dark)</li>
+                <li><strong>No analytics:</strong> We do not use Google Analytics or similar tools</li>
+            </ul>
+
+            <h2>8. International Data Transfer</h2>
+
+            <p>Data may be transferred to the USA (Railway, Supabase). We ensure:</p>
+            <ul>
+                <li>Compliance with Standard Contractual Clauses (SCC)</li>
+                <li>SOC 2 Type II certified provider</li>
+                <li>Data portability right always available</li>
+            </ul>
+
+            <h2>9. Children's Privacy</h2>
+
+            <p>We do not intentionally collect data from individuals under 18. Our service is B2B for companies.</p>
+
+            <h2>10. Changes to This Policy</h2>
+
+            <p>We may update this policy periodically. We will notify via email with 30 days' advance notice about material changes.</p>
+
+            <h2>11. Data Protection Officer (DPO) Contact</h2>
+
+            <p>For privacy questions:</p>
+            <ul>
+                <li><strong>Email:</strong> <a href="mailto:greengate@gmail.com">greengate@gmail.com</a></li>
+                <li><strong>Subject:</strong> "DPO - Privacy"</li>
+                <li><strong>Response time:</strong> Up to 15 business days</li>
+            </ul>
+
+            <h2>12. Supervisory Authority</h2>
+
+            <p>EU residents may lodge complaints with their national supervisory authority:</p>
+            <ul>
+                <li>Find your authority: <a href="https://edpb.europa.eu/about-edpb/about-edpb/members_en" target="_blank">EDPB Members</a></li>
+            </ul>
+
+            <a href="index.html" class="btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

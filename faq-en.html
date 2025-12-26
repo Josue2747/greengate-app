@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Frequently Asked Questions - GreenGate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .lang-switcher a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--dark);
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: var(--gray-light);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--gray);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 600px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container" style="position: relative;">
+            <div class="lang-switcher">
+                <a href="faq.html">🇧🇷 Português</a>
+            </div>
+            <h1>❓ Frequently Asked Questions (FAQ)</h1>
+            <p>Get answers about GreenGate</p>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is GreenGate?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>GreenGate is an automated geospatial validation platform that cross-references rural property coordinates with 6 official Brazilian environmental data layers (PRODES, FUNAI, IBAMA, ICMBio, INCRA, Legal Amazon). We generate auditable PDF reports in under 2 minutes, with a 0-100 risk score and QR Code for public verification.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Which data layers do you validate?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>6 official layers:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>PRODES (INPE) - Deforestation in Legal Amazon</li>
+                        <li>Indigenous Lands (FUNAI) - Homologated demarcations</li>
+                        <li>Conservation Units (ICMBio) - Protected areas</li>
+                        <li>IBAMA Embargoes - Environmental restrictions</li>
+                        <li>Quilombola Territories (INCRA) - Traditional communities</li>
+                        <li>Legal Amazon - Special legislation area</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How does the 0-100 risk score work?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Our proprietary algorithm analyzes:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li><strong>Overlaps:</strong> Total area overlapping with each layer</li>
+                        <li><strong>Severity:</strong> Differentiated weights (e.g., PRODES has higher weight than Legal Amazon)</li>
+                        <li><strong>Multiple violations:</strong> Progressive penalization</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;"><strong>Classification:</strong> 90-100 (Low), 70-89 (Medium), 50-69 (High), 0-49 (Critical)</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does a validation take?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Under 2 minutes</strong> from geometry submission to complete PDF generation. Processing is done via optimized PostGIS in PostgreSQL database.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How much does the API cost?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Brazilian market:</strong> R$ 15.90 per validation (fixed price, no volume variation).</p>
+                    <p style="margin-top: 0.5rem;"><strong>International/European market:</strong> €19.90 per validation</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Volume discount: 100+ validations/month = €16.90</li>
+                        <li>500+ validations/month = €14.90</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Compared to manual technical analysis (€40-50 average), this represents <strong>60% cost savings</strong>.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I get API access?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Contact us via:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>📧 Email: <a href="mailto:greengate@gmail.com">greengate@gmail.com</a></li>
+                        <li>📱 WhatsApp: <a href="https://wa.me/5519971046171">+55 19 97104-6171</a></li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">We provide your API key within 24 business hours after approval.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is the data updated?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes.</strong> We sync with official sources monthly:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>PRODES: Annual update (August)</li>
+                        <li>FUNAI: Quarterly</li>
+                        <li>IBAMA: Monthly</li>
+                        <li>ICMBio: Semi-annual</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Each report indicates the update date for each layer.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is the report valid for EUDR compliance?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>GreenGate provides a <strong>geospatial validation tool</strong> that can be used as part of EUDR Article 9 due diligence.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Important:</strong> We are not a certification body. We provide auditable technical data based on official Brazilian sources. Final EUDR compliance must be assessed by a qualified auditor.</p>
+                    <p style="margin-top: 0.5rem;"><strong>What we provide:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Plot-level deforestation analysis (PRODES + MapBiomas)</li>
+                        <li>Cross-check against 6 official environmental databases</li>
+                        <li>Auditable PDF reports with QR code verification</li>
+                        <li>Suitable for initial screening and documentation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I verify report authenticity?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes.</strong> All PDFs include a QR Code that leads to a public verification URL:</p>
+                    <p style="margin-top: 0.5rem;"><code>https://api.greengate.com.br/reports/verify/{code}</code></p>
+                    <p style="margin-top: 0.5rem;">Anyone can scan the QR Code and confirm that the report is authentic and hasn't been tampered with.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Are there API usage limits?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Standard rate limits:</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>100 requests per minute (authenticated)</li>
+                        <li>20 requests per minute (anonymous)</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">For higher volumes, contact us for custom plans.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Which geometry formats are accepted?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>GeoJSON</strong> with types:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Polygon</li>
+                        <li>MultiPolygon</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Coordinate system: <strong>WGS84 (EPSG:4326)</strong></p>
+                    <p style="margin-top: 0.5rem;"><strong>Geometry constraints:</strong></p>
+                    <ul style="margin-left: 2rem;">
+                        <li>Maximum vertices: 10,000</li>
+                        <li>Maximum area: 10,000 hectares</li>
+                        <li>Coordinates must be within Brazil bounding box</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">We automatically validate and correct invalid geometries (self-intersections, holes, etc).</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do you store submitted data?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes, for audit purposes.</strong> We store:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Submitted geometry</li>
+                        <li>Validation results</li>
+                        <li>Metadata (timestamp, API key used)</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Sensitive data (CPF, CNPJ, CAR) can be omitted from metadata if preferred.</p>
+                    <p style="margin-top: 0.5rem;">See our <a href="privacy-en.html">Privacy Policy</a> for more details.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What geographic area do you cover?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We are currently specialized in <strong>Mato Grosso state</strong>, Brazil's largest soy-producing region.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Why Mato Grosso?</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>27% of Brazil's soy production</li>
+                        <li>30% of Brazil's soy exports</li>
+                        <li>Highest EUDR risk area (deforestation frontier)</li>
+                        <li>Most comprehensive official data coverage</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">This specialization allows us to provide faster validations and deeper data accuracy for this critical region.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I generate reports in English?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes.</strong> The API supports bilingual PDF generation:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Portuguese (default): <code>lang: "pt"</code></li>
+                        <li>English: <code>lang: "en"</code></li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Simply add the <code>lang</code> parameter to your API request to generate reports in your preferred language.</p>
+                </div>
+            </div>
+
+            <a href="index.html" class="btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const wasActive = item.classList.contains('active');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+
+                // Open clicked (if wasn't active)
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
