@@ -50,5 +50,29 @@
         if (roiSaved && t.pricing_roi_saved) {
             roiSaved.innerHTML = 'R$ 24.910 <small>' + t.pricing_roi_saved + '</small>';
         }
+
+        // Update links to language-specific pages
+        updatePageLinks(lang);
+    }
+
+    function updatePageLinks(lang) {
+        const suffix = lang === 'en' ? '-en' : '';
+
+        // Update all links to docs, faq, privacy, terms
+        document.querySelectorAll('a[href*="docs.html"]').forEach(link => {
+            link.href = `docs${suffix}.html`;
+        });
+
+        document.querySelectorAll('a[href*="faq.html"]').forEach(link => {
+            link.href = `faq${suffix}.html`;
+        });
+
+        document.querySelectorAll('a[href*="privacy.html"]').forEach(link => {
+            link.href = `privacy${suffix}.html`;
+        });
+
+        document.querySelectorAll('a[href*="terms.html"]').forEach(link => {
+            link.href = `terms${suffix}.html`;
+        });
     }
 })();
