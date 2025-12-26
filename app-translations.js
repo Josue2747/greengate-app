@@ -97,6 +97,7 @@ const appTranslations = {
         pdfError: 'Erro ao gerar PDF',
         pdfSuccess: 'PDF gerado com sucesso!',
         errorUpload: 'Erro: ',
+        compliance: 'Conformidade:',
     },
     en: {
         // Header
@@ -195,6 +196,7 @@ const appTranslations = {
         pdfError: 'Error generating PDF',
         pdfSuccess: 'PDF generated successfully!',
         errorUpload: 'Error: ',
+        compliance: 'Compliance:',
     }
 };
 

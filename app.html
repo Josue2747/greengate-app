@@ -587,13 +587,15 @@
         const el = document.getElementById('historyList');
         const h = getHistory();
         if (!h.length) { el.innerHTML = `<div class="history-empty">${window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação'}</div>`; return; }
+        const locale = window.getCurrentAppLang ? (window.getCurrentAppLang() === 'en' ? 'en-US' : 'pt-BR') : 'pt-BR';
+        const complianceText = window.getAppTranslation ? window.getAppTranslation('compliance') : 'Conformidade:';
         el.innerHTML = h.map(i => `
             <div class="history-item" data-id="${i.id}">
                 <div class="history-header">
                     <span class="history-status ${i.status}">${fmtHistoryStatusLabel(i.status)}</span>
-                    <span class="history-date">${new Date(i.date).toLocaleDateString('pt-BR')}</span>
+                    <span class="history-date">${new Date(i.date).toLocaleDateString(locale)}</span>
                 </div>
-                <div class="history-info">${i.area.toFixed(1)} ha • Conformidade: ${i.score}/100</div>
+                <div class="history-info">${i.area.toFixed(1)} ha • ${complianceText} ${i.score}/100</div>
             </div>
         `).join('');
         el.querySelectorAll('.history-item').forEach(item => {
