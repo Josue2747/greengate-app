@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenGate - EUDR Geospatial Validation for Mato Grosso Suppliers</title>
+    <meta name="description" content="Automated geospatial validation for EUDR compliance. Specialized in Mato Grosso suppliers - Brazil's #1 soy region. €9.90/validation.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 900;
+        }
+
+        .hero {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-dark);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: white;
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-light);
+        }
+
+        .hero-note {
+            font-size: 0.95rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .pricing-section {
+            background: var(--gray-light);
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--gray-light);
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15);
+            transform: scale(1.05);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .price small {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .coverage-box {
+            background: linear-gradient(135deg, #F0FDF4, #ECFDF5);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .coverage-stat {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .layers-list {
+            list-style: none;
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+
+        .layers-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .layers-list li::before {
+            content: '✓';
+            width: 32px;
+            height: 32px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .emphasis {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🌱 GreenGate</div>
+                <a href="mailto:greengatebrasil@gmail.com" style="color: white; text-decoration: none; font-weight: 600;">greengatebrasil@gmail.com</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">🇪🇺 EUDR Article 9 Compliance Tool</div>
+                <h1>Validate Mato Grosso Suppliers<br>for EUDR Compliance</h1>
+                <p class="subtitle">Automated geospatial validation against 6 official Brazilian databases. €9.90/validation, &lt;2 minute results.</p>
+
+                <div class="cta-buttons">
+                    <a href="mailto:greengatebrasil@gmail.com?subject=EUDR Demo Request" class="btn-primary">Request Demo</a>
+                    <a href="GreenGate-Fazenda-Teste-Talhao-12.pdf" target="_blank" class="btn-secondary">📄 View Example Report</a>
+                </div>
+
+                <p class="hero-note">Specialized in Mato Grosso - Brazil's #1 soy-exporting state (33% of exports)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem / Why This Matters -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">EUDR Requires Farm-Level Geospatial Data</h2>
+                <p class="section-subtitle">Manual validation is expensive and doesn't scale</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Manual: 2-5 Days</h3>
+                    <p>Traditional due diligence requires specialized analysts to manually cross-check farm coordinates against deforestation databases, indigenous lands, and embargoes.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Manual: €40-50/Farm</h3>
+                    <p>Consultancies charge €40-50 per farm for manual geospatial analysis. At scale, this becomes prohibitively expensive for SMEs with 50-200 suppliers.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Compliance Risk</h3>
+                    <p>EUDR enforcement begins December 2024 (large companies) and June 2025 (SMEs). Non-compliance = products blocked at EU customs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="section" style="background: var(--gray-light);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Automated Geospatial Validation API</h2>
+                <p class="section-subtitle">Cross-check farms against 6 official Brazilian databases in under 2 minutes</p>
+            </div>
+
+            <ul class="layers-list">
+                <li><strong>PRODES (INPE)</strong> - Deforestation in Legal Amazon</li>
+                <li><strong>Indigenous Lands (FUNAI)</strong> - Homologated demarcations</li>
+                <li><strong>IBAMA Embargoes</strong> - Environmental restrictions</li>
+                <li><strong>Conservation Units (ICMBio)</strong> - Protected areas</li>
+                <li><strong>Quilombola Territories (INCRA)</strong> - Traditional communities</li>
+                <li><strong>Legal Amazon Status</strong> - Special legislation area</li>
+            </ul>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="font-size: 1.25rem; color: var(--gray);">
+                    <span class="emphasis">Output:</span> Auditable PDF report with risk score (0-100) and QR code for public verification
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coverage (Mato Grosso Focus) -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Mato Grosso?</h2>
+                <p class="section-subtitle">Specialized coverage = faster validations and deeper accuracy</p>
+            </div>
+
+            <div class="coverage-box">
+                <div class="coverage-stat">33%</div>
+                <p style="font-size: 1.75rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">
+                    of Brazilian soy exports come from Mato Grosso
+                </p>
+                <p style="font-size: 1.1rem; color: var(--gray);">
+                    Mato Grosso is Brazil's largest soy-producing state and the epicenter of EUDR risk. Our laser-focus on MT means:
+                </p>
+
+                <div class="features-grid" style="margin-top: 2rem;">
+                    <div class="feature-card">
+                        <h3>Higher Data Quality</h3>
+                        <p>More frequent updates and deeper validation for MT-specific environmental databases.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Faster Processing</h3>
+                        <p>Optimized PostGIS queries for MT state boundaries = sub-2-minute validations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Perfect Fit for SMEs</h3>
+                        <p>If your suppliers are in MT (and many are), you get specialized validation without paying for nationwide coverage you don't need.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section pricing-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Transparent Pricing</h2>
+                <p class="section-subtitle">80% cheaper than manual analysis</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Manual Validation</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Traditional process</p>
+                    <div class="price">€40-50 <small>/farm</small></div>
+                    <ul class="pricing-features">
+                        <li>2-5 days turnaround</li>
+                        <li>Specialized team required</li>
+                        <li>Limited scalability</li>
+                        <li>Manual report generation</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Recommended</div>
+                    <h3>GreenGate API</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Automated validation</p>
+                    <div class="price">€9.90 <small>/validation</small></div>
+                    <p style="font-size: 0.875rem; color: var(--gray); margin-bottom: 1.5rem;">
+                        Volume discount: 100+ validations/month = €7.90
+                    </p>
+                    <ul class="pricing-features">
+                        <li>&lt;2 minutes per validation</li>
+                        <li>6 official layers integrated</li>
+                        <li>Auditable PDF + QR code</li>
+                        <li>REST API ready-to-use</li>
+                        <li>Complete traceability</li>
+                        <li>English technical support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="font-size: 1.1rem; color: var(--gray);">
+                    <strong>Example:</strong> 50 validations/month = €495 (vs €2,000-2,500 manual) • <span class="emphasis">Savings: €1,500-2,000/month</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Is This For? -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Perfect For</h2>
+                <p class="section-subtitle">Small and medium-sized companies with Mato Grosso sourcing</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌾</div>
+                    <h3>Soy Importers</h3>
+                    <p>Companies with 10-100 MT suppliers needing cost-effective EUDR validation. Perfect for cooperatives and mid-sized traders.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🍽️</div>
+                    <h3>Food Manufacturers</h3>
+                    <p>Snack foods, pet food, and plant-based protein producers sourcing soy from Brazil and needing EUDR compliance proof.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🛒</div>
+                    <h3>Regional Supermarkets</h3>
+                    <p>Medium-sized retailers with private label products containing Brazilian soy requiring supplier validation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Validate Your MT Suppliers?</h2>
+            <p>Request a demo or explore our API documentation</p>
+
+            <div class="cta-buttons">
+                <a href="mailto:greengatebrasil@gmail.com?subject=EUDR Demo Request - Mato Grosso Suppliers" class="btn-primary" style="background: white; color: var(--primary-dark);">Request 15-Minute Demo</a>
+                <a href="docs.html" class="btn-secondary" style="border-color: white; color: white;">View API Docs</a>
+            </div>
+
+            <p style="margin-top: 2rem; font-size: 1rem; opacity: 0.8;">
+                <strong>Contact:</strong> greengatebrasil@gmail.com<br>
+                <strong>Documentation:</strong> greengate-app.vercel.app/docs.html
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. Geospatial validation platform for environmental compliance.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.875rem; opacity: 0.7;">
+                <a href="privacy.html" style="color: white; text-decoration: none;">Privacy Policy</a> •
+                <a href="terms.html" style="color: white; text-decoration: none;">Terms of Use</a> •
+                <a href="faq.html" style="color: white; text-decoration: none;">FAQ</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
