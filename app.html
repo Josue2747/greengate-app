@@ -302,11 +302,12 @@
     </div>
     <div class="logo-text" style="text-align: center;">
         <h1 style="margin: 0; line-height: 1.2; font-size: 24px;">GreenGate</h1>
-        <span style="font-size: 14px; display: block;">Plataforma de Diligência Prévia</span>
+        <span style="font-size: 14px; display: block;" data-i18n-app="subtitle">Plataforma de Diligência Prévia</span>
     </div>
     <div class="header-right" style="position: absolute; right: 20px; display: flex; align-items: center; gap: 15px;">
-        <div class="status-badge"><span class="status-dot"></span> API Online</div>
+        <div class="status-badge"><span class="status-dot"></span> <span data-i18n-app="status">Sistema Ativo</span></div>
         <button class="help-trigger" id="helpBtn" title="Ajuda">?</button>
+        <button id="langToggleApp" onclick="toggleAppLanguage()" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600;">PT</button>
     </div>
 </header>
 
@@ -316,13 +317,13 @@
 
         <div class="map-controls">
             <div style="position: relative;">
-                <button class="map-btn" id="drawBtn" title="Desenhar">✏️</button>
+                <button class="map-btn" id="drawBtn" data-i18n-app="drawBtn" title="Desenhar">✏️</button>
                 <div class="draw-options" id="drawOptions">
                     <button class="map-btn" id="drawPolygon" title="Polígono">⬡</button>
                     <button class="map-btn" id="drawRect" title="Retângulo">▢</button>
                 </div>
             </div>
-            <button class="map-btn" id="clearBtn" title="Limpar">🗑️</button>
+            <button class="map-btn" id="clearBtn" data-i18n-app="clearBtn" title="Limpar">🗑️</button>
             <button class="map-btn" id="locateBtn" title="Localização">📍</button>
             <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
         </div>
@@ -331,7 +332,7 @@
         <div class="search-box">
             <div class="search-input-wrap">
                 <span class="icon">🔍</span>
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar cidade ou estado...">
+                <input type="text" class="search-input" id="searchInput" data-i18n-app="searchPlaceholder" placeholder="Buscar cidade ou estado...">
                 <button class="search-clear" id="searchClear">✕</button>
             </div>
             <div class="search-results" id="searchResults"></div>
@@ -340,20 +341,20 @@
         <button class="close-fullscreen" id="closeFullscreen">✕</button>
 
         <div class="area-info" id="areaInfo">
-            <div class="area-info-label">Área Selecionada</div>
+            <div class="area-info-label" data-i18n-app="areaLabel">Área Selecionada</div>
             <div class="area-info-value"><span id="areaValue">0</span> <span>ha</span></div>
-            <div class="area-limit-text">Máx: 10.000 ha</div>
+            <div class="area-limit-text" data-i18n-app="areaLimit">Limite: 10.000 ha</div>
             <div class="area-coords" id="areaCoords"></div>
             <div class="area-coords" id="areaMeta"></div>
-            <button class="btn-export" id="exportBtn">📥 Exportar GeoJSON</button>
+            <button class="btn-export" id="exportBtn" data-i18n-app="exportBtn">📥 Exportar GeoJSON</button>
         </div>
 
         <div class="map-legend">
-            <div class="map-legend-title">Legenda</div>
-            <div class="legend-row"><div class="legend-dot neutral"></div>Selecionada</div>
-            <div class="legend-row"><div class="legend-dot approved"></div>Conforme</div>
-            <div class="legend-row"><div class="legend-dot warning"></div>Atenção</div>
-            <div class="legend-row"><div class="legend-dot rejected"></div>Não conforme</div>
+            <div class="map-legend-title" data-i18n-app="legendTitle">Legenda</div>
+            <div class="legend-row"><div class="legend-dot neutral"></div><span data-i18n-app="legendNeutral">Área Desenhada</span></div>
+            <div class="legend-row"><div class="legend-dot approved"></div><span data-i18n-app="legendApproved">Aprovado</span></div>
+            <div class="legend-row"><div class="legend-dot warning"></div><span data-i18n-app="legendWarning">Atenção</span></div>
+            <div class="legend-row"><div class="legend-dot rejected"></div><span data-i18n-app="legendRejected">Rejeitado</span></div>
         </div>
     </div>
 
@@ -380,12 +381,12 @@
             </label>
             <div class="upload-filename" id="fileName"></div>
 
-            <button class="btn-export" id="testExampleBtn" style="margin-top: 10px; background: var(--accent-blue); color: white; border-color: var(--accent-blue);">
+            <button class="btn-export" id="testExampleBtn" style="margin-top: 10px; background: var(--accent-blue); color: white; border-color: var(--accent-blue);" data-i18n-app="sampleBtn">
                 🎯 Testar com Área de Exemplo
             </button>
         </div>
 
-        <button class="btn-validate" id="validateBtn" disabled>🔍 Validar Área</button>
+        <button class="btn-validate" id="validateBtn" disabled data-i18n-app="validateBtn">🔍 Validar Área</button>
 
         <div class="card result-card" id="resultCard">
             <div class="result-banner" id="resultBanner">
@@ -408,14 +409,14 @@
                 <span id="metaTime">⏱️ --ms</span>
                 <span id="metaDate">📅 --/--/----</span>
             </div>
-            <button class="btn-pdf" id="pdfBtn">📄 Baixar Relatório PDF</button>
+            <button class="btn-pdf" id="pdfBtn" data-i18n-app="pdfBtn">📄 Baixar Relatório PDF</button>
         </div>
 
         <!-- HISTORY -->
         <div class="card">
             <div class="card-title">
                 <span><span class="card-title-icon">📋</span> Histórico</span>
-                <button class="btn-clear-history card-title-right" id="clearHistory">Limpar</button>
+                <button class="btn-clear-history card-title-right" id="clearHistory" data-i18n-app="clearHistory">Limpar</button>
             </div>
             <div class="history-list" id="historyList">
                 <div class="history-empty">Nenhuma validação</div>
@@ -434,19 +435,15 @@
         <div class="help-steps">
             <div class="step-item">
                 <div class="step-number">1</div>
-                <div class="step-content"><h4>API Key</h4><p>Insira sua <strong>API Key</strong> no campo "Autenticação". <br><span style="color:var(--accent-yellow); font-size:0.75rem;">⚠️ Se o backend estiver em produção, a API Key é obrigatória.</span></p></div>
+                <div class="step-content"><h4 data-i18n-app="step1Title">Navegue e Defina a Área</h4><p data-i18n-app="step1Text">Use a busca, desenhe com o <strong>Lápis (✏️)</strong>, faça upload ou teste com área de exemplo. <span style="color:var(--accent-yellow); font-size:0.75rem;">Limite: 10.000 ha.</span></p></div>
             </div>
             <div class="step-item">
                 <div class="step-number">2</div>
-                <div class="step-content"><h4>Navegue e Defina a Área</h4><p>Use a busca, desenhe com o <strong>Lápis (✏️)</strong>, faça upload ou teste com área de exemplo. <span style="color:var(--accent-yellow); font-size:0.75rem;">Limite: 10.000 ha.</span></p></div>
+                <div class="step-content"><h4 data-i18n-app="step2Title">Validação Automática</h4><p data-i18n-app="step2Text">Clique em <strong>Validar Área</strong> para cruzamento instantâneo com 7 bases oficiais (PRODES, MapBiomas, TIs, Embargos, etc).</p></div>
             </div>
             <div class="step-item">
                 <div class="step-number">3</div>
-                <div class="step-content"><h4>Validação Automática</h4><p>Clique em <strong>Validar Área</strong> para cruzamento instantâneo com 7 bases oficiais (PRODES, MapBiomas, TIs, Embargos, etc).</p></div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">4</div>
-                <div class="step-content"><h4>Relatório PDF</h4><p>Baixe o relatório profissional com mapas, verificações detalhadas e QR Code de autenticidade. <strong>Requer API Key</strong>.</p></div>
+                <div class="step-content"><h4 data-i18n-app="step3Title">Relatório PDF</h4><p data-i18n-app="step3Text">Baixe o relatório profissional com mapas, verificações detalhadas e QR Code de autenticidade. <strong>Requer API Key</strong>.</p></div>
             </div>
         </div>
         <button class="btn-start" id="startBtn">Começar a Usar</button>
@@ -467,27 +464,27 @@
         <button class="close-help" id="closePdfModal">✕</button>
         <div class="help-header" style="margin-bottom: 20px;">
             <div class="help-icon">📄</div>
-            <h2 style="font-size: 1.2rem;">Gerar Relatório PDF</h2>
+            <h2 style="font-size: 1.2rem;" data-i18n-app="pdfModalTitle">Gerar Relatório PDF</h2>
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
             <div>
-                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome da Fazenda *</label>
-                <input type="text" id="farmName" placeholder="Ex: Fazenda Santa Maria" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n-app="pdfPropertyLabel">Nome da Propriedade (opcional)</label>
+                <input type="text" id="farmName" data-i18n-app="pdfPropertyPlaceholder" placeholder="Ex: Fazenda Santa Rita" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
             </div>
             <div>
-                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome do Talhão *</label>
-                <input type="text" id="plotName" placeholder="Ex: Talhão 01 - Soja" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n-app="pdfPlotLabel">Nome do Talhão (opcional)</label>
+                <input type="text" id="plotName" data-i18n-app="pdfPlotPlaceholder" placeholder="Ex: Talhão 12" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
             </div>
             <div>
-                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Idioma do Relatório</label>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n-app="pdfLangLabel">Idioma do Relatório</label>
                 <div style="display: flex; gap: 10px;">
                     <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
                         <input type="radio" name="reportLang" value="pt" checked style="accent-color: var(--accent-green);">
-                        <span>🇧🇷 Português</span>
+                        <span data-i18n-app="pdfLangPt">Português</span>
                     </label>
                     <label style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer;">
                         <input type="radio" name="reportLang" value="en" style="accent-color: var(--accent-green);">
-                        <span>🇺🇸 English</span>
+                        <span data-i18n-app="pdfLangEn">English</span>
                     </label>
                 </div>
             </div>
@@ -495,7 +492,7 @@
         <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px; text-align: center;">
             📱 O relatório incluirá QR Code para verificação de autenticidade
         </p>
-        <button class="btn-start" id="confirmPdfBtn">📄 Gerar Relatório PDF</button>
+        <button class="btn-start" id="confirmPdfBtn" data-i18n-app="confirmPdfBtn">📄 Gerar Relatório PDF</button>
     </div>
 </div>
 
@@ -1273,5 +1270,6 @@
     document.getElementById('validateBtn').onclick = validate;
     document.getElementById('pdfBtn').onclick = openPdfModal;
 </script>
+<script src="app-translations.js"></script>
 </body>
 </html>
