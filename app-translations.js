@@ -80,6 +80,7 @@ const appTranslations = {
         uploadTitle: 'Upload de Arquivo',
         uploadText: 'Toque para selecionar',
         uploadHint: 'GeoJSON ou JSON',
+        historyTitle: 'Histórico',
 
         // Dynamic messages
         noPolygon: 'Nenhum polígono',
@@ -179,6 +180,7 @@ const appTranslations = {
         uploadTitle: 'File Upload',
         uploadText: 'Tap to select',
         uploadHint: 'GeoJSON or JSON',
+        historyTitle: 'History',
 
         // Dynamic messages
         noPolygon: 'No polygon',
