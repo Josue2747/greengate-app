@@ -661,9 +661,15 @@
             <h2 style="font-size: 1.2rem;" data-i18n-app="pdfModalTitle">Gerar Relatório PDF</h2>
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 16px; border-radius: 6px;">
+                <p style="font-size: 0.75rem; color: #92400e; margin: 0; line-height: 1.5;">
+                    <strong>⚠️ Privacy Notice:</strong> Do NOT include personal data (owner names, CPF, addresses). Use internal IDs or generic names (e.g., "Farm #12345").
+                </p>
+            </div>
+
             <div>
                 <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n-app="pdfPropertyLabel">Nome da Propriedade (opcional)</label>
-                <input type="text" id="farmName" data-i18n-app="pdfPropertyPlaceholder" placeholder="Ex: Fazenda Santa Rita" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
+                <input type="text" id="farmName" data-i18n-app="pdfPropertyPlaceholder" placeholder="Ex: Farm #12345" style="width: 100%; padding: 10px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
             </div>
             <div>
                 <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n-app="pdfPlotLabel">Nome do Talhão (opcional)</label>
