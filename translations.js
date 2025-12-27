@@ -137,7 +137,6 @@ const translations = {
         pricing_api_fixed_simple: 'Simples, transparente e previsível.',
         pricing_intl_badge: 'Preço Internacional',
         pricing_intl_note: 'Clientes internacionais: €9,90/validação',
-        pricing_intl_note_full: '🌍 Pricing para mercado europeu: €9,90/validação (100+ validações = €7,90) • 75-80% mais barato que análise manual (€40-50)',
 
         pricing_roi_title: 'Economia Real',
         pricing_roi_desc: 'Exemplo: 100 fornecedores MT/mês',
@@ -333,7 +332,6 @@ const translations = {
         pricing_api_fixed_simple: 'Simple, transparent, and predictable.',
         pricing_intl_badge: 'Volume Discount',
         pricing_intl_note: '100+ validations/month: €7.90/validation',
-        pricing_intl_note_full: '💰 Volume pricing: 100+ validations = €7.90 each • 80% cheaper than manual analysis (€40-50)',
 
         pricing_roi_title: 'Real Savings',
         pricing_roi_desc: 'Example: 100 MT suppliers/month',
