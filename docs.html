@@ -364,7 +364,7 @@
                             <tr>
                                 <td><span class="inline-code">metadata</span> <span class="badge optional">opcional</span></td>
                                 <td>object</td>
-                                <td>Metadados adicionais (CAR, CPF/CNPJ, etc)</td>
+                                <td>⚠️ Internal reference IDs only (CAR code, farm ID). <strong>DO NOT include personal data (CPF, names, addresses)</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -381,10 +381,10 @@
       [-54.123, -12.456]
     ]]
   },
-  "property_name": "Fazenda Exemplo",
+  "property_name": "Farm #12345",
   "metadata": {
     "car": "MT-1234567890123456789012345678901234",
-    "owner": "João Silva"
+    "internal_id": "farm-abc-123"
   }
 }</div>
 
@@ -439,7 +439,7 @@
     "legal_amazon": { "inside": true }
   },
   "pdf_url": "https://api.greengate.com.br/reports/550e8400.pdf",
-  "qr_code_url": "https://api.greengate.com.br/reports/verify/GG-20251225-ABCD",
+  "qr_code_url": "https://api.greengate.com.br/reports/verify/GG-a7f3k9m2p5q8",
   "completed_at": "2025-12-25T10:31:45Z"
 }</div>
                 </div>
@@ -456,6 +456,10 @@
                         <strong>📌 Nota:</strong> Este endpoint é público (não requer API key) e pode ser acessado por qualquer pessoa com o código do relatório.
                     </div>
 
+                    <div class="alert warning">
+                        <strong>🔐 Security:</strong> Report codes use cryptographically secure random format to prevent enumeration attacks. Property names are anonymized by default ([REDACTED]) in public verification to protect commercial confidentiality.
+                    </div>
+
                     <h4>Parâmetros de URL</h4>
                     <table class="param-table">
                         <thead>
@@ -469,7 +473,7 @@
                             <tr>
                                 <td><span class="inline-code">report_code</span></td>
                                 <td>string</td>
-                                <td>Código do relatório (formato: GG-YYYYMMDD-XXXX)</td>
+                                <td>Código do relatório (formato: GG-{random} - cryptographically secure)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -477,8 +481,8 @@
                     <h4>Resposta (200 OK)</h4>
                     <div class="code-block">{
   "verified": true,
-  "report_code": "GG-20251225-ABCD",
-  "property_name": "Fazenda Exemplo",
+  "report_code": "GG-a7f3k9m2p5q8",
+  "property_name": "[REDACTED]",
   "validation_date": "2025-12-25T10:31:45Z",
   "score": 87,
   "risk_level": "low",

@@ -146,12 +146,16 @@
             <h3>1.2. Dados Opcionais Fornecidos</h3>
             <p>Você pode opcionalmente incluir no campo <code>metadata</code>:</p>
             <ul>
-                <li>Nome da propriedade/fazenda</li>
+                <li>Nome da propriedade/fazenda (anonimizado como "Farm #XXXXX" recomendado)</li>
                 <li>Código CAR (Cadastro Ambiental Rural)</li>
-                <li>CPF ou CNPJ do proprietário</li>
-                <li>Outros identificadores internos</li>
+                <li>IDs internos de referência</li>
             </ul>
-            <p><strong>Recomendação:</strong> Envie apenas dados estritamente necessários para sua operação.</p>
+
+            <div class="alert warning" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0;">
+                <p><strong>⚠️ IMPORTANTE - NÃO ENVIE DADOS PESSOAIS:</strong></p>
+                <p>GreenGate NÃO processa e NÃO aceita dados pessoais sensíveis (CPF, CNPJ, nomes de proprietários, endereços residenciais, etc). Use apenas IDs internos e códigos CAR.</p>
+                <p>Envio de dados pessoais viola nossa Política de Privacidade e pode resultar em suspensão de conta.</p>
+            </div>
 
             <h3>1.3. Dados de Contato</h3>
             <p>Ao solicitar acesso à API, coletamos:</p>
@@ -196,12 +200,12 @@
             <h3>3.3. Verificação Pública</h3>
             <p>Relatórios verificados via QR Code expõem publicamente:</p>
             <ul>
-                <li>Nome da propriedade (se fornecido)</li>
-                <li>Score de risco</li>
+                <li><strong>Nome da propriedade:</strong> ANONIMIZADO por padrão ([REDACTED]) para proteger confidencialidade comercial</li>
+                <li>Score de risco (0-100)</li>
                 <li>Data de validação</li>
-                <li>Link para download do PDF</li>
+                <li>Link para download do PDF (assinado digitalmente, expira em 7 dias)</li>
             </ul>
-            <p><strong>Importante:</strong> Não incluímos CPF/CNPJ ou CAR na verificação pública.</p>
+            <p><strong>Importante:</strong> Códigos de relatório usam formato criptograficamente seguro (GG-{random}) para prevenir ataques de enumeração. Dados sensíveis (CAR, metadata) NÃO são expostos publicamente.</p>
 
             <h2>4. Armazenamento e Retenção</h2>
 
