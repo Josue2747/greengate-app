@@ -1,0 +1,33 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="url(#greenGradient)" filter="url(#shadow)"/>
+
+  <!-- Stylized "G" with leaf/gate design -->
+  <g transform="translate(100, 100)">
+    <!-- Main G shape (gate opening) -->
+    <path d="M 35,0 A 35,35 0 1,0 -35,0 L -35,-15 A 50,50 0 1,1 50,-15 L 50,15 L 15,15 L 15,-5 L 35,-5 Z"
+          fill="white" opacity="0.95"/>
+
+    <!-- Leaf accent inside the G -->
+    <path d="M 10,-30 Q 20,-20 10,-10 Q 0,-20 10,-30 Z"
+          fill="white" opacity="0.7"/>
+
+    <!-- Checkmark accent (validation symbol) -->
+    <path d="M 25,0 L 30,5 L 40,-10"
+          stroke="white" stroke-width="4" stroke-linecap="round"
+          fill="none" opacity="0.8"/>
+  </g>
+
+  <!-- Subtle border -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+</svg>

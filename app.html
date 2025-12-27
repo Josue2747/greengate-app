@@ -9,6 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* SVG Icon Utility */
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: middle; }
+        .icon-sm { width: 0.875em; height: 0.875em; }
+        .icon-lg { width: 1.25em; height: 1.25em; }
+        .icon-xl { width: 1.5em; height: 1.5em; }
+
+        <style>
         :root {
             --bg-primary: #0a0f1a; --bg-secondary: #111827; --bg-card: #1a2332; --bg-card-hover: #1f2937;
             --border-color: #2d3748; --text-primary: #f3f4f6; --text-secondary: #9ca3af; --text-muted: #6b7280;
@@ -306,9 +313,87 @@
     </style>
 </head>
 <body>
+
+<!-- SVG Icon Sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </symbol>
+  <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+  </symbol>
+  <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+    <line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>
+  </symbol>
+  <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
+  </symbol>
+  <symbol id="icon-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+    <polyline points="13 2 13 9 20 9"></polyline>
+  </symbol>
+  <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>
+  </symbol>
+  <symbol id="icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+  </symbol>
+  <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line>
+  </symbol>
+  <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+  </symbol>
+  <symbol id="icon-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>
+  </symbol>
+  <symbol id="icon-maximize" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+  </symbol>
+  <symbol id="icon-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line>
+  </symbol>
+  <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+  </symbol>
+  <symbol id="icon-polygon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+    <polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline>
+  </symbol>
+  <symbol id="icon-rectangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+  </symbol>
+  <symbol id="icon-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+  </symbol>
+  <symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>
+  </symbol>
+  <symbol id="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+    <line x1="1" y1="1" x2="23" y2="23"></line>
+  </symbol>
+  <symbol id="icon-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+    <line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line>
+  </symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+  </symbol>
+</svg>
+
 <header class="header" style="position: relative; display: flex; align-items: center; justify-content: center; height: 60px;">
-    <div class="logo-icon" style="position: absolute; left: 20px; height: 40px; width: auto; background: transparent;">
-        <img src="logo.png" alt="GreenGate" style="height: 40px; width: auto;">
+    <div class="logo-icon" style="position: absolute; left: 20px; height: 40px; width: 40px;">
+        <img src="logo.svg" alt="GreenGate" style="height: 100%; width: 100%;">
     </div>
     <div class="logo-text" style="text-align: center;">
         <h1 style="margin: 0; line-height: 1.2; font-size: 24px;">GreenGate</h1>
@@ -327,28 +412,28 @@
 
         <div class="map-controls">
             <div style="position: relative;">
-                <button class="map-btn" id="drawBtn" data-i18n-app="drawBtn" title="Desenhar">✏️</button>
+                <button class="map-btn" id="drawBtn" data-i18n-app="drawBtn" title="Desenhar"><svg class="icon"><use href="#icon-edit"></use></svg></button>
                 <div class="draw-options" id="drawOptions">
-                    <button class="map-btn" id="drawPolygon" title="Polígono">⬡</button>
-                    <button class="map-btn" id="drawRect" title="Retângulo">▢</button>
+                    <button class="map-btn" id="drawPolygon" title="Polígono"><svg class="icon"><use href="#icon-polygon"></use></svg></button>
+                    <button class="map-btn" id="drawRect" title="Retângulo"><svg class="icon"><use href="#icon-rectangle"></use></svg></button>
                 </div>
             </div>
-            <button class="map-btn" id="clearBtn" data-i18n-app="clearBtn" title="Limpar">🗑️</button>
-            <button class="map-btn" id="locateBtn" title="Localização">📍</button>
-            <button class="map-btn" id="fullscreenBtn" title="Tela Cheia">⛶</button>
+            <button class="map-btn" id="clearBtn" data-i18n-app="clearBtn" title="Limpar"><svg class="icon"><use href="#icon-trash"></use></svg></button>
+            <button class="map-btn" id="locateBtn" title="Localização"><svg class="icon"><use href="#icon-location"></use></svg></button>
+            <button class="map-btn" id="fullscreenBtn" title="Tela Cheia"><svg class="icon"><use href="#icon-maximize"></use></svg></button>
         </div>
 
         <!-- SEARCH -->
         <div class="search-box">
             <div class="search-input-wrap">
-                <span class="icon">🔍</span>
+                <svg class="icon" style="margin-left: 10px;"><use href="#icon-search"></use></svg>
                 <input type="text" class="search-input" id="searchInput" data-i18n-app="searchPlaceholder" placeholder="Buscar cidade ou estado...">
-                <button class="search-clear" id="searchClear">✕</button>
+                <button class="search-clear" id="searchClear"><svg class="icon"><use href="#icon-x"></use></svg></button>
             </div>
             <div class="search-results" id="searchResults"></div>
         </div>
 
-        <button class="close-fullscreen" id="closeFullscreen">✕</button>
+        <button class="close-fullscreen" id="closeFullscreen"><svg class="icon-xl"><use href="#icon-x"></use></svg></button>
 
         <div class="area-info" id="areaInfo">
             <div class="area-info-label" data-i18n-app="areaLabel">Área Selecionada</div>
@@ -356,7 +441,7 @@
             <div class="area-limit-text" data-i18n-app="areaLimit">Limite: 10.000 ha</div>
             <div class="area-coords" id="areaCoords"></div>
             <div class="area-coords" id="areaMeta"></div>
-            <button class="btn-export" id="exportBtn" data-i18n-app="exportBtn">📥 Exportar GeoJSON</button>
+            <button class="btn-export" id="exportBtn" data-i18n-app="exportBtn"><svg class="icon-sm"><use href="#icon-download"></use></svg> Exportar GeoJSON</button>
         </div>
 
         <div class="map-legend">
@@ -370,10 +455,10 @@
 
     <div class="sidebar">
         <div class="card">
-            <div class="card-title"><span class="card-title-icon">🔑</span> <span data-i18n-app="authTitle">Autenticação</span></div>
+            <div class="card-title"><svg class="icon card-title-icon"><use href="#icon-key"></use></svg> <span data-i18n-app="authTitle">Autenticação</span></div>
             <div class="input-wrapper">
                 <input type="password" id="apiKey" data-i18n-app="apiKeyPlaceholder" placeholder="Cole sua API Key">
-                <button class="input-eye" id="toggleKey">👁️</button>
+                <button class="input-eye" id="toggleKey"><svg class="icon"><use href="#icon-eye"></use></svg></button>
             </div>
             <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
                 💡 <strong><span data-i18n-app="apiKeyRequired">API Key obrigatória para uso.</span></strong><br>
@@ -382,21 +467,21 @@
         </div>
 
         <div class="card">
-            <div class="card-title"><span class="card-title-icon">📁</span> <span data-i18n-app="uploadTitle">Upload de Arquivo</span></div>
+            <div class="card-title"><svg class="icon card-title-icon"><use href="#icon-upload"></use></svg> <span data-i18n-app="uploadTitle">Upload de Arquivo</span></div>
             <label class="upload-area" id="uploadArea">
                 <input type="file" id="fileInput" accept=".json,.geojson">
-                <div class="upload-icon">📄</div>
+                <div class="upload-icon"><svg class="icon-xl"><use href="#icon-file"></use></svg></div>
                 <div class="upload-text" data-i18n-app="uploadText">Toque para selecionar</div>
                 <div class="upload-hint" data-i18n-app="uploadHint">GeoJSON ou JSON</div>
             </label>
             <div class="upload-filename" id="fileName"></div>
 
             <button class="btn-export" id="testExampleBtn" style="margin-top: 10px; background: var(--accent-blue); color: white; border-color: var(--accent-blue);" data-i18n-app="sampleBtn">
-                🎯 Testar com Área de Exemplo
+                <svg class="icon-sm"><use href="#icon-target"></use></svg> Testar com Área de Exemplo
             </button>
         </div>
 
-        <button class="btn-validate" id="validateBtn" disabled data-i18n-app="validateBtn">🔍 Validar Área</button>
+        <button class="btn-validate" id="validateBtn" disabled data-i18n-app="validateBtn"><svg class="icon"><use href="#icon-search"></use></svg> Validar Área</button>
 
         <div class="card result-card" id="resultCard">
             <div class="result-banner" id="resultBanner">
@@ -419,20 +504,20 @@
                 <span id="metaTime">⏱️ <span class="skeleton skeleton-text"></span>ms</span>
                 <span id="metaDate">📅 <span class="skeleton skeleton-date"></span></span>
             </div>
-            <button class="btn-pdf" id="pdfBtn" data-i18n-app="pdfBtn">📄 Baixar Relatório PDF</button>
+            <button class="btn-pdf" id="pdfBtn" data-i18n-app="pdfBtn"><svg class="icon-sm"><use href="#icon-file"></use></svg> Baixar Relatório PDF</button>
         </div>
 
         <!-- HISTORY -->
         <div class="card">
             <div class="card-title">
-                <span><span class="card-title-icon">📋</span> <span data-i18n-app="historyTitle">Histórico</span></span>
+                <span><svg class="icon card-title-icon"><use href="#icon-history"></use></svg> <span data-i18n-app="historyTitle">Histórico</span></span>
                 <button class="btn-clear-history card-title-right" id="clearHistory" data-i18n-app="clearHistory">Limpar</button>
             </div>
             <div class="history-list" id="historyList">
                 <div class="history-empty">
                     Nenhuma validação ainda
                     <button class="history-empty-cta" onclick="document.getElementById('testExampleBtn').click()">
-                        🎯 Testar com Área de Exemplo
+                        <svg class="icon-sm"><use href="#icon-target"></use></svg> Testar com Área de Exemplo
                     </button>
                 </div>
             </div>
@@ -441,7 +526,7 @@
         <!-- Footer Trust Signals -->
         <div style="margin-top: 20px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; text-align: center;">
             <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.6;">
-                🔒 <strong>Dados Criptografados</strong> • Fontes Oficiais Certificadas<br>
+                <svg class="icon-sm" style="color: var(--accent-green);"><use href="#icon-lock"></use></svg> <strong>Dados Criptografados</strong> • Fontes Oficiais Certificadas<br>
                 <span style="font-size: 0.65rem; opacity: 0.8;">INPE • FUNAI • IBAMA • ICMBio • INCRA • MapBiomas</span>
             </div>
         </div>
@@ -450,9 +535,9 @@
 
 <div class="help-modal" id="helpModal">
     <div class="help-card">
-        <button class="close-help" id="closeHelp">✕</button>
+        <button class="close-help" id="closeHelp"><svg class="icon"><use href="#icon-x"></use></svg></button>
         <div class="help-header">
-            <div class="help-icon">🚀</div>
+            <div class="help-icon"><svg class="icon-xl" style="width: 3rem; height: 3rem;"><use href="#icon-help"></use></svg></div>
             <h2>Como usar o GreenGate</h2>
         </div>
         <div class="help-steps">
@@ -484,9 +569,9 @@
 <!-- Modal Info Relatório -->
 <div class="help-modal" id="pdfModal">
     <div class="help-card" style="max-width: 420px;">
-        <button class="close-help" id="closePdfModal">✕</button>
+        <button class="close-help" id="closePdfModal"><svg class="icon"><use href="#icon-x"></use></svg></button>
         <div class="help-header" style="margin-bottom: 20px;">
-            <div class="help-icon">📄</div>
+            <div class="help-icon"><svg class="icon-xl" style="width: 3rem; height: 3rem;"><use href="#icon-file"></use></svg></div>
             <h2 style="font-size: 1.2rem;" data-i18n-app="pdfModalTitle">Gerar Relatório PDF</h2>
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
@@ -614,7 +699,7 @@
             el.innerHTML = `<div class="history-empty">
                 ${window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação ainda'}
                 <button class="history-empty-cta" onclick="document.getElementById('testExampleBtn').click()">
-                    🎯 ${window.getAppTranslation ? window.getAppTranslation('sampleBtn') : 'Testar com Área de Exemplo'}
+                    <svg class="icon-sm"><use href="#icon-target"></use></svg> ${window.getAppTranslation ? window.getAppTranslation('sampleBtn') : 'Testar com Área de Exemplo'}
                 </button>
             </div>`;
             return;
@@ -1097,7 +1182,14 @@
         document.getElementById('resultCard').classList.add('show');
         document.getElementById('resultBanner').className = 'result-banner ' + d.status;
 
-        document.getElementById('resultIcon').textContent = d.status === 'approved' ? '✓' : d.status === 'rejected' ? '✗' : '⚠';
+        const resultIconEl = document.getElementById('resultIcon');
+        if (d.status === 'approved') {
+            resultIconEl.innerHTML = '<svg class="icon-xl"><use href="#icon-check"></use></svg>';
+        } else if (d.status === 'rejected') {
+            resultIconEl.innerHTML = '<svg class="icon-xl"><use href="#icon-x"></use></svg>';
+        } else {
+            resultIconEl.innerHTML = '<svg class="icon-xl"><use href="#icon-warning"></use></svg>';
+        }
         document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
 
         const conf = clampConf(d.risk_score);
@@ -1116,7 +1208,10 @@
         list.innerHTML = '';
 
         (d.checks || []).forEach(c => {
-            const icon = c.status === 'pass' ? '✓' : c.status === 'fail' ? '✗' : c.status === 'warning' ? '⚠' : '○';
+            let iconSvg = '<svg class="icon"><use href="#icon-check"></use></svg>';
+            if (c.status === 'fail') iconSvg = '<svg class="icon"><use href="#icon-x"></use></svg>';
+            else if (c.status === 'warning') iconSvg = '<svg class="icon"><use href="#icon-warning"></use></svg>';
+            else if (c.status === 'skip') iconSvg = '<span style="opacity: 0.5;">—</span>';
 
             // Mapear fontes oficiais e datas por tipo de check
             const checkMetadata = {
@@ -1178,7 +1273,7 @@
             row.innerHTML =
                 `<div class="check-header" onclick="this.parentElement.classList.toggle('open'); window.flashCurrentGraphic && window.flashCurrentGraphic();">
                     <div class="check-left">
-                        <div class="check-status-icon ${c.status || 'skip'}">${icon}</div>
+                        <div class="check-status-icon ${c.status || 'skip'}">${iconSvg}</div>
                         <span class="check-name">${fmtCheckType(c.check_type)}</span>
                     </div>
                     <div class="check-right">
