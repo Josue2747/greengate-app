@@ -75,7 +75,7 @@ const appTranslations = {
         // Sidebar cards
         authTitle: 'Autenticação',
         apiKeyPlaceholder: 'Cole sua API Key',
-        apiKeyRequired: 'API Key obrigatória para uso.',
+        apiKeyRequired: '✨ Explore o mapa gratuitamente! API Key necessária apenas para validar suas áreas.',
         getApiKey: 'Obtenha sua chave:',
         uploadTitle: 'Upload de Arquivo',
         uploadText: 'Toque para selecionar',
@@ -175,7 +175,7 @@ const appTranslations = {
         // Sidebar cards
         authTitle: 'Authentication',
         apiKeyPlaceholder: 'Paste your API Key',
-        apiKeyRequired: 'API Key required for use.',
+        apiKeyRequired: '✨ Explore the map for free! API Key required only to validate your areas.',
         getApiKey: 'Get your key:',
         uploadTitle: 'File Upload',
         uploadText: 'Tap to select',

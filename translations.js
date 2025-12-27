@@ -32,7 +32,7 @@ const translations = {
 
         // CTA
         cta_title: 'Pronto para Garantir Conformidade?',
-        cta_subtitle: 'Junte-se a empresas que já confiam na GreenGate para triagem ambiental. Validação instantânea, relatórios PDF e suporte técnico.',
+        cta_subtitle: 'Validação geoespacial automatizada em até 2 minutos. Relatórios PDF auditáveis e suporte técnico.',
         cta_button: 'Falar com Especialista',
 
         // Hero
@@ -228,7 +228,7 @@ const translations = {
 
         // CTA
         cta_title: 'Ready to Ensure Compliance?',
-        cta_subtitle: 'Join companies that already trust GreenGate for environmental screening. Instant validation, PDF reports, and technical support.',
+        cta_subtitle: 'Automated geospatial validation in under 2 minutes. Auditable PDF reports and technical support.',
         cta_button: 'Talk to a Specialist',
 
         // Hero
