@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Plataforma de Diligência Prévia Ambiental</title>
 
+    <!-- Security Headers (Fallback if server doesn't send) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://js.arcgis.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.greengate.com.br https://geocode.arcgis.com; frame-ancestors 'none';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- HTTPS Redirect Enforcement -->
+    <script>
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+            location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+        }
+    </script>
+
     <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/dark/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -295,6 +308,68 @@
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         .toast a { color: white; text-decoration: underline; font-weight: 600; }
 
+        /* GDPR Cookie Consent Banner */
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 2px solid var(--accent-green);
+            padding: 20px;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        }
+        .cookie-consent.show { display: block; }
+        .cookie-consent-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .cookie-consent-text {
+            flex: 1;
+            min-width: 300px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .cookie-consent-text a {
+            color: var(--accent-green);
+            text-decoration: underline;
+        }
+        .cookie-consent-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .cookie-consent-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .cookie-consent-btn.accept {
+            background: var(--accent-green);
+            color: white;
+        }
+        .cookie-consent-btn.accept:hover {
+            background: var(--accent-green-dark);
+        }
+        .cookie-consent-btn.reject {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .cookie-consent-btn.reject:hover {
+            background: var(--bg-card-hover);
+        }
+
         body.fullscreen-mode .sidebar { display: none !important; }
         body.fullscreen-mode .main-container { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; height: 100vh !important; }
         body.fullscreen-mode .header { display: none !important; }
@@ -562,6 +637,21 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- GDPR Cookie Consent Banner -->
+<div class="cookie-consent" id="cookieConsent">
+    <div class="cookie-consent-content">
+        <div class="cookie-consent-text">
+            <strong>🔒 Privacy Notice:</strong> We use browser storage to save your API key locally (never sent to third parties).
+            <a href="privacy-en.html" target="_blank">Privacy Policy</a> |
+            <a href="terms-en.html" target="_blank">Terms of Use</a>
+        </div>
+        <div class="cookie-consent-buttons">
+            <button class="cookie-consent-btn reject" onclick="rejectCookies()">Reject</button>
+            <button class="cookie-consent-btn accept" onclick="acceptCookies()">Accept</button>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Info Relatório -->
 <div class="help-modal" id="pdfModal">
     <div class="help-card" style="max-width: 420px;">
@@ -604,6 +694,63 @@
 <script>
     const API_URL = 'https://api.greengate.com.br';
     const MAX_HISTORY = 5;
+
+    // ===================== SECURITY: API KEY ENCRYPTION =====================
+    // Simple XOR encryption (better than plain text, not military-grade)
+    function simpleEncrypt(text) {
+        const key = 'GG_' + navigator.userAgent.substring(0, 20); // Device fingerprint
+        let encrypted = '';
+        for (let i = 0; i < text.length; i++) {
+            encrypted += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return btoa(encrypted); // Base64 encode
+    }
+
+    function simpleDecrypt(encrypted) {
+        try {
+            const key = 'GG_' + navigator.userAgent.substring(0, 20);
+            const decoded = atob(encrypted);
+            let decrypted = '';
+            for (let i = 0; i < decoded.length; i++) {
+                decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return decrypted;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // ===================== GDPR COOKIE CONSENT =====================
+    let cookieConsentGiven = localStorage.getItem('gg_cookie_consent') === 'true';
+
+    function acceptCookies() {
+        localStorage.setItem('gg_cookie_consent', 'true');
+        cookieConsentGiven = true;
+        document.getElementById('cookieConsent').classList.remove('show');
+    }
+
+    function rejectCookies() {
+        localStorage.removeItem('gg_cookie_consent');
+        localStorage.removeItem('gg_api_key_enc');
+        localStorage.removeItem('gg_history');
+        localStorage.removeItem('gg_tutorial');
+        cookieConsentGiven = false;
+        document.getElementById('cookieConsent').classList.remove('show');
+        showToast('Data cleared. API key will not be saved.', 'info');
+    }
+
+    // Show consent banner if not decided
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('gg_cookie_consent')) {
+            setTimeout(() => {
+                document.getElementById('cookieConsent').classList.add('show');
+            }, 2000); // Show after 2 seconds
+        }
+    });
+
+    // ===================== RATE LIMITING =====================
+    let lastValidationTime = 0;
+    const VALIDATION_COOLDOWN = 2000; // 2 seconds between validations
 
     let map, view, graphicsLayer, sketchVM, currentPolygon = null, currentGraphic = null, geoEngine, webMercatorUtils;
     let searchTimeout = null;
@@ -652,8 +799,22 @@
 
     function showToast(m, t = 'error') {
         const el = document.getElementById('toast');
-        const message = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m;
-        el.innerHTML = message; // Use innerHTML to support links
+        let message = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m;
+
+        // XSS Protection: Only allow safe HTML (links from our own code)
+        // If message contains <a href with our whatsapp link, allow it
+        // Otherwise, escape HTML
+        const isSafeHTML = message.includes('wa.me/5519971046171') || message.includes('href="#');
+
+        if (isSafeHTML) {
+            el.innerHTML = message; // Safe links from our code
+        } else {
+            // Escape HTML to prevent XSS
+            const div = document.createElement('div');
+            div.textContent = message;
+            el.textContent = div.textContent;
+        }
+
         el.className = 'toast ' + t;
         el.classList.add('show');
         setTimeout(() => el.classList.remove('show'), t === 'error' ? 5000 : 4000); // Errors show longer
@@ -750,8 +911,14 @@
 
     // ===================== INIT =====================
     document.addEventListener('DOMContentLoaded', () => {
-        const k = localStorage.getItem('gg_api_key');
-        if (k) document.getElementById('apiKey').value = k;
+        // Load encrypted API key if consent given
+        if (cookieConsentGiven) {
+            const encryptedKey = localStorage.getItem('gg_api_key_enc');
+            if (encryptedKey) {
+                const decrypted = simpleDecrypt(encryptedKey);
+                if (decrypted) document.getElementById('apiKey').value = decrypted;
+            }
+        }
         renderHistory();
         // Auto-open tutorial removed - user clicks "?" button instead
     });
@@ -1099,6 +1266,13 @@
 
     // ===================== VALIDATE =====================
     async function validate() {
+        // Rate limiting check
+        const now = Date.now();
+        if (now - lastValidationTime < VALIDATION_COOLDOWN) {
+            showToast('⏱️ Please wait ' + Math.ceil((VALIDATION_COOLDOWN - (now - lastValidationTime)) / 1000) + ' seconds between validations', 'error');
+            return;
+        }
+
         const key = document.getElementById('apiKey').value.trim();
 
         // Permitir validação sem chave APENAS para área de exemplo
@@ -1115,8 +1289,13 @@
             showToast('🎯 Validando área de exemplo (sem API Key). Para suas áreas reais, obtenha uma chave.', 'info');
         }
 
-        // Salvar API Key para próximas sessões
-        localStorage.setItem('gg_api_key', key);
+        // Save encrypted API key if consent given
+        if (cookieConsentGiven && key) {
+            const encrypted = simpleEncrypt(key);
+            localStorage.setItem('gg_api_key_enc', encrypted);
+        }
+
+        lastValidationTime = now; // Update rate limit timestamp
 
         document.getElementById('loadingOverlay').classList.add('show');
         document.getElementById('validateBtn').disabled = true;
@@ -1138,19 +1317,31 @@
             clearInterval(iv);
             const data = await res.json();
 
-            // Tratamento específico para quota excedida
+            // Sanitized error handling (don't expose backend details)
             if (res.status === 429) {
                 const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Gostaria de aumentar minha cota mensal';
-                throw new Error('🚫 Cota mensal atingida. <a href="' + whatsappLink + '" target="_blank">Solicitar aumento →</a>');
+                throw new Error('🚫 Monthly quota reached. <a href="' + whatsappLink + '" target="_blank">Request upgrade →</a>');
             }
 
-            // Tratamento para API key inválida
             if (res.status === 401 || res.status === 403) {
                 const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Minha API Key não está funcionando';
-                throw new Error('❌ API Key inválida ou expirada. <a href="' + whatsappLink + '" target="_blank">Verificar chave →</a>');
+                throw new Error('❌ Invalid or expired API Key. <a href="' + whatsappLink + '" target="_blank">Verify key →</a>');
             }
 
-            if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro ao validar área');
+            if (res.status === 400) {
+                throw new Error('⚠️ Invalid area geometry. Please redraw your polygon.');
+            }
+
+            if (res.status >= 500) {
+                throw new Error('🔧 Server error. Please try again in a few moments.');
+                // Log details to console for debugging (not shown to user)
+                console.error('Backend error:', data);
+            }
+
+            if (!res.ok) {
+                // Generic error (don't expose backend details to user)
+                throw new Error('Validation failed. Please try again or contact support.');
+            }
 
             saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
             showResult(data);
@@ -1158,12 +1349,13 @@
         } catch (err) {
             clearInterval(iv);
 
-            // Mensagem de erro já formatada com CTAs
+            // Sanitized error messages (don't expose technical details)
             let errorMessage = err.message;
 
-            // Se erro de conexão/network
-            if (errorMessage.includes('fetch') || errorMessage.includes('Failed') || errorMessage.includes('NetworkError')) {
-                errorMessage = '🔌 Erro de conexão. Verifique sua internet e tente novamente.';
+            // Network errors (generic message)
+            if (errorMessage.includes('fetch') || errorMessage.includes('Failed') || errorMessage.includes('NetworkError') || errorMessage.includes('TypeError')) {
+                errorMessage = '🔌 Connection error. Please check your internet and try again.';
+                console.error('Network error details:', err); // Log for debugging
             }
 
             showToast(errorMessage);
