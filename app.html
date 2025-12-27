@@ -180,6 +180,14 @@
         /* HISTORY */
         .history-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
         .history-empty { text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 15px; }
+        .history-empty-cta { margin-top: 12px; padding: 8px 14px; background: var(--accent-blue); color: white; border: none; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+        .history-empty-cta:hover { background: #2563eb; }
+
+        /* Skeleton loader */
+        .skeleton { background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%); background-size: 200% 100%; animation: loading 1.5s ease-in-out infinite; border-radius: 4px; display: inline-block; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-text { height: 1em; width: 60px; }
+        .skeleton-date { height: 0.9em; width: 100px; }
         .history-item {
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
@@ -275,9 +283,11 @@
         .meta-row { display: flex; justify-content: space-between; padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--border-color); font-size: 0.7rem; color: var(--text-muted); }
         .btn-pdf { width: 100%; padding: 12px; margin-top: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-pdf:hover { border-color: var(--accent-green); color: var(--accent-green); }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent-red); color: white; padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 2001; opacity: 0; transition: all 0.3s; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent-red); color: white; padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 2001; opacity: 0; transition: all 0.3s; max-width: 90%; text-align: center; }
         .toast.success { background: var(--accent-green); }
+        .toast.info { background: var(--accent-blue); }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast a { color: white; text-decoration: underline; font-weight: 600; }
 
         body.fullscreen-mode .sidebar { display: none !important; }
         body.fullscreen-mode .main-container { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; height: 100vh !important; }
@@ -285,7 +295,7 @@
         body.fullscreen-mode .close-fullscreen { display: flex !important; align-items: center; justify-content: center; }
 
         @media (max-width: 900px) {
-            .main-container { grid-template-columns: 1fr; grid-template-rows: 50vh 1fr; }
+            .main-container { grid-template-columns: 1fr; grid-template-rows: 70vh 1fr; }
             .sidebar { border-left: none; border-top: 1px solid var(--border-color); }
             .map-controls { top: 10px; left: 10px; }
             .search-box { left: 50%; transform: translateX(-50%); width: calc(100% - 100px); max-width: 300px; }
@@ -393,21 +403,21 @@
                 <div class="result-icon" id="resultIcon">✓</div>
                 <div>
                     <div class="result-title" id="resultTitle">Conforme</div>
-                    <div class="result-subtitle" id="resultSubtitle">Conformidade: --/100</div>
+                    <div class="result-subtitle" id="resultSubtitle">Conformidade: <span class="skeleton skeleton-text"></span>/100</div>
                 </div>
             </div>
             <div class="compliance-section">
                 <div class="compliance-label">Conformidade (0–100 • quanto maior, melhor)</div>
                 <div class="compliance-bar"><div class="compliance-fill" id="complianceFill"></div></div>
                 <div class="compliance-row">
-                    <span><strong id="complianceValue">--</strong>/100</span>
-                    <span id="complianceLabel">--</span>
+                    <span><strong id="complianceValue"><span class="skeleton skeleton-text"></span></strong>/100</span>
+                    <span id="complianceLabel"><span class="skeleton skeleton-text"></span></span>
                 </div>
             </div>
             <div class="checks-list" id="checksList"></div>
             <div class="meta-row">
-                <span id="metaTime">⏱️ --ms</span>
-                <span id="metaDate">📅 --/--/----</span>
+                <span id="metaTime">⏱️ <span class="skeleton skeleton-text"></span>ms</span>
+                <span id="metaDate">📅 <span class="skeleton skeleton-date"></span></span>
             </div>
             <button class="btn-pdf" id="pdfBtn" data-i18n-app="pdfBtn">📄 Baixar Relatório PDF</button>
         </div>
@@ -419,7 +429,20 @@
                 <button class="btn-clear-history card-title-right" id="clearHistory" data-i18n-app="clearHistory">Limpar</button>
             </div>
             <div class="history-list" id="historyList">
-                <div class="history-empty">Nenhuma validação</div>
+                <div class="history-empty">
+                    Nenhuma validação ainda
+                    <button class="history-empty-cta" onclick="document.getElementById('testExampleBtn').click()">
+                        🎯 Testar com Área de Exemplo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Trust Signals -->
+        <div style="margin-top: 20px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; text-align: center;">
+            <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.6;">
+                🔒 <strong>Dados Criptografados</strong> • Fontes Oficiais Certificadas<br>
+                <span style="font-size: 0.65rem; opacity: 0.8;">INPE • FUNAI • IBAMA • ICMBio • INCRA • MapBiomas</span>
             </div>
         </div>
     </div>
@@ -548,10 +571,11 @@
 
     function showToast(m, t = 'error') {
         const el = document.getElementById('toast');
-        el.textContent = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m;
+        const message = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m;
+        el.innerHTML = message; // Use innerHTML to support links
         el.className = 'toast ' + t;
         el.classList.add('show');
-        setTimeout(() => el.classList.remove('show'), 4000);
+        setTimeout(() => el.classList.remove('show'), t === 'error' ? 5000 : 4000); // Errors show longer
     }
 
     function setValidateAvailability() {
@@ -586,7 +610,15 @@
     function renderHistory() {
         const el = document.getElementById('historyList');
         const h = getHistory();
-        if (!h.length) { el.innerHTML = `<div class="history-empty">${window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação'}</div>`; return; }
+        if (!h.length) {
+            el.innerHTML = `<div class="history-empty">
+                ${window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação ainda'}
+                <button class="history-empty-cta" onclick="document.getElementById('testExampleBtn').click()">
+                    🎯 ${window.getAppTranslation ? window.getAppTranslation('sampleBtn') : 'Testar com Área de Exemplo'}
+                </button>
+            </div>`;
+            return;
+        }
         const locale = window.getCurrentAppLang ? (window.getCurrentAppLang() === 'en' ? 'en-US' : 'pt-BR') : 'pt-BR';
         const complianceText = window.getAppTranslation ? window.getAppTranslation('compliance') : 'Conformidade:';
         el.innerHTML = h.map(i => `
@@ -640,7 +672,7 @@
         const k = localStorage.getItem('gg_api_key');
         if (k) document.getElementById('apiKey').value = k;
         renderHistory();
-        if (!localStorage.getItem('gg_tutorial')) setTimeout(() => document.getElementById('helpModal').classList.add('show'), 1000);
+        // Auto-open tutorial removed - user clicks "?" button instead
     });
 
     // ===================== ESRI =====================
@@ -990,7 +1022,8 @@
 
         // Permitir validação sem chave APENAS para área de exemplo
         if (!key && !isExampleArea) {
-            showToast('⚠️ Insira sua API Key para validar. Entre em contato via WhatsApp para obter uma chave.', 'error');
+            const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate';
+            showToast('⚠️ API Key necessária. <a href="' + whatsappLink + '" target="_blank" style="color: white; text-decoration: underline;">Solicitar via WhatsApp →</a>', 'error');
             return;
         }
 
@@ -1026,10 +1059,17 @@
 
             // Tratamento específico para quota excedida
             if (res.status === 429) {
-                throw new Error(data.detail || 'Quota mensal excedida. Faça upgrade do plano ou aguarde o reset mensal.');
+                const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Gostaria de aumentar minha cota mensal';
+                throw new Error('🚫 Cota mensal atingida. <a href="' + whatsappLink + '" target="_blank">Solicitar aumento →</a>');
             }
 
-            if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro');
+            // Tratamento para API key inválida
+            if (res.status === 401 || res.status === 403) {
+                const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Minha API Key não está funcionando';
+                throw new Error('❌ API Key inválida ou expirada. <a href="' + whatsappLink + '" target="_blank">Verificar chave →</a>');
+            }
+
+            if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : Array.isArray(data.detail) ? data.detail.map(e => e.msg).join(', ') : 'Erro ao validar área');
 
             saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
             showResult(data);
@@ -1037,24 +1077,12 @@
         } catch (err) {
             clearInterval(iv);
 
-            // Mensagem de erro mais clara
+            // Mensagem de erro já formatada com CTAs
             let errorMessage = err.message;
 
-            // Se o erro mencionar quota excedida
-            if (errorMessage.includes('Quota') || errorMessage.includes('quota') || errorMessage.includes('excedida')) {
-                errorMessage = '🚫 ' + errorMessage;
-            }
-            // Se o erro mencionar API Key
-            else if (errorMessage.includes('API Key') || errorMessage.includes('403') || errorMessage.includes('401')) {
-                if (!key) {
-                    errorMessage = '⚠️ Backend requer API Key. Entre em contato para obter uma chave.';
-                } else {
-                    errorMessage = '❌ API Key inválida. Verifique sua chave ou entre em contato conosco.';
-                }
-            }
-            // Se erro de conexão
-            else if (errorMessage.includes('fetch') || errorMessage.includes('Failed') || errorMessage.includes('NetworkError')) {
-                errorMessage = '🔌 Erro de conexão. Verifique se a API está online ou tente novamente.';
+            // Se erro de conexão/network
+            if (errorMessage.includes('fetch') || errorMessage.includes('Failed') || errorMessage.includes('NetworkError')) {
+                errorMessage = '🔌 Erro de conexão. Verifique sua internet e tente novamente.';
             }
 
             showToast(errorMessage);
@@ -1103,6 +1131,20 @@
 
             const meta = checkMetadata[c.check_type] || { source: 'Base oficial', updated: '--', id_field: null };
 
+            // Calcular "há X dias" para mostrar frescor dos dados
+            function daysAgo(dateStr) {
+                if (!dateStr || dateStr === '--') return '';
+                const updated = new Date(dateStr);
+                const now = new Date();
+                const diffTime = Math.abs(now - updated);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays === 0) return ' (hoje)';
+                if (diffDays === 1) return ' (ontem)';
+                if (diffDays < 30) return ` (há ${diffDays} dias)`;
+                const months = Math.floor(diffDays / 30);
+                return ` (há ${months} ${months === 1 ? 'mês' : 'meses'})`;
+            }
+
             let det = '<p>' + (c.message || '') + '</p>';
 
             // Área afetada
@@ -1112,10 +1154,11 @@
                     ' ha (' + Number(c.overlap_percentage || 0).toFixed(1) + '% da área total)</div>';
             }
 
-            // Fonte e data de atualização
+            // Fonte e data de atualização com badge de frescor
             det += '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted);">';
             det += '<div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>📋 <strong>Fonte:</strong> ' + meta.source + '</span></div>';
-            det += '<div style="display: flex; justify-content: space-between;"><span>📅 <strong>Atualizado:</strong> ' + new Date(meta.updated).toLocaleDateString('pt-BR') + '</span></div>';
+            const freshnessText = meta.updated !== '--' ? new Date(meta.updated).toLocaleDateString('pt-BR') + '<span style="color: var(--accent-green); font-weight: 600;">' + daysAgo(meta.updated) + '</span>' : '--';
+            det += '<div style="display: flex; justify-content: space-between;"><span>📅 <strong>Atualizado:</strong> ' + freshnessText + '</span></div>';
 
             // IDs oficiais (se disponíveis no response)
             if (meta.id_field && c[meta.id_field]) {
