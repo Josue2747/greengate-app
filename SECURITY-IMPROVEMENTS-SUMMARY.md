@@ -128,10 +128,7 @@ Policy: https://www.greengate.com.br/responsible-disclosure
 ### URGENT (Esta Semana)
 1. ✅ ~~Security.txt + VDP~~ (DONE)
 2. ✅ ~~BFF design document~~ (DONE)
-3. 📧 **Configurar email security@greengate.com.br**
-   - Criar alias no Gmail/Google Workspace
-   - Forwardar para greengatebrasil@gmail.com
-   - Testar envio/recebimento
+3. ✅ ~~Email ajustado para greengatebrasil@gmail.com~~ (DONE - sem domínio próprio)
 
 4. 🌐 **Deploy para produção**
    ```bash
@@ -214,7 +211,7 @@ Policy: https://www.greengate.com.br/responsible-disclosure
 ## 📧 Próximas Ações Imediatas
 
 ### Para Você (Bruno):
-1. [ ] Configurar email `security@greengate.com.br`
+1. [x] ~~Configurar email~~ (usando greengatebrasil@gmail.com - sem domínio próprio)
 2. [ ] Fazer deploy dos novos arquivos HTML
 3. [ ] Adicionar links no footer do site
 4. [ ] Testar security.txt: https://www.greengate.com.br/.well-known/security.txt
