@@ -37,6 +37,315 @@ pdftotext GreenGate-Example-Report.pdf - | grep "GG-"
 
 ---
 
+## 🔴 CRITICAL: Backend-for-Frontend (BFF) - Remove API Keys from Browser
+
+**Status:** ❌ **BLOCKS ENTERPRISE SALES** (€10k+/year customers)
+**Priority:** #1 (After PDF fix)
+**Effort:** 2-3 weeks
+**Impact:** MASSIVE (eliminates primary security blocker in due diligence)
+
+### Current State (INSECURE - DD BLOCKER)
+
+```javascript
+// app.html - API key exposed in browser
+const apiKey = localStorage.getItem('gg_api_key'); // ❌ CRITICAL VULNERABILITY
+fetch('https://api.greengate.com.br/api/v1/validations', {
+    headers: { 'x-api-key': apiKey } // ❌ Visible in DevTools, stealable via XSS
+});
+```
+
+**Why This Blocks Enterprise Sales:**
+
+1. **Due Diligence Failure:** "Your web app exposes API keys in the browser = any malicious script can steal them"
+2. **OWASP Top 10 #2:** Cryptographic Failures - storing secrets client-side
+3. **No Revocation:** If XSS steals key, all validations from that key are compromised
+4. **No Attribution:** Can't tell WHO used the key, only WHICH key was used
+5. **Compliance:** Fails PCI DSS, ISO 27001, SOC 2 requirements
+
+### Proposed Architecture: Backend-for-Frontend (BFF)
+
+```
+┌─────────────┐
+│   Browser   │
+│  (No keys)  │
+└──────┬──────┘
+       │ 1. Login (email/password)
+       ▼
+┌─────────────────────┐
+│  auth.greengate.com │ ← Authentication Service
+│  (Issues JWT)       │
+└──────┬──────────────┘
+       │ 2. JWT in httpOnly cookie
+       ▼
+┌─────────────┐
+│   Browser   │
+│ (Has cookie)│
+└──────┬──────┘
+       │ 3. POST /bff/validate
+       ▼
+┌──────────────────────┐
+│  bff.greengate.com   │ ← Backend-for-Frontend
+│  (Verifies JWT)      │
+│  (Adds API key)      │
+└──────┬───────────────┘
+       │ 4. POST /validations (with API key server-side)
+       ▼
+┌──────────────────────┐
+│  api.greengate.com   │ ← Main API
+│  (Processes request) │
+└──────────────────────┘
+```
+
+### Implementation Plan
+
+#### Phase 1: Authentication Service (Week 1)
+
+**Tech Stack:** Node.js + Express + JWT + PostgreSQL
+
+```javascript
+// auth-service/server.js
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const app = express();
+
+// Sign up
+app.post('/auth/signup', async (req, res) => {
+  const { email, password, company } = req.body;
+
+  // Validate email domain (only business emails)
+  if (!email.match(/@((?!gmail|hotmail|yahoo).)*\.[a-z]{2,}/)) {
+    return res.status(400).json({ error: 'Corporate email required' });
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  // Create user + generate API key server-side
+  const user = await db.users.create({
+    email,
+    password_hash: passwordHash,
+    company,
+    api_key: generateSecureAPIKey(), // Stored server-side only
+    created_at: new Date()
+  });
+
+  res.json({ message: 'Account created. Check email for verification.' });
+});
+
+// Login
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await db.users.findByEmail(email);
+  if (!user || !await bcrypt.compare(password, user.password_hash)) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  // Generate JWT (short-lived: 1 hour)
+  const token = jwt.sign(
+    { user_id: user.id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  // Set httpOnly cookie (JavaScript can't access)
+  res.cookie('gg_session', token, {
+    httpOnly: true,
+    secure: true, // HTTPS only
+    sameSite: 'strict',
+    maxAge: 3600000 // 1 hour
+  });
+
+  res.json({ message: 'Logged in', user: { email: user.email, company: user.company } });
+});
+
+function generateSecureAPIKey() {
+  const crypto = require('crypto');
+  return 'ggk_' + crypto.randomBytes(32).toString('hex');
+}
+```
+
+#### Phase 2: BFF Service (Week 2)
+
+**Tech Stack:** Python FastAPI (matches main API stack)
+
+```python
+from fastapi import FastAPI, Cookie, HTTPException
+import httpx
+import jwt
+
+app = FastAPI()
+
+# Middleware: Verify JWT from cookie
+async def verify_jwt(gg_session: str = Cookie(None)):
+    if not gg_session:
+        raise HTTPException(401, "Not authenticated")
+
+    try:
+        payload = jwt.decode(gg_session, JWT_SECRET, algorithms=["HS256"])
+        return payload  # Contains user_id, email
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(401, "Session expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(401, "Invalid session")
+
+# Proxy: Validate area
+@app.post("/bff/validate")
+async def validate_area(request: dict, jwt_payload = Depends(verify_jwt)):
+    user_id = jwt_payload["user_id"]
+
+    # Get user's API key from database (server-side only)
+    user = await db.users.get(user_id)
+    api_key = user.api_key  # NEVER sent to browser
+
+    # Forward request to main API with API key
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://api.greengate.com.br/api/v1/validations",
+            json=request,
+            headers={"x-api-key": api_key}
+        )
+
+    return response.json()
+
+# Proxy: Get validation result
+@app.get("/bff/validations/{validation_id}")
+async def get_validation(validation_id: str, jwt_payload = Depends(verify_jwt)):
+    user_id = jwt_payload["user_id"]
+    user = await db.users.get(user_id)
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"https://api.greengate.com.br/api/v1/validations/{validation_id}",
+            headers={"x-api-key": user.api_key}
+        )
+
+    # Additional security: Verify this validation belongs to this user
+    result = response.json()
+    if result.get("api_key_id") != user.api_key_id:
+        raise HTTPException(403, "Not your validation")
+
+    return result
+```
+
+#### Phase 3: Frontend Migration (Week 3)
+
+**Changes to app.html:**
+
+```javascript
+// BEFORE (INSECURE)
+const apiKey = localStorage.getItem('gg_api_key');
+fetch('https://api.greengate.com.br/api/v1/validations', {
+    headers: { 'x-api-key': apiKey }
+});
+
+// AFTER (SECURE)
+// No API key in browser! Just login first
+async function login(email, password) {
+    await fetch('https://auth.greengate.com.br/auth/login', {
+        method: 'POST',
+        credentials: 'include', // Send cookies
+        body: JSON.stringify({ email, password })
+    });
+    // JWT stored in httpOnly cookie automatically
+}
+
+async function validateArea(geometry, propertyName) {
+    const response = await fetch('https://bff.greengate.com.br/bff/validate', {
+        method: 'POST',
+        credentials: 'include', // Send JWT cookie
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ geometry, property_name: propertyName })
+    });
+
+    if (response.status === 401) {
+        // Session expired, redirect to login
+        window.location.href = '/login';
+    }
+
+    return response.json();
+}
+```
+
+### Migration Strategy
+
+**For Existing Users:**
+
+```sql
+-- Generate user accounts from existing API keys
+INSERT INTO users (email, company, api_key, created_from_migration)
+SELECT
+    api_key_email,
+    api_key_company,
+    api_key_hash,
+    true
+FROM api_keys
+WHERE active = true;
+
+-- Send migration emails
+-- Subject: "Action Required: Migrate to new GreenGate authentication"
+```
+
+**Migration Email Template:**
+```
+Subject: 🔐 Migrate to Secure Authentication (Action Required)
+
+Hi [Company],
+
+We're upgrading GreenGate security to enterprise-grade standards!
+
+WHAT'S CHANGING:
+- Old: API key stored in your browser (security risk)
+- New: Secure login with email/password (API key stays server-side)
+
+ACTION REQUIRED BY [DATE]:
+1. Visit https://app.greengate.com.br/migrate
+2. Enter your current API key: [MASKED_KEY]
+3. Create password for email: [EMAIL]
+4. Done! API key now protected server-side
+
+BENEFITS:
+✅ API key can't be stolen via XSS
+✅ Revoke access instantly if needed
+✅ Track who used what (audit logs)
+✅ Easier team collaboration (multiple users, one account)
+
+Questions? Reply to this email or contact support@greengate.com.br
+```
+
+### Benefits for Due Diligence
+
+**Before BFF:**
+- ❌ "API keys exposed in browser" → FAIL audit
+- ❌ "No user attribution" → Can't tell who did what
+- ❌ "XSS = total compromise" → One vulnerability = leak all keys
+- ❌ "No instant revocation" → Manual email process
+
+**After BFF:**
+- ✅ "API keys never leave server" → PASS audit
+- ✅ "JWT with user_id" → Full audit trail of who/what/when
+- ✅ "XSS = single session leak" → Revoke one token, not all keys
+- ✅ "Instant revocation" → User clicks "logout" → session dead
+
+### Cost-Benefit Analysis
+
+**Costs:**
+- Development: 2-3 weeks (1 developer)
+- Infrastructure: +$50/month (auth + BFF services on Railway)
+- Migration effort: 1 email campaign + support tickets
+
+**Benefits:**
+- **Unblocks enterprise sales:** Can now sell to banks, funds (€10k+/year)
+- **Reduces support:** No more "I leaked my key, regenerate please"
+- **Better UX:** Login once, no copy-pasting keys
+- **Compliance:** Passes ISO 27001, SOC 2, PCI DSS requirements
+- **Competitive advantage:** Most competitors still use client-side keys
+
+**ROI:** If this unblocks ONE enterprise sale (€10k/year) → 200x ROI in Year 1
+
+---
+
 ## 🔴 CRITICAL: Two-Level Verification System
 
 ### Current State (INSECURE)

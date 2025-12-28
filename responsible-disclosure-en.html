@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsible Vulnerability Disclosure - GreenGate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --gray-light: #F3F4F6;
+            --white: #FFFFFF;
+            --red: #EF4444;
+            --yellow: #F59E0B;
+            --green: #10B981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .alert {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert.info {
+            background: #EFF6FF;
+            border-color: #3B82F6;
+            color: #1E40AF;
+        }
+
+        .alert.warning {
+            background: #FEF3C7;
+            border-color: var(--yellow);
+            color: #92400E;
+        }
+
+        .alert.success {
+            background: #D1FAE5;
+            border-color: var(--green);
+            color: #065F46;
+        }
+
+        .alert.danger {
+            background: #FEE2E2;
+            border-color: var(--red);
+            color: #991B1B;
+        }
+
+        .scope-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .scope-item {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .scope-item.in-scope {
+            border-color: var(--green);
+            background: #F0FDF4;
+        }
+
+        .scope-item.out-scope {
+            border-color: var(--red);
+            background: #FEF2F2;
+        }
+
+        .scope-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scope-item.in-scope h4 {
+            color: #065F46;
+        }
+
+        .scope-item.out-scope h4 {
+            color: #991B1B;
+        }
+
+        .scope-item ul {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            background: #F3F4F6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #DC2626;
+        }
+
+        .contact-box {
+            background: var(--gray-light);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .contact-box h3 {
+            margin-top: 0;
+        }
+
+        .contact-box a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-box a:hover {
+            text-decoration: underline;
+        }
+
+        .sla-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .sla-table th,
+        .sla-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .sla-table th {
+            background: var(--dark);
+            color: white;
+            font-weight: 600;
+        }
+
+        .sla-table tr:hover {
+            background: var(--gray-light);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .badge.critical {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge.high {
+            background: #FED7AA;
+            color: #9A3412;
+        }
+
+        .badge.medium {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge.low {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🔒 Responsible Disclosure Program</h1>
+            <p>Help us keep GreenGate secure for everyone</p>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="container">
+            <div class="alert success">
+                <strong>✅ Legal Safe Harbor:</strong> We commit to NOT taking legal action against security researchers who follow this policy in good faith and report vulnerabilities responsibly.
+            </div>
+
+            <h2>About This Program</h2>
+            <p>GreenGate values the security community and believes that responsible disclosure of vulnerabilities makes our services safer for everyone. This program defines how you can help us identify and fix security issues.</p>
+
+            <h2>Program Scope</h2>
+
+            <div class="scope-box">
+                <div class="scope-item in-scope">
+                    <h4>✅ In Scope</h4>
+                    <ul>
+                        <li><code>www.greengate.com.br</code></li>
+                        <li><code>api.greengate.com.br</code></li>
+                        <li><code>app.greengate.com.br</code></li>
+                        <li>Official mobile applications</li>
+                    </ul>
+                </div>
+
+                <div class="scope-item out-scope">
+                    <h4>❌ Out of Scope</h4>
+                    <ul>
+                        <li>Denial of Service (DoS/DDoS)</li>
+                        <li>Employee phishing</li>
+                        <li>Physical attacks</li>
+                        <li>Social engineering</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Vulnerability Types</h2>
+
+            <h3>Critical Priority <span class="badge critical">CRITICAL</span></h3>
+            <ul>
+                <li>Remote code execution (RCE)</li>
+                <li>SQL injection with access to sensitive data</li>
+                <li>Mass data leak (API keys, customer data)</li>
+                <li>Complete authentication bypass</li>
+                <li>Report code enumeration (successful brute-force)</li>
+            </ul>
+
+            <h3>High Priority <span class="badge high">HIGH</span></h3>
+            <ul>
+                <li>Cross-Site Scripting (XSS) allowing API key theft</li>
+                <li>Cross-Site Request Forgery (CSRF) on critical operations</li>
+                <li>Personal data exposure (CPF, CNPJ, names)</li>
+                <li>Authorization bypass (access to other customers' reports)</li>
+                <li>Rate limiting bypass enabling enumeration</li>
+            </ul>
+
+            <h3>Medium Priority <span class="badge medium">MEDIUM</span></h3>
+            <ul>
+                <li>Reflected XSS without access to sensitive data</li>
+                <li>Technical information disclosure (versions, paths)</li>
+                <li>Clickjacking on non-critical pages</li>
+                <li>Missing security headers</li>
+            </ul>
+
+            <h3>Low Priority <span class="badge low">LOW</span></h3>
+            <ul>
+                <li>Misconfigured SPF/DKIM/DMARC</li>
+                <li>Cookies without Secure flag (in non-sensitive contexts)</li>
+                <li>UI/UX issues that don't impact security</li>
+            </ul>
+
+            <div class="alert warning">
+                <strong>⚠️ Not Vulnerabilities:</strong>
+                <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                    <li>Absence of best practices without real impact (e.g., missing HSTS if HTTPS already redirects)</li>
+                    <li>Automated scanner reports without manual validation</li>
+                    <li>Theoretical vulnerabilities without proof-of-concept</li>
+                    <li>Issues in third-party services (Cloudflare, Railway, etc.)</li>
+                </ul>
+            </div>
+
+            <h2>How to Report</h2>
+
+            <div class="contact-box">
+                <h3>Contact Information</h3>
+                <p><strong>Email:</strong> <a href="mailto:security@greengate.com.br">security@greengate.com.br</a></p>
+                <p><strong>Subject:</strong> <code>[SECURITY] Brief vulnerability description</code></p>
+                <p><strong>PGP Key:</strong> <a href="/pgp-key.txt">Download public key</a> (optional but recommended)</p>
+            </div>
+
+            <h3>What to Include in Your Report</h3>
+            <ol>
+                <li><strong>Clear description:</strong> Summary of the vulnerability and potential impact</li>
+                <li><strong>Steps to reproduce:</strong> Detailed step-by-step instructions</li>
+                <li><strong>Proof of concept:</strong> Screenshots, videos, or demonstrative code</li>
+                <li><strong>Environment:</strong> Browser, OS, tools used</li>
+                <li><strong>Impact:</strong> Your severity assessment (Critical/High/Medium/Low)</li>
+                <li><strong>Fix suggestions:</strong> If you have any (optional)</li>
+            </ol>
+
+            <h2>Response SLA</h2>
+
+            <table class="sla-table">
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Severity</th>
+                        <th>Timeline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Receipt confirmation</td>
+                        <td>All</td>
+                        <td>2 business days</td>
+                    </tr>
+                    <tr>
+                        <td>Initial triage</td>
+                        <td>All</td>
+                        <td>5 business days</td>
+                    </tr>
+                    <tr>
+                        <td>Fix</td>
+                        <td>Critical/High</td>
+                        <td>30 days</td>
+                    </tr>
+                    <tr>
+                        <td>Fix</td>
+                        <td>Medium/Low</td>
+                        <td>90 days</td>
+                    </tr>
+                    <tr>
+                        <td>Public disclosure</td>
+                        <td>All</td>
+                        <td>After fix + 7 days</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Rewards and Recognition</h2>
+
+            <h3>🎁 Public Recognition</h3>
+            <ul>
+                <li><strong>Hall of Fame:</strong> Your name on our <a href="/security-hall-of-fame">acknowledgments page</a></li>
+                <li><strong>Release Notes:</strong> Mention in update notes (if desired)</li>
+                <li><strong>LinkedIn:</strong> Public recommendation from our security team</li>
+            </ul>
+
+            <h3>💰 Financial Rewards (Case by Case)</h3>
+            <p>For critical and high-impact vulnerabilities, we offer monetary rewards:</p>
+            <ul>
+                <li><strong>Critical:</strong> $100 - $400 USD (RCE, SQL injection, mass data leak)</li>
+                <li><strong>High:</strong> $50 - $100 USD (XSS with key theft, auth bypass)</li>
+                <li><strong>Medium/Low:</strong> Hall of Fame only</li>
+            </ul>
+
+            <div class="alert info">
+                <strong>📝 Note on Bounties:</strong> We evaluate each case individually. Factors that increase value include: report quality, originality of discovery, real business impact, and well-founded fix suggestions.
+            </div>
+
+            <h2>Rules of Conduct</h2>
+
+            <h3>✅ Allowed</h3>
+            <ul>
+                <li>Testing on staging/development environments (if provided)</li>
+                <li>Using your own test accounts</li>
+                <li>Using automated tools with moderation</li>
+                <li>Sharing findings with our team before public disclosure</li>
+            </ul>
+
+            <h3>❌ Prohibited</h3>
+            <ul>
+                <li>Accessing, modifying, or deleting other users' data</li>
+                <li>Executing denial of service attacks</li>
+                <li>Spamming or flooding requests</li>
+                <li>Publicly disclosing vulnerabilities before fix</li>
+                <li>Social engineering employees</li>
+                <li>Violating real users' privacy</li>
+            </ul>
+
+            <h2>Disclosure Process</h2>
+
+            <ol>
+                <li><strong>Private report:</strong> You send vulnerability to security@greengate.com.br</li>
+                <li><strong>Confirmation:</strong> We confirm receipt within 2 business days</li>
+                <li><strong>Triage:</strong> We assess severity and impact within 5 business days</li>
+                <li><strong>Fix:</strong> We develop and deploy fix (30-90 days based on severity)</li>
+                <li><strong>Validation:</strong> We ask you to validate the fix</li>
+                <li><strong>Recognition:</strong> We add you to Hall of Fame (if desired)</li>
+                <li><strong>Coordinated disclosure:</strong> After 7 days post-fix, we may disclose publicly (with your consent)</li>
+            </ol>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <h3>Can I test in production?</h3>
+            <p>Yes, but with moderation. Avoid destructive actions, use test data, and don't impact other users.</p>
+
+            <h3>What if I accidentally cause damage?</h3>
+            <p>Report immediately to security@greengate.com.br. If you follow this policy in good faith, we won't take legal action.</p>
+
+            <h3>Can I use automated scanners?</h3>
+            <p>Yes, but validate manually before reporting. Don't send automated reports without analysis.</p>
+
+            <h3>Do you offer a test environment?</h3>
+            <p>We currently don't have public staging. Use test data in production with caution.</p>
+
+            <h3>How long until I receive a bounty?</h3>
+            <p>After fix validation, we process payment within 30 days via bank transfer or cryptocurrency.</p>
+
+            <div class="alert info">
+                <strong>📧 Questions?</strong> Contact <a href="mailto:security@greengate.com.br" style="color: #1E40AF; font-weight: 600;">security@greengate.com.br</a>
+            </div>
+
+            <a href="index.html" class="btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenGate. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Last updated: December 27, 2025</p>
+        </div>
+    </footer>
+</body>
+</html>
