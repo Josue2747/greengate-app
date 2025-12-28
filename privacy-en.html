@@ -162,14 +162,17 @@
             </ul>
 
             <h3>1.2. Optional Data Provided</h3>
-            <p>You may optionally include in the <code>metadata</code> field:</p>
+            <p>You may optionally include:</p>
             <ul>
-                <li>Property/farm name</li>
-                <li>CAR code (Rural Environmental Registry)</li>
-                <li>Owner identification</li>
-                <li>Other internal identifiers</li>
+                <li><strong>property_name (property name):</strong> Free text field - <strong>treated as potentially sensitive</strong> and automatically redacted in public verification. Use only anonymous IDs (e.g., "Farm #12345").</li>
+                <li><strong>metadata:</strong> CAR code (Rural Environmental Registry) and internal reference IDs.</li>
             </ul>
-            <p><strong>Recommendation:</strong> Only send data strictly necessary for your operation.</p>
+
+            <div class="alert warning" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0;">
+                <p><strong>⚠️ IMPORTANT - FREE TEXT FIELDS ARE TREATED AS POTENTIALLY SENSITIVE:</strong></p>
+                <p>GreenGate does NOT process and does NOT accept sensitive personal data (CPF, CNPJ, owner names, residential addresses, etc.). The <code>property_name</code> field is free text and therefore treated as potentially sensitive - it will be <strong>automatically redacted to [REDACTED]</strong> in public verification.</p>
+                <p><strong>Use only:</strong> Anonymous internal IDs (e.g., "Farm #12345", "Property A"). Sending real personal data violates our Privacy Policy and may result in account suspension.</p>
+            </div>
 
             <h3>1.3. Contact Data</h3>
             <p>When requesting API access, we collect:</p>
@@ -211,15 +214,27 @@
                 <li><strong>Authorities:</strong> When legally required (court order, regulatory agencies, etc.)</li>
             </ul>
 
-            <h3>3.3. Public Verification</h3>
-            <p>Reports verified via QR Code publicly expose:</p>
+            <h3>3.3. Public Verification (Two-Level System)</h3>
+            <p>To protect commercial confidentiality and privacy, we implement two-level verification:</p>
+
+            <h4 style="font-size: 1.1rem; margin-top: 1rem;">Level 1: Public Verification (no authentication)</h4>
+            <p>Reports verified via QR Code expose only minimal information:</p>
+            <ul>
+                <li><strong>Property name:</strong> ALWAYS redacted as <code>[REDACTED]</code> - treated as potentially sensitive</li>
+                <li>Risk score (0-100)</li>
+                <li>Validation date</li>
+                <li>Verification status (valid/invalid)</li>
+            </ul>
+
+            <h4 style="font-size: 1.1rem; margin-top: 1rem;">Level 2: Full Verification (requires API key)</h4>
+            <p>Complete details available only with API key authentication from the client:</p>
             <ul>
                 <li>Property name (if provided)</li>
-                <li>Risk score</li>
-                <li>Validation date</li>
-                <li>PDF download link</li>
+                <li>PDF download link (digitally signed, expires in 7 days)</li>
+                <li>Complete metadata (CAR, internal IDs)</li>
             </ul>
-            <p><strong>Important:</strong> We do not include personal identification data in public verification.</p>
+
+            <p><strong>Important:</strong> Report codes use cryptographically secure high-entropy format (GG-{16+ random chars}) to prevent enumeration attacks. Public endpoint has aggressive rate limiting.</p>
 
             <h2>4. Storage and Retention</h2>
 

@@ -359,7 +359,7 @@
                             <tr>
                                 <td><span class="inline-code">property_name</span> <span class="badge optional">opcional</span></td>
                                 <td>string</td>
-                                <td>Nome da propriedade/fazenda</td>
+                                <td>⚠️ <strong>Use anonymous identifiers only</strong> (e.g., "Farm #12345", "Property A"). Treated as potentially sensitive - will be redacted ([REDACTED]) in public verification. <strong>DO NOT use real property names.</strong></td>
                             </tr>
                             <tr>
                                 <td><span class="inline-code">metadata</span> <span class="badge optional">opcional</span></td>
@@ -457,7 +457,13 @@
                     </div>
 
                     <div class="alert warning">
-                        <strong>🔐 Security:</strong> Report codes use cryptographically secure random format to prevent enumeration attacks. Property names are anonymized by default ([REDACTED]) in public verification to protect commercial confidentiality.
+                        <strong>🔐 Security & Privacy:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem;">
+                            <li><strong>Report codes:</strong> Cryptographically secure random format (high entropy) to prevent enumeration attacks</li>
+                            <li><strong>Property names:</strong> Automatically redacted to <code>[REDACTED]</code> in public verification - treated as potentially sensitive data</li>
+                            <li><strong>Two-level verification:</strong> Public endpoint shows minimal info (valid/invalid, score, date). Full details require API key authentication</li>
+                            <li><strong>Rate limiting:</strong> Aggressive limits on public endpoint to prevent abuse</li>
+                        </ul>
                     </div>
 
                     <h4>Parâmetros de URL</h4>
@@ -519,7 +525,7 @@ payload = {
             [-54.123, -12.456]
         ]]
     },
-    "property_name": "Fazenda Teste"
+    "property_name": "Farm #12345"
 }
 
 response = requests.post(
@@ -562,7 +568,7 @@ const response = await fetch(`${BASE_URL}/validations`, {
         [-54.123, -12.456]
       ]]
     },
-    property_name: 'Fazenda Teste'
+    property_name: 'Farm #12345'
   })
 });
 
@@ -602,7 +608,7 @@ RESPONSE=$(curl -s -X POST "$BASE_URL/validations" \
         [-54.123, -12.456]
       ]]
     },
-    "property_name": "Fazenda Teste"
+    "property_name": "Farm #12345"
   }')
 
 VALIDATION_ID=$(echo $RESPONSE | jq -r '.validation_id')

@@ -377,12 +377,17 @@
                             <tr>
                                 <td><span class="inline-code">property_name</span> <span class="badge optional">optional</span></td>
                                 <td>string</td>
-                                <td>Property/farm name</td>
+                                <td>⚠️ <strong>Use anonymous identifiers only</strong> (e.g., "Farm #12345", "Property A"). Treated as potentially sensitive - will be redacted ([REDACTED]) in public verification. <strong>DO NOT use real property names.</strong></td>
                             </tr>
                             <tr>
                                 <td><span class="inline-code">plot_name</span> <span class="badge optional">optional</span></td>
                                 <td>string</td>
-                                <td>Plot/field name</td>
+                                <td>Plot/field identifier (e.g., "Plot A-12")</td>
+                            </tr>
+                            <tr>
+                                <td><span class="inline-code">metadata</span> <span class="badge optional">optional</span></td>
+                                <td>object</td>
+                                <td>⚠️ Internal reference IDs only (CAR code, farm ID). <strong>DO NOT include personal data (CPF, CNPJ, names, addresses)</strong></td>
                             </tr>
                         </tbody>
                     </table>
@@ -399,8 +404,12 @@
       [-56.2410, -11.8956]
     ]]
   },
-  "property_name": "Example Farm",
-  "plot_name": "Plot 12"
+  "property_name": "Farm #12345",
+  "plot_name": "Plot A-12",
+  "metadata": {
+    "car": "MT-1234567890123456789012345678901234",
+    "internal_id": "farm-abc-123"
+  }
 }</div>
 
                     <h4>Response (200 OK)</h4>
@@ -472,16 +481,16 @@
                     <h4>Request Example</h4>
                     <div class="code-block">{
   "geometry": { ... },
-  "property_name": "Example Farm",
-  "plot_name": "Plot 12",
+  "property_name": "Farm #12345",
+  "plot_name": "Plot A-12",
   "lang": "en"
 }</div>
 
                     <h4>Response (200 OK)</h4>
                     <div class="code-block">{
-  "report_code": "GG-20251225150233-VUTG",
+  "report_code": "GG-a7f3k9m2p5q8",
   "pdf_base64": "JVBERi0xLjQKJeLj...",
-  "verification_url": "https://api.greengate.com.br/api/v1/reports/verify/GG-20251225150233-VUTG/page",
+  "verification_url": "https://api.greengate.com.br/api/v1/reports/verify/GG-a7f3k9m2p5q8",
   "qr_code_base64": "iVBORw0KGgoAAAANSUhEU...",
   "validation_summary": {
     "status": "approved",
@@ -503,6 +512,16 @@
                         <strong>📌 Note:</strong> This endpoint is public (no API key required) and can be accessed by anyone with the report code.
                     </div>
 
+                    <div class="alert warning">
+                        <strong>🔐 Security & Privacy:</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem;">
+                            <li><strong>Report codes:</strong> Cryptographically secure random format (high entropy) to prevent enumeration attacks</li>
+                            <li><strong>Property names:</strong> Automatically redacted to <code>[REDACTED]</code> in public verification - treated as potentially sensitive data</li>
+                            <li><strong>Two-level verification:</strong> Public endpoint shows minimal info (valid/invalid, score, date). Full details require API key authentication</li>
+                            <li><strong>Rate limiting:</strong> Aggressive limits on public endpoint to prevent abuse</li>
+                        </ul>
+                    </div>
+
                     <h4>URL Parameters</h4>
                     <table class="param-table">
                         <thead>
@@ -516,7 +535,7 @@
                             <tr>
                                 <td><span class="inline-code">report_code</span></td>
                                 <td>string</td>
-                                <td>Report code (format: GG-YYYYMMDDHHMMSS-XXXX)</td>
+                                <td>Report code (format: GG-{random} - cryptographically secure)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -524,16 +543,12 @@
                     <h4>Response (200 OK)</h4>
                     <div class="code-block">{
   "verified": true,
-  "report_code": "GG-20251225150233-VUTG",
-  "property_name": "Example Farm",
-  "plot_name": "Plot 12",
-  "generated_at": "2025-12-25T15:02:33Z",
-  "validation_summary": {
-    "status": "approved",
-    "score": 100,
-    "risk_level": "low",
-    "area_ha": 163.91
-  }
+  "report_code": "GG-a7f3k9m2p5q8",
+  "property_name": "[REDACTED]",
+  "validation_date": "2025-12-25T15:02:33Z",
+  "score": 100,
+  "risk_level": "low",
+  "area_ha": 163.91
 }</div>
                 </div>
 
@@ -582,8 +597,8 @@ payload = {
             [-56.2410, -11.8956]
         ]]
     },
-    "property_name": "Example Farm",
-    "plot_name": "Plot 12",
+    "property_name": "Farm #12345",
+    "plot_name": "Plot A-12",
     "lang": "en"
 }
 
@@ -628,8 +643,8 @@ const response = await fetch(`${BASE_URL}/reports/due-diligence/quick`, {
         [-56.2410, -11.8956]
       ]]
     },
-    property_name: 'Example Farm',
-    plot_name: 'Plot 12',
+    property_name: 'Farm #12345',
+    plot_name: 'Plot A-12',
     lang: 'en'
   })
 });
@@ -664,8 +679,8 @@ curl -X POST "$BASE_URL/reports/due-diligence/quick" \
         [-56.2410, -11.8956]
       ]]
     },
-    "property_name": "Example Farm",
-    "plot_name": "Plot 12",
+    "property_name": "Farm #12345",
+    "plot_name": "Plot A-12",
     "lang": "en"
   }' | jq '.'</div>
             </section>
