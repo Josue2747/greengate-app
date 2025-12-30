@@ -1480,18 +1480,20 @@
             else if (c.status === 'warning') iconSvg = '<svg class="icon"><use href="#icon-warning"></use></svg>';
             else if (c.status === 'skip') iconSvg = '<span style="opacity: 0.5;">—</span>';
 
-            // Mapear fontes oficiais e datas por tipo de check
+            // Mapear fontes oficiais por tipo de check
             const checkMetadata = {
-                'deforestation': { source: 'PRODES/INPE', updated: '2024-08-15', id_field: null },
-                'indigenous_territory': { source: 'FUNAI', updated: '2024-12-01', id_field: 'terrai_cod' },
-                'conservation_unit': { source: 'ICMBio/MMA', updated: '2024-11-20', id_field: 'cnuc_cod' },
-                'embargo': { source: 'IBAMA', updated: '2024-12-10', id_field: 'num_auto_infracao' },
-                'mapbiomas_alert': { source: 'MapBiomas', updated: '2024-12-05', id_field: 'alertCode' },
-                // 'app' removido - será reimplementado com dados oficiais MT
-                'settlement': { source: 'INCRA', updated: '2024-09-15', id_field: 'sipra_cod' }
+                'deforestation': { source: 'PRODES/INPE', id_field: null },
+                'indigenous_territory': { source: 'FUNAI', id_field: 'terrai_cod' },
+                'conservation_unit': { source: 'ICMBio/MMA', id_field: 'cnuc_cod' },
+                'embargo': { source: 'IBAMA', id_field: 'num_auto_infracao' },
+                'mapbiomas_alert': { source: 'MapBiomas', id_field: 'alertCode' },
+                'settlement': { source: 'INCRA', id_field: 'sipra_cod' }
             };
 
-            const meta = checkMetadata[c.check_type] || { source: 'Base oficial', updated: '--', id_field: null };
+            const meta = checkMetadata[c.check_type] || { source: 'Base oficial', id_field: null };
+
+            // Usar last_updated da API se disponível, caso contrário mostrar --
+            const updated = c.last_updated || null;
 
             // Calcular "há X dias" para mostrar frescor dos dados
             function daysAgo(dateStr) {
@@ -1519,7 +1521,7 @@
             // Fonte e data de atualização com badge de frescor
             det += '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted);">';
             det += '<div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>📋 <strong>Fonte:</strong> ' + meta.source + '</span></div>';
-            const freshnessText = meta.updated !== '--' ? new Date(meta.updated).toLocaleDateString('pt-BR') + '<span style="color: var(--accent-green); font-weight: 600;">' + daysAgo(meta.updated) + '</span>' : '--';
+            const freshnessText = updated ? new Date(updated).toLocaleDateString('pt-BR') + '<span style="color: var(--accent-green); font-weight: 600;">' + daysAgo(updated) + '</span>' : '--';
             det += '<div style="display: flex; justify-content: space-between;"><span>📅 <strong>Atualizado:</strong> ' + freshnessText + '</span></div>';
 
             // IDs oficiais (se disponíveis no response)
