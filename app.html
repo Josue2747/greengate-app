@@ -534,7 +534,7 @@
             </div>
             <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
                 💡 <strong><span data-i18n-app="apiKeyRequired">API Key obrigatória para uso.</span></strong><br>
-                <span data-i18n-app="getApiKey">Obtenha sua chave:</span> <a href="mailto:contato@greengate.com.br?subject=Solicitar API Key GreenGate" style="color: var(--accent-green); text-decoration: none;">contato@greengate.com.br</a>
+                <span data-i18n-app="getApiKey">Obtenha sua chave:</span> <a href="mailto:greengatebrasil@gmail.com?subject=Solicitar API Key GreenGate" style="color: var(--accent-green); text-decoration: none;">greengatebrasil@gmail.com</a>
             </p>
         </div>
 
@@ -811,7 +811,7 @@
         // XSS Protection: Only allow safe HTML (links from our own code)
         // If message contains <a href with our email link, allow it
         // Otherwise, escape HTML
-        const isSafeHTML = message.includes('mailto:contato@greengate.com.br') || message.includes('href="#');
+        const isSafeHTML = message.includes('mailto:greengatebrasil@gmail.com') || message.includes('href="#');
 
         if (isSafeHTML) {
             el.innerHTML = message; // Safe links from our code
@@ -1284,7 +1284,7 @@
 
         // Permitir validação sem chave APENAS para área de exemplo
         if (!key && !isExampleArea) {
-            const emailLink = 'mailto:contato@greengate.com.br?subject=Solicitar API Key GreenGate';
+            const emailLink = 'mailto:greengatebrasil@gmail.com?subject=Solicitar API Key GreenGate';
             showToast('⚠️ API Key necessária. <a href="' + emailLink + '" style="color: white; text-decoration: underline;">Solicitar por email →</a>', 'error');
             return;
         }
@@ -1326,12 +1326,12 @@
 
             // Sanitized error handling (don't expose backend details)
             if (res.status === 429) {
-                const emailLink = 'mailto:contato@greengate.com.br?subject=Aumentar Cota Mensal GreenGate';
+                const emailLink = 'mailto:greengatebrasil@gmail.com?subject=Aumentar Cota Mensal GreenGate';
                 throw new Error('🚫 Monthly quota reached. <a href="' + emailLink + '">Contact support →</a>');
             }
 
             if (res.status === 401 || res.status === 403) {
-                const emailLink = 'mailto:contato@greengate.com.br?subject=Problema com API Key GreenGate';
+                const emailLink = 'mailto:greengatebrasil@gmail.com?subject=Problema com API Key GreenGate';
                 throw new Error('❌ Invalid or expired API Key. <a href="' + emailLink + '">Contact support →</a>');
             }
 
