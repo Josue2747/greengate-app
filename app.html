@@ -5,8 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Plataforma de Diligência Prévia Ambiental</title>
 
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+
+        // Track validation events
+        function trackValidation(status, riskScore) {
+            gtag('event', 'validation_complete', {
+                'event_category': 'Validation',
+                'event_label': status,
+                'value': riskScore
+            });
+        }
+    </script>
+
     <!-- Security Headers (ArcGIS-compatible CSP) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.arcgis.com https://*.arcgis.com; worker-src 'self' blob: https://js.arcgis.com https://*.arcgis.com; style-src 'self' 'unsafe-inline' https://js.arcgis.com https://*.arcgis.com https://fonts.googleapis.com; font-src 'self' data: https://js.arcgis.com https://*.arcgis.com https://fonts.gstatic.com; img-src 'self' data: blob: https: https://*.arcgis.com https://*.arcgisonline.com; connect-src 'self' https://api.greengate.com.br https://*.arcgis.com https://*.arcgisonline.com https://geocode.arcgis.com; child-src blob:; frame-ancestors 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.arcgis.com https://*.arcgis.com https://www.googletagmanager.com https://www.google-analytics.com; worker-src 'self' blob: https://js.arcgis.com https://*.arcgis.com; style-src 'self' 'unsafe-inline' https://js.arcgis.com https://*.arcgis.com https://fonts.googleapis.com; font-src 'self' data: https://js.arcgis.com https://*.arcgis.com https://fonts.gstatic.com; img-src 'self' data: blob: https: https://*.arcgis.com https://*.arcgisonline.com https://www.google-analytics.com; connect-src 'self' https://api.greengate.com.br https://*.arcgis.com https://*.arcgisonline.com https://geocode.arcgis.com https://www.google-analytics.com https://analytics.google.com; child-src blob:; frame-ancestors 'none';">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
