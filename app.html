@@ -1481,12 +1481,27 @@
             else if (c.status === 'skip') iconSvg = '<span style="opacity: 0.5;">—</span>';
 
             // Mapear fontes oficiais por tipo de check
+            // Os check_types vêm da API: deforestation_prodes, terra_indigena, etc.
             const checkMetadata = {
+                // PRODES
+                'deforestation_prodes': { source: 'PRODES/INPE', id_field: null },
                 'deforestation': { source: 'PRODES/INPE', id_field: null },
-                'indigenous_territory': { source: 'FUNAI', id_field: 'terrai_cod' },
-                'conservation_unit': { source: 'ICMBio/MMA', id_field: 'cnuc_cod' },
-                'embargo': { source: 'IBAMA', id_field: 'num_auto_infracao' },
+                'prodes': { source: 'PRODES/INPE', id_field: null },
+                // MapBiomas
+                'deforestation_mapbiomas': { source: 'MapBiomas', id_field: 'alertCode' },
+                'mapbiomas': { source: 'MapBiomas', id_field: 'alertCode' },
                 'mapbiomas_alert': { source: 'MapBiomas', id_field: 'alertCode' },
+                // Terras Indígenas
+                'terra_indigena': { source: 'FUNAI', id_field: 'terrai_cod' },
+                'indigenous_territory': { source: 'FUNAI', id_field: 'terrai_cod' },
+                // Unidades de Conservação
+                'uc': { source: 'ICMBio/MMA', id_field: 'cnuc_cod' },
+                'conservation_unit': { source: 'ICMBio/MMA', id_field: 'cnuc_cod' },
+                // Embargos IBAMA
+                'embargo_ibama': { source: 'IBAMA', id_field: 'num_auto_infracao' },
+                'embargo': { source: 'IBAMA', id_field: 'num_auto_infracao' },
+                // Quilombolas
+                'quilombola': { source: 'INCRA', id_field: 'sipra_cod' },
                 'settlement': { source: 'INCRA', id_field: 'sipra_cod' }
             };
 
