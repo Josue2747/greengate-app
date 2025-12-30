@@ -1422,9 +1422,9 @@
             if (daysSince > 90) freshnessColor = '#dc2626'; // Vermelho
 
             html += `
-                <div style="padding: 0.5rem; background: var(--gray-light); border-radius: 4px; border-left: 3px solid ${freshnessColor};">
+                <div style="padding: 0.5rem; background: var(--bg-secondary); border-radius: 4px; border-left: 3px solid ${freshnessColor};">
                     <strong style="font-size: 0.75rem; color: var(--text-muted); display: block;">${layerName}</strong>
-                    <span style="font-size: 0.9rem; color: var(--dark);">${formattedDate}</span>
+                    <span style="font-size: 0.9rem; color: var(--text-primary);">${formattedDate}</span>
                     ${daysSince === 0 ? '<span style="font-size: 0.7rem; color: #059669; display: block;">• Hoje</span>' :
                       daysSince === 1 ? '<span style="font-size: 0.7rem; color: #059669; display: block;">• Ontem</span>' :
                       daysSince < 7 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${daysSince} dias atrás</span>` :

@@ -38,6 +38,9 @@ const appTranslations = {
         legendRejected: 'Rejeitado',
         legendWarning: 'Atenção',
 
+        // Data Freshness
+        dataFreshness: 'Atualização dos Dados',
+
         // PDF Modal
         pdfModalTitle: 'Gerar Relatório PDF',
         pdfApiKeyLabel: 'API Key (obrigatória para PDF)',
@@ -137,6 +140,9 @@ const appTranslations = {
         legendApproved: 'Approved',
         legendRejected: 'Rejected',
         legendWarning: 'Warning',
+
+        // Data Freshness
+        dataFreshness: 'Data Freshness',
 
         // PDF Modal
         pdfModalTitle: 'Generate PDF Report',
