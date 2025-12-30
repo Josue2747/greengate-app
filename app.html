@@ -534,7 +534,7 @@
             </div>
             <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
                 💡 <strong><span data-i18n-app="apiKeyRequired">API Key obrigatória para uso.</span></strong><br>
-                <span data-i18n-app="getApiKey">Obtenha sua chave:</span> <a href="https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate" style="color: var(--accent-green); text-decoration: none;">WhatsApp +55 19 9 7104-6171</a>
+                <span data-i18n-app="getApiKey">Obtenha sua chave:</span> <a href="mailto:contato@greengate.com.br?subject=Solicitar API Key GreenGate" style="color: var(--accent-green); text-decoration: none;">contato@greengate.com.br</a>
             </p>
         </div>
 
@@ -662,11 +662,9 @@
             <h2 style="font-size: 1.2rem;" data-i18n-app="pdfModalTitle">Gerar Relatório PDF</h2>
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 16px; border-radius: 6px;">
-                <p style="font-size: 0.75rem; color: #92400e; margin: 0; line-height: 1.5;">
-                    <strong>⚠️ Privacy Notice:</strong> Property names are <strong>treated as potentially sensitive data</strong>. They will be automatically redacted to <code style="background: #fff3cd; padding: 2px 4px; border-radius: 3px;">[REDACTED]</code> in public verification.<br><br>
-                    <strong>DO NOT include:</strong> Real property names, owner names, CPF, addresses, or any identifying information.<br>
-                    <strong>ONLY use:</strong> Anonymous internal IDs (e.g., "Farm #12345", "Property A").
+            <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 12px; margin-bottom: 16px; border-radius: 6px;">
+                <p style="font-size: 0.75rem; color: #0c4a6e; margin: 0; line-height: 1.5;">
+                    <strong>💡 Dica de Privacidade:</strong> Use identificadores internos (ex: "Fazenda #12345") ao invés de nomes reais. Nomes de propriedades aparecem no relatório PDF mas são redatados na verificação pública.
                 </p>
             </div>
 
@@ -811,9 +809,9 @@
         let message = typeof m === 'object' ? (m.detail || m.message || 'Erro') : m;
 
         // XSS Protection: Only allow safe HTML (links from our own code)
-        // If message contains <a href with our whatsapp link, allow it
+        // If message contains <a href with our email link, allow it
         // Otherwise, escape HTML
-        const isSafeHTML = message.includes('wa.me/5519971046171') || message.includes('href="#');
+        const isSafeHTML = message.includes('mailto:contato@greengate.com.br') || message.includes('href="#');
 
         if (isSafeHTML) {
             el.innerHTML = message; // Safe links from our code
@@ -1286,8 +1284,8 @@
 
         // Permitir validação sem chave APENAS para área de exemplo
         if (!key && !isExampleArea) {
-            const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Gostaria de obter uma API Key do GreenGate';
-            showToast('⚠️ API Key necessária. <a href="' + whatsappLink + '" target="_blank" style="color: white; text-decoration: underline;">Solicitar via WhatsApp →</a>', 'error');
+            const emailLink = 'mailto:contato@greengate.com.br?subject=Solicitar API Key GreenGate';
+            showToast('⚠️ API Key necessária. <a href="' + emailLink + '" style="color: white; text-decoration: underline;">Solicitar por email →</a>', 'error');
             return;
         }
 
@@ -1328,13 +1326,13 @@
 
             // Sanitized error handling (don't expose backend details)
             if (res.status === 429) {
-                const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Gostaria de aumentar minha cota mensal';
-                throw new Error('🚫 Monthly quota reached. <a href="' + whatsappLink + '" target="_blank">Request upgrade →</a>');
+                const emailLink = 'mailto:contato@greengate.com.br?subject=Aumentar Cota Mensal GreenGate';
+                throw new Error('🚫 Monthly quota reached. <a href="' + emailLink + '">Contact support →</a>');
             }
 
             if (res.status === 401 || res.status === 403) {
-                const whatsappLink = 'https://wa.me/5519971046171?text=Olá! Minha API Key não está funcionando';
-                throw new Error('❌ Invalid or expired API Key. <a href="' + whatsappLink + '" target="_blank">Verify key →</a>');
+                const emailLink = 'mailto:contato@greengate.com.br?subject=Problema com API Key GreenGate';
+                throw new Error('❌ Invalid or expired API Key. <a href="' + emailLink + '">Contact support →</a>');
             }
 
             if (res.status === 400) {
