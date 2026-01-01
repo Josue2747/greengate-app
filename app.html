@@ -450,12 +450,12 @@
                 font-size: 1.1rem !important;
             }
 
-            /* Search box - posicionar à esquerda */
+            /* Search box - posicionar à esquerda no topo */
             .search-box {
-                left: 60px;
+                left: 10px;
                 right: auto;
                 transform: none;
-                width: calc(100% - 120px);
+                width: calc(100% - 80px);
                 max-width: 200px;
                 top: 8px;
             }
@@ -464,30 +464,16 @@
                 font-size: 0.85rem;
             }
 
+            /* Map controls - descer para ficar abaixo da search */
+            .map-controls {
+                top: 55px;
+            }
+
             /* Draw options - abrir para baixo em mobile */
             .draw-options {
                 left: 0;
                 top: 48px;
                 flex-direction: column;
-            }
-
-            /* Map controls - manter no topo à esquerda */
-            .map-controls {
-                top: 10px;
-            }
-
-            /* ArcGIS BasemapGallery - descer em mobile */
-            .esri-ui-top-right,
-            .esri-ui .esri-ui-top-right,
-            .esri-component.esri-expand,
-            .esri-expand {
-                top: 55px !important;
-                margin-top: 0 !important;
-            }
-
-            /* Forçar posição do container top-right do ArcGIS */
-            .esri-ui-corner .esri-ui-top-right {
-                top: 55px !important;
             }
 
             /* Area info mais compacto */
