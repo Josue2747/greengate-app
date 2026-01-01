@@ -477,7 +477,16 @@
             }
 
             /* ArcGIS BasemapGallery - descer em mobile */
-            .esri-ui-top-right {
+            .esri-ui-top-right,
+            .esri-ui .esri-ui-top-right,
+            .esri-component.esri-expand,
+            .esri-expand {
+                top: 55px !important;
+                margin-top: 0 !important;
+            }
+
+            /* Forçar posição do container top-right do ArcGIS */
+            .esri-ui-corner .esri-ui-top-right {
                 top: 55px !important;
             }
 
