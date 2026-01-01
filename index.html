@@ -1687,6 +1687,361 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ===============================================
+           MOBILE RESPONSIVENESS - ENHANCED
+           =============================================== */
+
+        /* Tablets (max-width: 900px) */
+        @media (max-width: 900px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .roi-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .roi-card.featured {
+                transform: none;
+            }
+
+            .roi-card.featured:hover {
+                transform: translateY(-8px);
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Mobile Phones (max-width: 640px) */
+        @media (max-width: 640px) {
+            :root {
+                --section-padding: clamp(2.5rem, 6vw, 4rem);
+                --container-padding: clamp(1rem, 3vw, 1.5rem);
+            }
+
+            /* Navigation */
+            .nav-container {
+                padding: 1rem var(--container-padding);
+            }
+
+            .nav-logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
+            .nav-logo-text h1 {
+                font-size: 1.25rem;
+            }
+
+            .nav-logo-text span {
+                font-size: 0.65rem;
+            }
+
+            .nav-cta {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.85rem;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+
+            /* Hero */
+            .hero {
+                padding-top: calc(70px + 2rem);
+            }
+
+            .hero h1 {
+                font-size: clamp(1.75rem, 6vw, 2.5rem);
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-badge {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                min-height: 52px;
+            }
+
+            .hero-card {
+                padding: 1.5rem;
+            }
+
+            .hero-card-title {
+                font-size: 1.1rem;
+            }
+
+            .hero-checklist-item {
+                padding: 0.75rem;
+            }
+
+            .hero-checklist-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .hero-checklist-text strong {
+                font-size: 0.9rem;
+            }
+
+            /* Stats */
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            /* Features */
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.5rem, 5vw, 2rem);
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+            }
+
+            /* Data Sources */
+            .data-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .data-card {
+                padding: 1.25rem;
+            }
+
+            /* ROI/Pricing */
+            .roi-card {
+                padding: 1.5rem;
+            }
+
+            .roi-card h3 {
+                font-size: 1.4rem;
+            }
+
+            .roi-card .price {
+                font-size: 2rem;
+            }
+
+            .roi-features li {
+                font-size: 0.9rem;
+                padding: 0.625rem 0;
+            }
+
+            .roi-example {
+                padding: 1.5rem;
+            }
+
+            .roi-example .pdf-link {
+                padding: 1rem 1.5rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* CTA */
+            .cta h2 {
+                font-size: clamp(1.5rem, 5vw, 2rem);
+            }
+
+            .cta p {
+                font-size: 1rem;
+            }
+
+            /* Contact */
+            .contact-info {
+                padding: 2rem 1.5rem;
+            }
+
+            .contact-info h3 {
+                font-size: 1.5rem;
+            }
+
+            .contact-form-wrapper {
+                padding: 1.5rem;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 0.875rem 1rem;
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            .form-submit {
+                padding: 1rem;
+                min-height: 52px;
+            }
+
+            /* Footer */
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .footer-brand {
+                margin-bottom: 1rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            /* Floating Buttons - Mobile Position */
+            .theme-toggle,
+            .lang-toggle {
+                width: 50px;
+                height: 50px;
+                bottom: 1.5rem;
+            }
+
+            .theme-toggle {
+                right: 1.5rem;
+            }
+
+            .lang-toggle {
+                right: 4.5rem;
+                font-size: 0.8rem;
+            }
+
+            /* EUDR Banner Mobile */
+            .eudr-container {
+                padding: 0 1rem;
+            }
+
+            .eudr-icon {
+                font-size: 1.5rem;
+            }
+
+            .eudr-content strong {
+                font-size: 0.9rem;
+            }
+
+            .eudr-content span {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Extra Small Phones (max-width: 380px) */
+        @media (max-width: 380px) {
+            .nav-logo-text span {
+                display: none;
+            }
+
+            .nav-logo-text h1 {
+                font-size: 1.1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .roi-card .price {
+                font-size: 1.75rem;
+            }
+
+            .theme-toggle,
+            .lang-toggle {
+                width: 44px;
+                height: 44px;
+                bottom: 1rem;
+            }
+
+            .theme-toggle {
+                right: 1rem;
+                font-size: 1.2rem;
+            }
+
+            .lang-toggle {
+                right: 3.75rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Touch targets - Ensure all clickable elements are at least 44x44px */
+        @media (max-width: 640px) {
+            a, button {
+                min-height: 44px;
+            }
+
+            .footer-section a {
+                display: inline-block;
+                padding: 0.5rem 0;
+            }
+
+            .contact-detail {
+                padding: 0.5rem 0;
+            }
+        }
     </style>
 </head>
 <body>
