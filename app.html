@@ -407,12 +407,28 @@
 
         /* Mobile - Phones */
         @media (max-width: 600px) {
-            .header { padding: 0.5rem 0.75rem; }
+            .header { padding: 0.5rem 0.75rem; height: auto; min-height: 50px; }
             .logo-icon { width: 28px; height: 28px; }
-            .logo-text { font-size: 1rem; }
-            .header-actions { gap: 0.25rem; }
-            .header-actions .btn { padding: 0.4rem 0.6rem; font-size: 0.7rem; }
-            .header-actions .btn svg { width: 14px; height: 14px; }
+            .logo-text h1 { font-size: 1.1rem !important; }
+            .logo-text span { font-size: 0.6rem !important; }
+
+            /* Header right - ajustar para mobile */
+            .header-right {
+                position: static !important;
+                gap: 8px !important;
+                margin-left: auto;
+            }
+            .status-badge {
+                display: none !important; /* Esconder em mobile para economizar espaço */
+            }
+            .help-trigger {
+                width: 32px; height: 32px; font-size: 0.8rem;
+            }
+            #langToggleApp {
+                padding: 4px 8px !important;
+                font-size: 0.7rem !important;
+                min-height: 32px;
+            }
 
             .main-container { grid-template-rows: 55vh 1fr; }
             .sidebar { padding: 0.75rem; max-height: 45vh; }
@@ -489,8 +505,12 @@
 
         /* Extra small phones */
         @media (max-width: 380px) {
-            .header-actions .btn span { display: none; }
-            .header-actions .btn { padding: 0.5rem !important; }
+            .header { padding: 0.25rem 0.5rem; }
+            .logo-text h1 { font-size: 0.95rem !important; }
+            .logo-text span { display: none !important; }
+            .header-right { gap: 6px !important; }
+            .help-trigger { width: 28px; height: 28px; font-size: 0.75rem; }
+            #langToggleApp { padding: 3px 6px !important; font-size: 0.65rem !important; }
             .main-container { grid-template-rows: 50vh 1fr; }
             .btn { font-size: 0.8rem !important; }
         }
