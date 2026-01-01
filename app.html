@@ -450,15 +450,25 @@
                 font-size: 1.1rem !important;
             }
 
-            /* Search box */
+            /* Search box - posicionar à direita dos controles */
             .search-box {
-                width: calc(100% - 80px);
-                max-width: none;
+                left: auto;
+                right: 10px;
+                transform: none;
+                width: calc(100% - 70px);
+                max-width: 220px;
                 top: 8px;
             }
             .search-box input {
-                padding: 0.6rem 0.75rem;
-                font-size: 0.9rem;
+                padding: 0.5rem 0.6rem;
+                font-size: 0.85rem;
+            }
+
+            /* Draw options - abrir para baixo em mobile */
+            .draw-options {
+                left: 0;
+                top: 48px;
+                flex-direction: column;
             }
 
             /* Area info mais compacto */
