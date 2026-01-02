@@ -186,7 +186,7 @@ const translations = {
         footer_legal: 'Legal',
         footer_privacy: 'Política de Privacidade',
         footer_terms: 'Termos de Uso',
-        footer_rights: '© 2025 GreenGate. Todos os direitos reservados.',
+        footer_rights: '© 2026 GreenGate. Todos os direitos reservados.',
 
         // Messages
         form_sending: 'Enviando...',
@@ -379,7 +379,7 @@ const translations = {
         footer_legal: 'Legal',
         footer_privacy: 'Privacy Policy',
         footer_terms: 'Terms of Use',
-        footer_rights: '© 2025 GreenGate. All rights reserved.',
+        footer_rights: '© 2026 GreenGate. All rights reserved.',
 
         // Messages
         form_sending: 'Sending...',
