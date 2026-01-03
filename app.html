@@ -938,6 +938,10 @@
     let map, view, graphicsLayer, sketchVM, currentPolygon = null, currentGraphic = null, geoEngine, webMercatorUtils;
     let searchTimeout = null;
 
+    // Camada de overlaps (geometrias de interseção) e resultado da validação
+    let overlapsLayer = null;
+    let currentValidationResult = null;
+
     // meta da área (para PDF / UI)
     let currentMeta = { municipality: null, state: null, address: null };
 
@@ -1072,8 +1076,10 @@
         if (sketchVM) sketchVM.cancel();
         currentPolygon = null; currentGraphic = null;
         currentMeta = { municipality: null, state: null, address: null };
+        currentValidationResult = null;
 
         if (graphicsLayer) graphicsLayer.removeAll();
+        if (overlapsLayer) overlapsLayer.removeAll();
 
         const ai = document.getElementById('areaInfo');
         ai.classList.remove('show', 'limit-exceeded');
@@ -1136,6 +1142,10 @@
 
         graphicsLayer = new GraphicsLayer();
         map.add(graphicsLayer);
+
+        // Camada separada para desenhar os overlaps (geometrias de interseção)
+        overlapsLayer = new GraphicsLayer();
+        map.add(overlapsLayer);
 
         sketchVM = new SketchVM({
             view,
@@ -1600,6 +1610,14 @@
     }
 
     function showResult(d) {
+        // Armazenar resultado para uso posterior (ex: destacar overlaps no mapa)
+        currentValidationResult = d;
+
+        // Limpar overlaps anteriores
+        if (overlapsLayer) {
+            overlapsLayer.removeAll();
+        }
+
         // Exibir datas de atualização dos dados (se disponível)
         if (d.data_freshness) {
             displayDataFreshness(d.data_freshness);
@@ -1737,37 +1755,149 @@
     }
 
     // ===================== HIGHLIGHT ON MAP =====================
+    // Cores para cada tipo de restrição (vermelho = crítico, laranja = atenção)
+    const overlapColors = {
+        'deforestation_prodes': [239, 68, 68, 0.5],      // Vermelho
+        'deforestation_mapbiomas': [239, 68, 68, 0.5],  // Vermelho
+        'terra_indigena': [168, 85, 247, 0.5],          // Roxo
+        'quilombola': [168, 85, 247, 0.5],              // Roxo
+        'embargo_ibama': [239, 68, 68, 0.5],            // Vermelho
+        'uc': [245, 158, 11, 0.5],                      // Laranja
+        'app_water': [59, 130, 246, 0.5]                // Azul
+    };
+
+    const overlapBorderColors = {
+        'deforestation_prodes': [239, 68, 68],
+        'deforestation_mapbiomas': [239, 68, 68],
+        'terra_indigena': [168, 85, 247],
+        'quilombola': [168, 85, 247],
+        'embargo_ibama': [239, 68, 68],
+        'uc': [245, 158, 11],
+        'app_water': [59, 130, 246]
+    };
+
     function highlightOnMap(checkType, event) {
         event.stopPropagation(); // Evita fechar o accordion
 
-        // Flash visual no polígono atual
-        if (window.flashCurrentGraphic) {
-            window.flashCurrentGraphic();
-        }
-
         // Toast de feedback
         const checkNames = {
-            'deforestation': 'Desmatamento PRODES',
-            'indigenous_territory': 'Terras Indígenas',
-            'conservation_unit': 'Unidades de Conservação',
-            'embargo': 'Embargos IBAMA',
-            'mapbiomas_alert': 'MapBiomas Alerta',
-            'app': 'Áreas de Preservação',
-            'settlement': 'Assentamentos'
+            'deforestation_prodes': 'Desmatamento PRODES',
+            'deforestation_mapbiomas': 'MapBiomas Alerta',
+            'terra_indigena': 'Terras Indígenas',
+            'quilombola': 'Quilombolas',
+            'uc': 'Unidades de Conservação',
+            'embargo_ibama': 'Embargos IBAMA',
+            'app_water': 'APP (Água)'
         };
 
-        showToast('🗺️ ' + (checkNames[checkType] || 'Camada') + ' destacada no mapa', 'success');
-
-        // Zoom suave no polígono (se view estiver disponível)
-        if (window.view && currentGraphic) {
-            window.view.goTo({
-                target: currentGraphic,
-                zoom: 13
-            }, {
-                duration: 1000,
-                easing: 'ease-in-out'
-            }).catch(() => {});
+        // Limpar overlaps anteriores
+        if (overlapsLayer) {
+            overlapsLayer.removeAll();
         }
+
+        // Buscar o check correspondente no resultado da validação
+        if (!currentValidationResult || !currentValidationResult.checks) {
+            showToast('❌ Nenhum resultado de validação disponível', 'error');
+            return;
+        }
+
+        const check = currentValidationResult.checks.find(c => c.check_type === checkType);
+        if (!check) {
+            showToast('❌ Check não encontrado: ' + checkType, 'error');
+            return;
+        }
+
+        // Verificar se tem geometrias de interseção
+        const geometries = check.intersection_geometries || [];
+        if (geometries.length === 0) {
+            showToast('ℹ️ Nenhuma geometria de sobreposição disponível', 'info');
+            // Ainda faz o flash no polígono principal
+            if (window.flashCurrentGraphic) {
+                window.flashCurrentGraphic();
+            }
+            return;
+        }
+
+        // Cores para este tipo de check
+        const fillColor = overlapColors[checkType] || [239, 68, 68, 0.5];
+        const borderColor = overlapBorderColors[checkType] || [239, 68, 68];
+
+        // Desenhar cada geometria de interseção
+        let drawnCount = 0;
+        geometries.forEach((item, idx) => {
+            const geom = item.geometry;
+            if (!geom || !geom.type) return;
+
+            try {
+                let rings;
+                if (geom.type === 'Polygon') {
+                    rings = geom.coordinates;
+                } else if (geom.type === 'MultiPolygon') {
+                    // Para MultiPolygon, desenhar cada polígono separadamente
+                    geom.coordinates.forEach((polyCoords, pIdx) => {
+                        drawOverlapPolygon(polyCoords, fillColor, borderColor, item.name, item.overlap_ha, pIdx);
+                        drawnCount++;
+                    });
+                    return;
+                } else {
+                    console.warn('Tipo de geometria não suportado:', geom.type);
+                    return;
+                }
+
+                drawOverlapPolygon(rings, fillColor, borderColor, item.name, item.overlap_ha, idx);
+                drawnCount++;
+            } catch (err) {
+                console.error('Erro ao desenhar overlap:', err);
+            }
+        });
+
+        if (drawnCount > 0) {
+            showToast('🗺️ ' + (checkNames[checkType] || 'Sobreposição') + ' destacada no mapa (' + drawnCount + ' área' + (drawnCount > 1 ? 's' : '') + ')', 'success');
+
+            // Zoom para mostrar todas as geometrias
+            if (window.view && overlapsLayer.graphics.length > 0) {
+                const allGraphics = overlapsLayer.graphics.toArray();
+                window.view.goTo(allGraphics, {
+                    duration: 1000,
+                    easing: 'ease-in-out'
+                }).catch(() => {});
+            }
+        } else {
+            showToast('⚠️ Não foi possível desenhar as sobreposições', 'warning');
+        }
+    }
+
+    // Função auxiliar para desenhar um polígono de overlap
+    function drawOverlapPolygon(rings, fillColor, borderColor, name, overlapHa, idx) {
+        require(["esri/Graphic", "esri/geometry/Polygon"], function(Graphic, Polygon) {
+            const poly = new Polygon({
+                rings: rings,
+                spatialReference: { wkid: 4326 }
+            });
+
+            const graphic = new Graphic({
+                geometry: poly,
+                symbol: {
+                    type: "simple-fill",
+                    color: fillColor,
+                    outline: {
+                        color: borderColor,
+                        width: 2,
+                        style: "solid"
+                    }
+                },
+                attributes: {
+                    name: name || 'Sobreposição ' + (idx + 1),
+                    overlap_ha: overlapHa || 0
+                },
+                popupTemplate: {
+                    title: "{name}",
+                    content: "Área de sobreposição: {overlap_ha} ha"
+                }
+            });
+
+            overlapsLayer.add(graphic);
+        });
     }
 
     // ===================== PDF MODAL =====================
