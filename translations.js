@@ -36,10 +36,12 @@ const translations = {
         cta_button: 'Falar com Especialista',
 
         // Hero
-        hero_title: 'Validação Geoespacial para Conformidade Ambiental',
-        hero_subtitle: 'Desenhe ou envie sua área e cruze com 6 camadas oficiais de dados ambientais brasileiros. Gere relatório PDF auditável em até 2 minutos.',
+        hero_title: 'Descubra em 2 minutos se sua área tem risco ambiental',
+        hero_subtitle: 'Cruze sua área com 6 bases oficiais brasileiras e gere relatório PDF auditável. Compradores internacionais já exigem — esteja preparado.',
         hero_cta: 'Testar Gratuitamente',
         hero_docs: 'Ver Documentação',
+        hero_free_info: '3 validações grátis • Sem cartão de crédito',
+        hero_region_info: 'Disponível para Mato Grosso — outros estados em breve',
         hero_check1: 'Desmatamento (PRODES)',
         hero_check2: 'Terras Indígenas (FUNAI)',
         hero_check3: 'Unidades de Conservação',
@@ -229,10 +231,12 @@ const translations = {
         cta_button: 'Talk to a Specialist',
 
         // Hero
-        hero_title: 'Geospatial Validation for Environmental Compliance',
-        hero_subtitle: 'Draw or upload your area and cross-check with 6 official Brazilian environmental data layers. Generate auditable PDF report in under 2 minutes.',
+        hero_title: 'Find out in 2 minutes if your area has environmental risk',
+        hero_subtitle: 'Cross-check your area with 6 official Brazilian databases and generate an auditable PDF report. International buyers already require this — be prepared.',
         hero_cta: 'Try Free',
         hero_docs: 'View Documentation',
+        hero_free_info: '3 free validations • No credit card required',
+        hero_region_info: 'Available for Mato Grosso — other states coming soon',
         hero_check1: 'Deforestation (PRODES)',
         hero_check2: 'Indigenous Lands (FUNAI)',
         hero_check3: 'Conservation Units',
