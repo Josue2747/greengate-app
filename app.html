@@ -1807,9 +1807,21 @@
 
             // Área afetada
             if ((c.overlap_area_ha || 0) > 0) {
+                const pct = Number(c.overlap_percentage || 0);
+                // Mostrar porcentagem com precisão adequada ao valor
+                let pctText;
+                if (pct >= 1) {
+                    pctText = pct.toFixed(1) + '%';
+                } else if (pct >= 0.01) {
+                    pctText = pct.toFixed(2) + '%';
+                } else if (pct > 0) {
+                    pctText = '< 0.01%';
+                } else {
+                    pctText = '0%';
+                }
                 det += '<div class="check-overlap-box"><strong>📍 Área Afetada:</strong> ' +
                     Number(c.overlap_area_ha).toFixed(2) +
-                    ' ha (' + Number(c.overlap_percentage || 0).toFixed(1) + '% da área total)</div>';
+                    ' ha (' + pctText + ' da área total)</div>';
             }
 
             // Fonte e data de atualização com badge de frescor
