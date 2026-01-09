@@ -959,8 +959,19 @@
         return 'Crítico';
     }
 
+    // XSS Protection: escape HTML special characters
+    function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
     function fmtCheckType(c) {
-        return {
+        const map = {
             deforestation_prodes: 'Desmatamento PRODES',
             deforestation_mapbiomas: 'Alertas MapBiomas',
             terra_indigena: 'Terras Indígenas',
@@ -968,20 +979,23 @@
             quilombola: 'Quilombolas',
             uc: 'Unidades de Conservação'
             // app_water removido - será reimplementado com dados oficiais MT
-        }[c] || c;
+        };
+        return map[c] || escapeHtml(c);
     }
 
     function fmtCheckStatusBadge(s) {
-        return {
+        const map = {
             pass: 'Conforme',
             fail: 'Não conforme',
             warning: 'Atenção',
             skip: 'N/A'
-        }[s] || s;
+        };
+        return map[s] || escapeHtml(s);
     }
 
     function fmtHistoryStatusLabel(s) {
-        return s === 'approved' ? 'OK' : s === 'rejected' ? 'FAIL' : 'WARN';
+        const map = { approved: 'OK', rejected: 'FAIL' };
+        return map[s] || 'WARN';
     }
 
     function showToast(m, t = 'error') {
@@ -1039,27 +1053,63 @@
     function renderHistory() {
         const el = document.getElementById('historyList');
         const h = getHistory();
+        el.textContent = ''; // Clear safely
+
         if (!h.length) {
-            el.innerHTML = `<div class="history-empty">
-                ${window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação ainda'}
-                <button class="history-empty-cta" onclick="document.getElementById('testExampleBtn').click()">
-                    <svg class="icon-sm"><use href="#icon-target"></use></svg> ${window.getAppTranslation ? window.getAppTranslation('sampleBtn') : 'Testar com Área de Exemplo'}
-                </button>
-            </div>`;
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'history-empty';
+            emptyDiv.appendChild(document.createTextNode(
+                window.getAppTranslation ? window.getAppTranslation('historyEmpty') : 'Nenhuma validação ainda'
+            ));
+
+            const ctaBtn = document.createElement('button');
+            ctaBtn.className = 'history-empty-cta';
+            ctaBtn.onclick = () => document.getElementById('testExampleBtn').click();
+
+            const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            iconSvg.setAttribute('class', 'icon-sm');
+            const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+            useEl.setAttribute('href', '#icon-target');
+            iconSvg.appendChild(useEl);
+            ctaBtn.appendChild(iconSvg);
+            ctaBtn.appendChild(document.createTextNode(' ' + (window.getAppTranslation ? window.getAppTranslation('sampleBtn') : 'Testar com Área de Exemplo')));
+
+            emptyDiv.appendChild(ctaBtn);
+            el.appendChild(emptyDiv);
             return;
         }
+
         const locale = window.getCurrentAppLang ? (window.getCurrentAppLang() === 'en' ? 'en-US' : 'pt-BR') : 'pt-BR';
         const complianceText = window.getAppTranslation ? window.getAppTranslation('compliance') : 'Conformidade:';
-        el.innerHTML = h.map(i => `
-            <div class="history-item" data-id="${i.id}">
-                <div class="history-header">
-                    <span class="history-status ${i.status}">${fmtHistoryStatusLabel(i.status)}</span>
-                    <span class="history-date">${new Date(i.date).toLocaleDateString(locale)}</span>
-                </div>
-                <div class="history-info">${i.area.toFixed(1)} ha • ${complianceText} ${i.score}/100</div>
-            </div>
-        `).join('');
-        el.querySelectorAll('.history-item').forEach(item => {
+
+        h.forEach(i => {
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.dataset.id = i.id;
+
+            const header = document.createElement('div');
+            header.className = 'history-header';
+
+            const statusSpan = document.createElement('span');
+            statusSpan.className = 'history-status ' + (i.status || '');
+            statusSpan.textContent = fmtHistoryStatusLabel(i.status);
+
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'history-date';
+            dateSpan.textContent = new Date(i.date).toLocaleDateString(locale);
+
+            header.appendChild(statusSpan);
+            header.appendChild(dateSpan);
+
+            const info = document.createElement('div');
+            info.className = 'history-info';
+            const area = Number(i.area) || 0;
+            const score = Number(i.score) || 0;
+            info.textContent = area.toFixed(1) + ' ha • ' + complianceText + ' ' + score + '/100';
+
+            item.appendChild(header);
+            item.appendChild(info);
+
             item.onclick = () => {
                 const found = h.find(x => x.id === +item.dataset.id);
                 if (found?.polygon) {
@@ -1068,6 +1118,8 @@
                     showToast(window.getAppTranslation ? window.getAppTranslation('polygonLoaded') : 'Polígono carregado', 'success');
                 }
             };
+
+            el.appendChild(item);
         });
     }
 
@@ -1178,13 +1230,22 @@
 
         let lastSearchResults = [];
 
+        // Helper: create search status message safely
+        function setSearchStatus(container, className, message) {
+            container.textContent = '';
+            const div = document.createElement('div');
+            div.className = className;
+            div.textContent = message;
+            container.appendChild(div);
+        }
+
         sInput.oninput = (e) => {
             const q = e.target.value.trim();
             sClear.classList.toggle('show', q.length > 0);
             if (searchTimeout) clearTimeout(searchTimeout);
             if (q.length < 2) { sResults.classList.remove('show'); return; }
 
-            sResults.innerHTML = `<div class="search-loading">${window.getAppTranslation ? window.getAppTranslation('searching') : 'Buscando...'}</div>`;
+            setSearchStatus(sResults, 'search-loading', window.getAppTranslation ? window.getAppTranslation('searching') : 'Buscando...');
             sResults.classList.add('show');
 
             searchTimeout = setTimeout(() => {
@@ -1195,16 +1256,29 @@
                     outFields: ["Addr_type", "City", "Region"]
                 }).then(res => {
                     lastSearchResults = res || [];
-                    if (!res.length) { sResults.innerHTML = `<div class="search-empty">${window.getAppTranslation ? window.getAppTranslation('noResults') : 'Nenhum resultado'}</div>`; return; }
-                    sResults.innerHTML = res.map((r, i) => `
-                        <div class="search-item" data-i="${i}">
-                            <div class="search-item-name">${r.address}</div>
-                            <div class="search-item-type">${r.attributes.Addr_type || 'Local'}</div>
-                        </div>
-                    `).join('');
-                    sResults.querySelectorAll('.search-item').forEach(el => {
-                        el.onclick = () => {
-                            const r = res[+el.dataset.i];
+                    if (!res.length) {
+                        setSearchStatus(sResults, 'search-empty', window.getAppTranslation ? window.getAppTranslation('noResults') : 'Nenhum resultado');
+                        return;
+                    }
+
+                    sResults.textContent = '';
+                    res.forEach((r, i) => {
+                        const item = document.createElement('div');
+                        item.className = 'search-item';
+                        item.dataset.i = i;
+
+                        const nameDiv = document.createElement('div');
+                        nameDiv.className = 'search-item-name';
+                        nameDiv.textContent = r.address || '';
+
+                        const typeDiv = document.createElement('div');
+                        typeDiv.className = 'search-item-type';
+                        typeDiv.textContent = (r.attributes && r.attributes.Addr_type) || 'Local';
+
+                        item.appendChild(nameDiv);
+                        item.appendChild(typeDiv);
+
+                        item.onclick = () => {
                             view.goTo({
                                 center: [r.location.longitude, r.location.latitude],
                                 zoom: r.attributes.Addr_type === 'Locality' ? 12 : 8
@@ -1212,8 +1286,10 @@
                             sInput.value = r.address;
                             sResults.classList.remove('show');
                         };
+
+                        sResults.appendChild(item);
                     });
-                }).catch(() => sResults.innerHTML = `<div class="search-empty">${window.getAppTranslation ? window.getAppTranslation('searchError') : 'Erro na busca'}</div>`);
+                }).catch(() => setSearchStatus(sResults, 'search-empty', window.getAppTranslation ? window.getAppTranslation('searchError') : 'Erro na busca'));
             }, 350);
         };
 
@@ -1582,7 +1658,8 @@
         for (const [layer, date] of Object.entries(dataFreshness)) {
             const layerDate = new Date(date);
             const formattedDate = layerDate.toLocaleDateString('pt-BR');
-            const layerName = layerNames[layer] || layer;
+            // Escape layer name if not in known list
+            const layerName = layerNames[layer] || escapeHtml(layer);
 
             // Calcular há quantos dias foi atualizado
             const daysSince = Math.floor((Date.now() - layerDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -1701,7 +1778,7 @@
                 return ` (há ${months} ${months === 1 ? 'mês' : 'meses'})`;
             }
 
-            let det = '<p>' + (c.message || '') + '</p>';
+            let det = '<p>' + escapeHtml(c.message || '') + '</p>';
 
             // Área afetada
             if ((c.overlap_area_ha || 0) > 0) {
@@ -1718,27 +1795,33 @@
 
             // IDs oficiais (se disponíveis no response)
             if (meta.id_field && c[meta.id_field]) {
-                det += '<div style="margin-top: 4px;"><span>🆔 <strong>ID Oficial:</strong> ' + c[meta.id_field] + '</span></div>';
+                det += '<div style="margin-top: 4px;"><span>🆔 <strong>ID Oficial:</strong> ' + escapeHtml(c[meta.id_field]) + '</span></div>';
             }
 
             det += '</div>';
 
             // Botão "Destacar no Mapa" (apenas se houver sobreposição)
             if ((c.overlap_area_ha || 0) > 0) {
-                det += '<button class="btn-highlight-map" style="margin-top: 12px; width: 100%; padding: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green); border-radius: 6px; color: var(--accent-green); font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="highlightOnMap(\'' + c.check_type + '\', event)">🗺️ Destacar no Mapa</button>';
+                // Validate check_type against known types to prevent injection
+                const safeCheckType = checkMetadata[c.check_type] ? c.check_type : 'unknown';
+                det += '<button class="btn-highlight-map" style="margin-top: 12px; width: 100%; padding: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green); border-radius: 6px; color: var(--accent-green); font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="highlightOnMap(\'' + safeCheckType + '\', event)">🗺️ Destacar no Mapa</button>';
             }
 
+            // Validate status to prevent className injection
+            const validStatuses = ['pass', 'fail', 'warning', 'skip'];
+            const safeStatus = validStatuses.includes(c.status) ? c.status : 'skip';
+
             const row = document.createElement('div');
-            row.className = 'check-row ' + (c.status || 'skip');
+            row.className = 'check-row ' + safeStatus;
 
             row.innerHTML =
                 `<div class="check-header" onclick="this.parentElement.classList.toggle('open'); window.flashCurrentGraphic && window.flashCurrentGraphic();">
                     <div class="check-left">
-                        <div class="check-status-icon ${c.status || 'skip'}">${iconSvg}</div>
+                        <div class="check-status-icon ${safeStatus}">${iconSvg}</div>
                         <span class="check-name">${fmtCheckType(c.check_type)}</span>
                     </div>
                     <div class="check-right">
-                        <span class="check-badge ${c.status || 'skip'}">${fmtCheckStatusBadge(c.status)}</span>
+                        <span class="check-badge ${safeStatus}">${fmtCheckStatusBadge(c.status)}</span>
                         <span class="check-arrow">▼</span>
                     </div>
                 </div>
