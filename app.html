@@ -697,9 +697,11 @@
                 <input type="password" id="apiKey" data-i18n-app="apiKeyPlaceholder" placeholder="Cole sua API Key">
                 <button class="input-eye" id="toggleKey"><svg class="icon"><use href="#icon-eye"></use></svg></button>
             </div>
-            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
-                💡 <strong><span data-i18n-app="apiKeyRequired">API Key obrigatória para uso.</span></strong><br>
-                <span data-i18n-app="getApiKey">Obtenha sua chave:</span> <a href="mailto:greengatebrasil@gmail.com?subject=Solicitar API Key GreenGate" style="color: var(--accent-green); text-decoration: none;">greengatebrasil@gmail.com</a>
+            <button id="getApiKeyBtn" style="margin-top: 10px; width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-green), #059669); color: white; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                🔑 <span data-i18n-app="getApiKeyFree">Obter API Key Grátis</span>
+            </button>
+            <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 6px; text-align: center;">
+                3 validações gratuitas • Sem cartão de crédito
             </p>
         </div>
 
@@ -870,6 +872,29 @@
             📱 O relatório incluirá QR Code para verificação de autenticidade
         </p>
         <button class="btn-start" id="confirmPdfBtn" data-i18n-app="confirmPdfBtn">📄 Gerar Relatório PDF</button>
+    </div>
+</div>
+
+<!-- Modal Registro API Key -->
+<div class="help-modal" id="registerModal">
+    <div class="help-card" style="max-width: 380px;">
+        <button class="close-help" id="closeRegisterModal"><svg class="icon"><use href="#icon-x"></use></svg></button>
+        <div class="help-header" style="margin-bottom: 20px;">
+            <div class="help-icon">🔑</div>
+            <h2 style="font-size: 1.2rem;">Obter API Key Grátis</h2>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Seu email</label>
+            <input type="email" id="registerEmail" placeholder="seu@email.com" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; background: var(--bg-primary); color: var(--text-primary);">
+        </div>
+        <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 0.75rem; color: var(--text-muted);">
+            ✅ 3 validações gratuitas<br>
+            ✅ Sem cartão de crédito<br>
+            ✅ API key instantânea
+        </div>
+        <button class="btn-start" id="confirmRegisterBtn" style="width: 100%;">Criar Minha API Key</button>
+        <p id="registerError" style="display: none; color: #ef4444; font-size: 0.75rem; margin-top: 10px; text-align: center;"></p>
+        <p id="registerSuccess" style="display: none; color: var(--accent-green); font-size: 0.75rem; margin-top: 10px; text-align: center;"></p>
     </div>
 </div>
 
@@ -2065,6 +2090,95 @@
     document.getElementById('confirmPdfBtn').onclick = downloadPDF;
     document.getElementById('validateBtn').onclick = validate;
     document.getElementById('pdfBtn').onclick = openPdfModal;
+
+    // ===================== REGISTER MODAL =====================
+    function openRegisterModal() {
+        document.getElementById('registerModal').classList.add('show');
+        document.getElementById('registerEmail').value = '';
+        document.getElementById('registerError').style.display = 'none';
+        document.getElementById('registerSuccess').style.display = 'none';
+        document.getElementById('confirmRegisterBtn').disabled = false;
+        document.getElementById('confirmRegisterBtn').textContent = 'Criar Minha API Key';
+    }
+
+    function closeRegisterModal() {
+        document.getElementById('registerModal').classList.remove('show');
+    }
+
+    async function registerApiKey() {
+        const email = document.getElementById('registerEmail').value.trim();
+        const errorEl = document.getElementById('registerError');
+        const successEl = document.getElementById('registerSuccess');
+        const btn = document.getElementById('confirmRegisterBtn');
+
+        // Validar email
+        if (!email || !email.includes('@')) {
+            errorEl.textContent = 'Por favor, insira um email válido.';
+            errorEl.style.display = 'block';
+            successEl.style.display = 'none';
+            return;
+        }
+
+        // Desabilitar botão
+        btn.disabled = true;
+        btn.textContent = '⏳ Criando...';
+        errorEl.style.display = 'none';
+
+        try {
+            const res = await fetch(API_URL + '/api/v1/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                const errorMsg = data.detail?.message || data.detail || 'Erro ao criar API key';
+                throw new Error(errorMsg);
+            }
+
+            // Sucesso! Preencher campo de API key
+            document.getElementById('apiKey').value = data.api_key;
+
+            // Salvar se consent foi dado
+            if (localStorage.getItem('gg_privacy_consent') === 'accepted') {
+                const encrypted = simpleEncrypt(data.api_key);
+                if (encrypted) localStorage.setItem('gg_api_key_enc', encrypted);
+            }
+
+            // Mostrar sucesso
+            successEl.innerHTML = '✅ API Key criada! <strong>Guarde-a em local seguro.</strong><br>Você tem ' + data.quota + ' validações gratuitas.';
+            successEl.style.display = 'block';
+            btn.textContent = '✅ Criado!';
+
+            // Fechar modal após 3s
+            setTimeout(() => {
+                closeRegisterModal();
+                showToast('🎉 API Key configurada! Você pode validar áreas agora.', 'success');
+            }, 2500);
+
+        } catch (err) {
+            errorEl.textContent = err.message;
+            errorEl.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Criar Minha API Key';
+        }
+    }
+
+    document.getElementById('getApiKeyBtn').onclick = openRegisterModal;
+    document.getElementById('closeRegisterModal').onclick = closeRegisterModal;
+    document.getElementById('confirmRegisterBtn').onclick = registerApiKey;
+
+    // Enter para submeter
+    document.getElementById('registerEmail').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') registerApiKey();
+    });
+
+    // Fechar modal ao clicar fora
+    document.getElementById('registerModal').onclick = (e) => {
+        if (e.target.id === 'registerModal') closeRegisterModal();
+    };
 </script>
 <script src="app-translations.js"></script>
 </body>
