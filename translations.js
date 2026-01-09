@@ -193,7 +193,16 @@ const translations = {
         // Messages
         form_sending: 'Enviando...',
         form_success: '✓ Mensagem enviada com sucesso! Entraremos em contato em breve.',
-        form_error: '✗ Erro ao enviar mensagem. Tente novamente.'
+        form_error: '✗ Erro ao enviar mensagem. Tente novamente.',
+
+        // API Error Messages
+        error_quota_exceeded: '🚫 Cota mensal atingida.',
+        error_quota_contact: 'Contatar suporte →',
+        error_invalid_key: '❌ API Key inválida ou expirada.',
+        error_invalid_geometry: '⚠️ Geometria inválida. Por favor redesenhe o polígono.',
+        error_server: '🔧 Erro no servidor. Tente novamente em alguns instantes.',
+        error_connection: '🔌 Erro de conexão. Verifique sua internet e tente novamente.',
+        error_generic: 'Validação falhou. Tente novamente ou contate o suporte.'
     },
     en: {
         // Environmental Screening Banner
@@ -388,6 +397,15 @@ const translations = {
         // Messages
         form_sending: 'Sending...',
         form_success: '✓ Message sent successfully! We will contact you soon.',
-        form_error: '✗ Error sending message. Please try again.'
+        form_error: '✗ Error sending message. Please try again.',
+
+        // API Error Messages
+        error_quota_exceeded: '🚫 Monthly quota reached.',
+        error_quota_contact: 'Contact support →',
+        error_invalid_key: '❌ Invalid or expired API Key.',
+        error_invalid_geometry: '⚠️ Invalid area geometry. Please redraw your polygon.',
+        error_server: '🔧 Server error. Please try again in a few moments.',
+        error_connection: '🔌 Connection error. Please check your internet and try again.',
+        error_generic: 'Validation failed. Please try again or contact support.'
     }
 };

@@ -1612,29 +1612,32 @@
             const data = await res.json();
 
             // Sanitized error handling (don't expose backend details)
+            // Use translations for error messages
+            const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
+
             if (res.status === 429) {
                 const emailLink = 'mailto:greengatebrasil@gmail.com?subject=Aumentar Cota Mensal GreenGate';
-                throw new Error('🚫 Monthly quota reached. <a href="' + emailLink + '">Contact support →</a>');
+                throw new Error(t('error_quota_exceeded') + ' <a href="' + emailLink + '">' + t('error_quota_contact') + '</a>');
             }
 
             if (res.status === 401 || res.status === 403) {
                 const emailLink = 'mailto:greengatebrasil@gmail.com?subject=Problema com API Key GreenGate';
-                throw new Error('❌ Invalid or expired API Key. <a href="' + emailLink + '">Contact support →</a>');
+                throw new Error(t('error_invalid_key') + ' <a href="' + emailLink + '">' + t('error_quota_contact') + '</a>');
             }
 
             if (res.status === 400) {
-                throw new Error('⚠️ Invalid area geometry. Please redraw your polygon.');
+                throw new Error(t('error_invalid_geometry'));
             }
 
             if (res.status >= 500) {
-                throw new Error('🔧 Server error. Please try again in a few moments.');
+                throw new Error(t('error_server'));
                 // Log details to console for debugging (not shown to user)
                 console.error('Backend error:', data);
             }
 
             if (!res.ok) {
                 // Generic error (don't expose backend details to user)
-                throw new Error('Validation failed. Please try again or contact support.');
+                throw new Error(t('error_generic'));
             }
 
             saveHistory(data, parseFloat(document.getElementById('areaValue').textContent));
@@ -1648,7 +1651,8 @@
 
             // Network errors (generic message)
             if (errorMessage.includes('fetch') || errorMessage.includes('Failed') || errorMessage.includes('NetworkError') || errorMessage.includes('TypeError')) {
-                errorMessage = '🔌 Connection error. Please check your internet and try again.';
+                const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
+                errorMessage = t('error_connection');
                 console.error('Network error details:', err); // Log for debugging
             }
 
@@ -1807,7 +1811,21 @@
 
             // Área afetada
             if ((c.overlap_area_ha || 0) > 0) {
+                const area = Number(c.overlap_area_ha);
                 const pct = Number(c.overlap_percentage || 0);
+
+                // Mostrar área com precisão adequada ao valor
+                let areaText;
+                if (area >= 1) {
+                    areaText = area.toFixed(2) + ' ha';
+                } else if (area >= 0.01) {
+                    areaText = area.toFixed(2) + ' ha';
+                } else if (area >= 0.0001) {
+                    areaText = area.toFixed(4) + ' ha';
+                } else {
+                    areaText = '< 0.0001 ha';
+                }
+
                 // Mostrar porcentagem com precisão adequada ao valor
                 let pctText;
                 if (pct >= 1) {
@@ -1820,8 +1838,7 @@
                     pctText = '0%';
                 }
                 det += '<div class="check-overlap-box"><strong>📍 Área Afetada:</strong> ' +
-                    Number(c.overlap_area_ha).toFixed(2) +
-                    ' ha (' + pctText + ' da área total)</div>';
+                    areaText + ' (' + pctText + ' da área total)</div>';
             }
 
             // Fonte e data de atualização com badge de frescor
