@@ -507,6 +507,11 @@
     </div>
 
     <script>
+        // HTTPS Enforcement (security)
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+            location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+        }
+
         // Configuração
         const API_URL = window.location.hostname === 'localhost'
             ? 'http://localhost:8000/api/v1'
@@ -549,8 +554,12 @@
                 loadKeys();
 
             } catch (error) {
-                document.getElementById('loginError').innerHTML =
-                    `<div class="alert alert-error">${error.message}</div>`;
+                const errorDiv = document.getElementById('loginError');
+                errorDiv.textContent = '';
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-error';
+                alert.textContent = error.message;
+                errorDiv.appendChild(alert);
             }
         }
 
@@ -616,47 +625,117 @@
 
             } catch (error) {
                 console.error('Erro ao carregar keys:', error);
-                document.getElementById('keysTableBody').innerHTML =
-                    `<tr><td colspan="8" style="text-align: center; color: red;">${error.message}</td></tr>`;
+                const tbody = document.getElementById('keysTableBody');
+                tbody.textContent = '';
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.colSpan = 8;
+                td.style.textAlign = 'center';
+                td.style.color = 'red';
+                td.textContent = error.message;
+                tr.appendChild(td);
+                tbody.appendChild(tr);
             }
         }
 
-        // Render Keys Table
+        // XSS Protection: escape HTML special characters
+        function escapeHtml(str) {
+            if (str == null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Render Keys Table (XSS-safe)
         function renderKeysTable(keys) {
             const tbody = document.getElementById('keysTableBody');
+            tbody.textContent = '';
 
             if (keys.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhuma API key encontrada</td></tr>';
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.colSpan = 8;
+                td.style.textAlign = 'center';
+                td.textContent = 'Nenhuma API key encontrada';
+                tr.appendChild(td);
+                tbody.appendChild(tr);
                 return;
             }
 
-            tbody.innerHTML = keys.map(key => `
-                <tr>
-                    <td><code>${key.key_prefix}</code></td>
-                    <td>${key.client_name}</td>
-                    <td><span class="badge badge-${key.plan}">${key.plan}</span></td>
-                    <td>${key.monthly_quota === null ? '∞' : key.monthly_quota}</td>
-                    <td>${key.requests_this_month}</td>
-                    <td><span class="badge badge-${key.is_active && !key.is_revoked ? 'active' : 'inactive'}">
-                        ${key.is_active && !key.is_revoked ? 'Ativa' : 'Inativa'}
-                    </span></td>
-                    <td>${new Date(key.created_at).toLocaleDateString('pt-BR')}</td>
-                    <td>
-                        ${key.is_active && !key.is_revoked ? `
-                            <button onclick="revokeKey('${key.id}', '${key.client_name}')"
-                                    style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 4px;">
-                                🚫 Revogar
-                            </button>
-                        ` : '<span style="color: #999; font-size: 12px;">Revogada</span>'}
-                    </td>
-                </tr>
-            `).join('');
+            keys.forEach(key => {
+                const tr = document.createElement('tr');
+
+                // Key prefix
+                const tdPrefix = document.createElement('td');
+                const code = document.createElement('code');
+                code.textContent = key.key_prefix;
+                tdPrefix.appendChild(code);
+                tr.appendChild(tdPrefix);
+
+                // Client name (escaped)
+                const tdClient = document.createElement('td');
+                tdClient.textContent = key.client_name;
+                tr.appendChild(tdClient);
+
+                // Plan badge
+                const tdPlan = document.createElement('td');
+                const badgePlan = document.createElement('span');
+                badgePlan.className = 'badge badge-' + escapeHtml(key.plan);
+                badgePlan.textContent = key.plan;
+                tdPlan.appendChild(badgePlan);
+                tr.appendChild(tdPlan);
+
+                // Quota
+                const tdQuota = document.createElement('td');
+                tdQuota.textContent = key.monthly_quota === null ? '∞' : key.monthly_quota;
+                tr.appendChild(tdQuota);
+
+                // Requests this month
+                const tdRequests = document.createElement('td');
+                tdRequests.textContent = key.requests_this_month;
+                tr.appendChild(tdRequests);
+
+                // Status badge
+                const tdStatus = document.createElement('td');
+                const badgeStatus = document.createElement('span');
+                const isActive = key.is_active && !key.is_revoked;
+                badgeStatus.className = 'badge badge-' + (isActive ? 'active' : 'inactive');
+                badgeStatus.textContent = isActive ? 'Ativa' : 'Inativa';
+                tdStatus.appendChild(badgeStatus);
+                tr.appendChild(tdStatus);
+
+                // Created at
+                const tdCreated = document.createElement('td');
+                tdCreated.textContent = new Date(key.created_at).toLocaleDateString('pt-BR');
+                tr.appendChild(tdCreated);
+
+                // Actions
+                const tdActions = document.createElement('td');
+                if (isActive) {
+                    const btn = document.createElement('button');
+                    btn.textContent = '🚫 Revogar';
+                    btn.style.cssText = 'background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 4px;';
+                    btn.addEventListener('click', () => revokeKey(key.id, key.client_name));
+                    tdActions.appendChild(btn);
+                } else {
+                    const span = document.createElement('span');
+                    span.style.cssText = 'color: #999; font-size: 12px;';
+                    span.textContent = 'Revogada';
+                    tdActions.appendChild(span);
+                }
+                tr.appendChild(tdActions);
+
+                tbody.appendChild(tr);
+            });
         }
 
         // Show Create Modal
         function showCreateModal() {
             document.getElementById('createModal').classList.add('active');
-            document.getElementById('createResult').innerHTML = '';
+            document.getElementById('createResult').textContent = '';
             // Reset form
             document.querySelector('#createModal form').reset();
         }
@@ -696,28 +775,62 @@
                     throw new Error(result.detail || 'Erro ao criar API key');
                 }
 
-                // Mostrar API key criada (ÚNICA VEZ!)
-                document.getElementById('createResult').innerHTML = `
-                    <div class="alert alert-warning">
-                        <strong>⚠️ ATENÇÃO: Esta é a ÚNICA VEZ que a API key será exibida!</strong><br>
-                        Copie e salve em local seguro.
-                    </div>
-                    <div class="alert alert-success">
-                        <strong>✅ API Key criada com sucesso!</strong>
-                    </div>
-                    <div class="code-box">
-                        <strong>API Key:</strong><br>
-                        <code id="newApiKey">${result.api_key}</code><br>
-                        <button class="copy-btn" onclick="copyApiKey()">📋 Copiar</button>
-                    </div>
-                    <div class="code-box">
-                        <strong>Detalhes:</strong><br>
-                        Cliente: ${result.client_name}<br>
-                        Plano: ${result.plan}<br>
-                        Quota: ${result.monthly_quota === null ? 'Ilimitado' : result.monthly_quota}<br>
-                        Prefixo: ${result.key_prefix}
-                    </div>
-                `;
+                // Mostrar API key criada (ÚNICA VEZ!) - XSS-safe
+                const resultDiv = document.getElementById('createResult');
+                resultDiv.textContent = '';
+
+                // Warning alert
+                const warningAlert = document.createElement('div');
+                warningAlert.className = 'alert alert-warning';
+                const warningStrong = document.createElement('strong');
+                warningStrong.textContent = '⚠️ ATENÇÃO: Esta é a ÚNICA VEZ que a API key será exibida!';
+                warningAlert.appendChild(warningStrong);
+                warningAlert.appendChild(document.createElement('br'));
+                warningAlert.appendChild(document.createTextNode('Copie e salve em local seguro.'));
+                resultDiv.appendChild(warningAlert);
+
+                // Success alert
+                const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success';
+                const successStrong = document.createElement('strong');
+                successStrong.textContent = '✅ API Key criada com sucesso!';
+                successAlert.appendChild(successStrong);
+                resultDiv.appendChild(successAlert);
+
+                // API Key box
+                const keyBox = document.createElement('div');
+                keyBox.className = 'code-box';
+                const keyLabel = document.createElement('strong');
+                keyLabel.textContent = 'API Key:';
+                keyBox.appendChild(keyLabel);
+                keyBox.appendChild(document.createElement('br'));
+                const keyCode = document.createElement('code');
+                keyCode.id = 'newApiKey';
+                keyCode.textContent = result.api_key;
+                keyBox.appendChild(keyCode);
+                keyBox.appendChild(document.createElement('br'));
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.textContent = '📋 Copiar';
+                copyBtn.addEventListener('click', copyApiKey);
+                keyBox.appendChild(copyBtn);
+                resultDiv.appendChild(keyBox);
+
+                // Details box
+                const detailsBox = document.createElement('div');
+                detailsBox.className = 'code-box';
+                const detailsLabel = document.createElement('strong');
+                detailsLabel.textContent = 'Detalhes:';
+                detailsBox.appendChild(detailsLabel);
+                detailsBox.appendChild(document.createElement('br'));
+                detailsBox.appendChild(document.createTextNode('Cliente: ' + escapeHtml(result.client_name)));
+                detailsBox.appendChild(document.createElement('br'));
+                detailsBox.appendChild(document.createTextNode('Plano: ' + escapeHtml(result.plan)));
+                detailsBox.appendChild(document.createElement('br'));
+                detailsBox.appendChild(document.createTextNode('Quota: ' + (result.monthly_quota === null ? 'Ilimitado' : result.monthly_quota)));
+                detailsBox.appendChild(document.createElement('br'));
+                detailsBox.appendChild(document.createTextNode('Prefixo: ' + escapeHtml(result.key_prefix)));
+                resultDiv.appendChild(detailsBox);
 
                 // Reload keys
                 loadKeys();
@@ -727,8 +840,12 @@
                 document.querySelector('.modal-content').scrollTop = 0;
 
             } catch (error) {
-                document.getElementById('createResult').innerHTML =
-                    `<div class="alert alert-error">${error.message}</div>`;
+                const resultDiv = document.getElementById('createResult');
+                resultDiv.textContent = '';
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-error';
+                alert.textContent = error.message;
+                resultDiv.appendChild(alert);
             }
         }
 
