@@ -1579,8 +1579,7 @@
 
         // Permitir validação sem chave APENAS para área de exemplo
         if (!key && !isExampleArea) {
-            const emailLink = 'mailto:greengatebrasil@gmail.com?subject=Solicitar API Key GreenGate';
-            showToast('⚠️ API Key necessária. <a href="' + emailLink + '" style="color: white; text-decoration: underline;">Solicitar por email →</a>', 'error');
+            showToast('⚠️ API Key necessária. <a href="#" onclick="openRegisterModal(); return false;" style="color: white; text-decoration: underline; font-weight: bold;">Obter API Key Grátis →</a>', 'error');
             return;
         }
 
