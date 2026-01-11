@@ -776,7 +776,7 @@
         <!-- Footer Trust Signals -->
         <div style="margin-top: 20px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; text-align: center;">
             <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.6;">
-                <svg class="icon-sm" style="color: var(--accent-green);"><use href="#icon-lock"></use></svg> <strong>Dados Criptografados</strong> • Fontes Oficiais Certificadas<br>
+                <svg class="icon-sm" style="color: var(--accent-green);"><use href="#icon-lock"></use></svg> <strong data-i18n-app="encryptedData">Dados Criptografados</strong> • <span data-i18n-app="certifiedSources">Fontes Oficiais Certificadas</span><br>
                 <span style="font-size: 0.65rem; opacity: 0.8;">INPE • FUNAI • IBAMA • ICMBio • INCRA • MapBiomas</span>
             </div>
         </div>
@@ -881,16 +881,16 @@
         <button class="close-help" id="closeRegisterModal"><svg class="icon"><use href="#icon-x"></use></svg></button>
         <div class="help-header" style="margin-bottom: 20px;">
             <div class="help-icon">🔑</div>
-            <h2 style="font-size: 1.2rem;">Obter API Key Grátis</h2>
+            <h2 style="font-size: 1.2rem;" data-i18n-app="registerModalTitle">Obter API Key Grátis</h2>
         </div>
         <div style="margin-bottom: 20px;">
-            <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Seu email</label>
+            <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;" data-i18n-app="registerEmailLabel">Seu email</label>
             <input type="email" id="registerEmail" placeholder="seu@email.com" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; background: var(--bg-primary); color: var(--text-primary);">
         </div>
         <div style="background: var(--bg-secondary); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 0.75rem; color: var(--text-muted);">
-            ✅ 3 validações gratuitas<br>
-            ✅ Sem cartão de crédito<br>
-            ✅ API key instantânea
+            ✅ <span data-i18n-app="freeValidations">3 validações gratuitas</span><br>
+            ✅ <span data-i18n-app="noCreditCard">Sem cartão de crédito</span><br>
+            ✅ <span data-i18n-app="instantApiKey">API key instantânea</span>
         </div>
         <button class="btn-start" id="confirmRegisterBtn" style="width: 100%;">Criar Minha API Key</button>
         <p id="registerError" style="display: none; color: #ef4444; font-size: 0.75rem; margin-top: 10px; text-align: center;"></p>
@@ -1579,7 +1579,9 @@
 
         // Permitir validação sem chave APENAS para área de exemplo
         if (!key && !isExampleArea) {
-            showToast('⚠️ API Key necessária. <a href="#" onclick="openRegisterModal(); return false;" style="color: white; text-decoration: underline; font-weight: bold;">Obter API Key Grátis →</a>', 'error');
+            const toastMsg = window.getAppTranslation ? window.getAppTranslation('apiKeyRequiredToast') : '⚠️ API Key necessária.';
+            const toastLink = window.getAppTranslation ? window.getAppTranslation('getApiKeyLink') : 'Obter API Key Grátis →';
+            showToast(toastMsg + ' <a href="#" onclick="openRegisterModal(); return false;" style="color: white; text-decoration: underline; font-weight: bold;">' + toastLink + '</a>', 'error');
             return;
         }
 

@@ -80,6 +80,22 @@ const appTranslations = {
         apiKeyPlaceholder: 'Cole sua API Key',
         apiKeyRequired: '✨ Explore o mapa gratuitamente! API Key necessária apenas para validar suas áreas.',
         getApiKey: 'Obtenha sua chave:',
+        getApiKeyFree: 'Obter API Key Grátis',
+
+        // Trust signals footer
+        encryptedData: 'Dados Criptografados',
+        certifiedSources: 'Fontes Oficiais Certificadas',
+
+        // Register modal
+        registerModalTitle: 'Obter API Key Grátis',
+        registerEmailLabel: 'Seu email',
+        freeValidations: '3 validações gratuitas',
+        noCreditCard: 'Sem cartão de crédito',
+        instantApiKey: 'API key instantânea',
+
+        // Toast messages
+        apiKeyRequiredToast: '⚠️ API Key necessária.',
+        getApiKeyLink: 'Obter API Key Grátis →',
         uploadTitle: 'Upload de Arquivo',
         uploadText: 'Toque para selecionar',
         uploadHint: 'GeoJSON ou JSON',
@@ -183,6 +199,22 @@ const appTranslations = {
         apiKeyPlaceholder: 'Paste your API Key',
         apiKeyRequired: '✨ Explore the map for free! API Key required only to validate your areas.',
         getApiKey: 'Get your key:',
+        getApiKeyFree: 'Get Free API Key',
+
+        // Trust signals footer
+        encryptedData: 'Encrypted Data',
+        certifiedSources: 'Certified Official Sources',
+
+        // Register modal
+        registerModalTitle: 'Get Free API Key',
+        registerEmailLabel: 'Your email',
+        freeValidations: '3 free validations',
+        noCreditCard: 'No credit card required',
+        instantApiKey: 'Instant API key',
+
+        // Toast messages
+        apiKeyRequiredToast: '⚠️ API Key required.',
+        getApiKeyLink: 'Get Free API Key →',
         uploadTitle: 'File Upload',
         uploadText: 'Tap to select',
         uploadHint: 'GeoJSON or JSON',
