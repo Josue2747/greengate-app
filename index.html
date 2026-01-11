@@ -2386,14 +2386,9 @@
                 </p>
             </div>
 
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3 data-i18n="contact_info_title">Informações de Contato</h3>
-                    <p data-i18n="contact_subtitle">
-                        Tire suas dúvidas ou solicite acesso à API
-                    </p>
-
-                    <div class="contact-details">
+            <div class="contact-content" style="justify-content: center;">
+                <div class="contact-info" style="max-width: 500px; text-align: center;">
+                    <div class="contact-details" style="justify-content: center; margin-bottom: 2rem;">
                         <div class="contact-detail">
                             <div class="contact-detail-icon">✉</div>
                             <div class="contact-detail-text">
@@ -2410,36 +2405,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="contact-form-wrapper">
-                    <form id="contactForm" onsubmit="handleSubmit(event)">
-                        <div class="form-group">
-                            <label for="name" data-i18n="contact_label_name">Nome</label>
-                            <input type="text" id="name" name="name" required data-i18n="contact_placeholder_name" placeholder="João Silva">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email" data-i18n="contact_label_email">E-mail</label>
-                            <input type="email" id="email" name="email" required data-i18n="contact_placeholder_email" placeholder="joao@empresa.com.br">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company" data-i18n="contact_label_company">Empresa</label>
-                            <input type="text" id="company" name="company" data-i18n="contact_placeholder_company" placeholder="Sua Empresa Ltda">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message" data-i18n="contact_label_message">Mensagem</label>
-                            <textarea id="message" name="message" required data-i18n="contact_placeholder_message" placeholder="Como podemos ajudar?"></textarea>
-                        </div>
-
-                        <button type="submit" class="form-submit" id="submitBtn" data-i18n="contact_submit">
-                            Enviar Mensagem
-                        </button>
-
-                        <div class="form-message" id="formMessage"></div>
-                    </form>
+                    <a href="mailto:greengatebrasil@gmail.com?subject=Contato GreenGate" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; font-size: 1.1rem;" data-i18n="contact_submit">
+                        ✉ Enviar E-mail
+                    </a>
                 </div>
             </div>
         </div>
@@ -2512,50 +2481,6 @@
             localStorage.setItem('theme', newTheme);
             themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
         });
-
-        // Contact Form Handler
-        function handleSubmit(event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const submitBtn = document.getElementById('submitBtn');
-            const formMessage = document.getElementById('formMessage');
-
-            // Get current language
-            const currentLang = localStorage.getItem('language') || 'pt';
-            const t = translations[currentLang];
-
-            // Disable submit button
-            submitBtn.disabled = true;
-            submitBtn.textContent = t.form_sending;
-
-            // Get form data
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
-
-            // Simulate API call (replace with actual endpoint)
-            setTimeout(() => {
-                // Success
-                formMessage.className = 'form-message success';
-                formMessage.textContent = t.form_success;
-
-                // Reset form
-                form.reset();
-
-                // Re-enable button
-                submitBtn.disabled = false;
-                submitBtn.textContent = t.contact_submit;
-
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    formMessage.style.display = 'none';
-                }, 5000);
-
-                // Log data (for now)
-                console.log('Form data:', data);
-
-            }, 1500);
-        }
 
         // Scroll behavior for navigation
         window.addEventListener('scroll', () => {

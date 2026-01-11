@@ -169,7 +169,7 @@ const translations = {
         contact_placeholder_company: 'Sua Empresa Ltda',
         contact_label_message: 'Mensagem',
         contact_placeholder_message: 'Como podemos ajudar?',
-        contact_submit: 'Enviar Mensagem',
+        contact_submit: '✉ Enviar E-mail',
 
         contact_info_title: 'Informações de Contato',
         contact_email: 'E-mail',
@@ -373,7 +373,7 @@ const translations = {
         contact_placeholder_company: 'Your Company Ltd',
         contact_label_message: 'Message',
         contact_placeholder_message: 'How can we help?',
-        contact_submit: 'Send Message',
+        contact_submit: '✉ Send Email',
 
         contact_info_title: 'Contact Information',
         contact_email: 'Email',
