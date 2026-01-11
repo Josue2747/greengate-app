@@ -175,6 +175,20 @@ const appTranslations = {
         msg_overlap_uc_integral: 'Sobreposição com UC de Proteção Integral:',
         msg_overlap_uc_sustentavel: 'Sobreposição com UC de Uso Sustentável:',
         msg_no_overlap_uc: 'Nenhuma sobreposição com Unidade de Conservação',
+
+        // PDF Modal - Privacy tip
+        privacyTipTitle: '💡 Dica de Privacidade:',
+        privacyTipText: 'Use identificadores internos (ex: "Fazenda #12345") ao invés de nomes reais. Nomes de propriedades aparecem no relatório PDF mas são redatados na verificação pública.',
+        reportIncludesQr: '📱 O relatório incluirá QR Code para verificação de autenticidade',
+
+        // Validation loading steps
+        validatingSampleArea: '🎯 Validando área de exemplo (sem API Key). Para suas áreas reais, obtenha uma chave.',
+        stepAnalyzingProdes: 'Analisando PRODES...',
+        stepCheckingMapbiomas: 'Verificando MapBiomas...',
+        stepConsultingTi: 'Consultando TIs...',
+        stepCheckingEmbargoes: 'Verificando Embargos...',
+        stepAnalyzingUcs: 'Analisando UCs...',
+        stepProcessing: 'Processando...',
     },
     en: {
         // Header
@@ -351,6 +365,20 @@ const appTranslations = {
         msg_overlap_uc_integral: 'Overlap with Strict Protection Conservation Unit:',
         msg_overlap_uc_sustentavel: 'Overlap with Sustainable Use Conservation Unit:',
         msg_no_overlap_uc: 'No overlap with Conservation Unit',
+
+        // PDF Modal - Privacy tip
+        privacyTipTitle: '💡 Privacy Tip:',
+        privacyTipText: 'Use internal identifiers (e.g., "Farm #12345") instead of real names. Property names appear in the PDF report but are redacted in public verification.',
+        reportIncludesQr: '📱 Report will include QR Code for authenticity verification',
+
+        // Validation loading steps
+        validatingSampleArea: '🎯 Validating sample area (no API Key). For your real areas, get a key.',
+        stepAnalyzingProdes: 'Analyzing PRODES...',
+        stepCheckingMapbiomas: 'Checking MapBiomas...',
+        stepConsultingTi: 'Consulting Indigenous Lands...',
+        stepCheckingEmbargoes: 'Checking Embargoes...',
+        stepAnalyzingUcs: 'Analyzing Conservation Units...',
+        stepProcessing: 'Processing...',
     }
 };
 
