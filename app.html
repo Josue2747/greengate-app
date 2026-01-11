@@ -1004,23 +1004,26 @@
     }
 
     function fmtCheckType(c) {
+        const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
         const map = {
-            deforestation_prodes: 'Desmatamento PRODES',
-            deforestation_mapbiomas: 'Alertas MapBiomas',
-            terra_indigena: 'Terras Indígenas',
-            embargo_ibama: 'Embargos IBAMA',
-            quilombola: 'Quilombolas',
-            uc: 'Unidades de Conservação'
-            // app_water removido - será reimplementado com dados oficiais MT
+            deforestation_prodes: t('check_deforestation_prodes'),
+            deforestation_mapbiomas: t('check_deforestation_mapbiomas'),
+            terra_indigena: t('check_terra_indigena'),
+            embargo_ibama: t('check_embargo_ibama'),
+            quilombola: t('check_quilombola'),
+            uc: t('check_uc'),
+            app_water: t('check_app_water'),
+            legal_amazon: t('check_legal_amazon')
         };
         return map[c] || escapeHtml(c);
     }
 
     function fmtCheckStatusBadge(s) {
+        const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
         const map = {
-            pass: 'Conforme',
-            fail: 'Não conforme',
-            warning: 'Atenção',
+            pass: t('statusApproved'),
+            fail: t('statusRejected'),
+            warning: t('statusWarning'),
             skip: 'N/A'
         };
         return map[s] || escapeHtml(s);
@@ -1686,13 +1689,14 @@
         const card = document.getElementById('dataFreshnessCard');
         const content = document.getElementById('dataFreshnessContent');
 
+        const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
         const layerNames = {
-            'prodes': 'PRODES (Desmatamento)',
-            'embargo_ibama': 'Embargos IBAMA',
-            'terra_indigena': 'Terras Indígenas',
-            'uc': 'Unidades de Conservação',
-            'quilombola': 'Territórios Quilombolas',
-            'mapbiomas': 'MapBiomas'
+            'prodes': t('layer_prodes'),
+            'embargo_ibama': t('layer_embargo_ibama'),
+            'terra_indigena': t('layer_terra_indigena'),
+            'uc': t('layer_uc'),
+            'quilombola': t('layer_quilombola'),
+            'mapbiomas': t('layer_mapbiomas')
         };
 
         let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">';
@@ -1713,11 +1717,11 @@
                 <div style="padding: 0.5rem; background: var(--bg-secondary); border-radius: 4px; border-left: 3px solid ${freshnessColor};">
                     <strong style="font-size: 0.75rem; color: var(--text-muted); display: block;">${layerName}</strong>
                     <span style="font-size: 0.9rem; color: var(--text-primary);">${formattedDate}</span>
-                    ${daysSince === 0 ? '<span style="font-size: 0.7rem; color: #059669; display: block;">• Hoje</span>' :
-                      daysSince === 1 ? '<span style="font-size: 0.7rem; color: #059669; display: block;">• Ontem</span>' :
-                      daysSince < 7 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${daysSince} dias atrás</span>` :
-                      daysSince < 30 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${Math.floor(daysSince/7)} semanas atrás</span>` :
-                      `<span style="font-size: 0.7rem; color: ${freshnessColor}; display: block;">• ${Math.floor(daysSince/30)} meses atrás</span>`}
+                    ${daysSince === 0 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${t('timeToday')}</span>` :
+                      daysSince === 1 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${t('timeYesterday')}</span>` :
+                      daysSince < 7 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${daysSince} ${t('timeDaysAgo')}</span>` :
+                      daysSince < 30 ? `<span style="font-size: 0.7rem; color: #059669; display: block;">• ${Math.floor(daysSince/7)} ${t('timeWeeksAgo')}</span>` :
+                      `<span style="font-size: 0.7rem; color: ${freshnessColor}; display: block;">• ${Math.floor(daysSince/30)} ${t('timeMonthsAgo')}</span>`}
                 </div>
             `;
         }
@@ -1753,12 +1757,13 @@
         } else {
             resultIconEl.innerHTML = '<svg class="icon-xl"><use href="#icon-warning"></use></svg>';
         }
-        document.getElementById('resultTitle').textContent = d.status === 'approved' ? 'Conforme' : d.status === 'rejected' ? 'Não Conforme' : 'Atenção';
+        const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
+        document.getElementById('resultTitle').textContent = d.status === 'approved' ? t('statusApproved') : d.status === 'rejected' ? t('statusRejected') : t('statusWarning');
 
         const conf = clampConf(d.risk_score);
         const label = confLabel(conf);
 
-        document.getElementById('resultSubtitle').textContent = `Conformidade: ${conf}/100 • ${label}`;
+        document.getElementById('resultSubtitle').textContent = `${t('compliance')} ${conf}/100 • ${label}`;
 
         const fill = document.getElementById('complianceFill');
         fill.style.width = conf + '%';
@@ -1806,6 +1811,10 @@
             // Usar last_updated da API se disponível, caso contrário mostrar --
             const updated = c.last_updated || null;
 
+            // Traduções
+            const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
+            const currentLang = localStorage.getItem('app_language') || 'pt';
+
             // Calcular "há X dias" para mostrar frescor dos dados
             function daysAgo(dateStr) {
                 if (!dateStr || dateStr === '--') return '';
@@ -1813,11 +1822,11 @@
                 const now = new Date();
                 const diffTime = Math.abs(now - updated);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if (diffDays === 0) return ' (hoje)';
-                if (diffDays === 1) return ' (ontem)';
-                if (diffDays < 30) return ` (há ${diffDays} dias)`;
+                if (diffDays === 0) return ` (${t('timeToday').toLowerCase()})`;
+                if (diffDays === 1) return ` (${t('timeYesterday').toLowerCase()})`;
+                if (diffDays < 30) return ` (${diffDays} ${t('timeDaysAgo')})`;
                 const months = Math.floor(diffDays / 30);
-                return ` (há ${months} ${months === 1 ? 'mês' : 'meses'})`;
+                return ` (${months} ${months === 1 ? t('timeMonth') : t('timeMonths')})`;
             }
 
             let det = '<p>' + escapeHtml(c.message || '') + '</p>';
@@ -1850,19 +1859,20 @@
                 } else {
                     pctText = '0%';
                 }
-                det += '<div class="check-overlap-box"><strong>📍 Área Afetada:</strong> ' +
-                    areaText + ' (' + pctText + ' da área total)</div>';
+                det += '<div class="check-overlap-box"><strong>📍 ' + t('affectedAreaLabel') + '</strong> ' +
+                    areaText + ' (' + pctText + ' ' + t('ofTotalArea') + ')</div>';
             }
 
             // Fonte e data de atualização com badge de frescor
             det += '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted);">';
-            det += '<div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>📋 <strong>Fonte:</strong> ' + meta.source + '</span></div>';
-            const freshnessText = updated ? new Date(updated).toLocaleDateString('pt-BR') + '<span style="color: var(--accent-green); font-weight: 600;">' + daysAgo(updated) + '</span>' : '--';
-            det += '<div style="display: flex; justify-content: space-between;"><span>📅 <strong>Atualizado:</strong> ' + freshnessText + '</span></div>';
+            det += '<div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>📋 <strong>' + t('sourceLabel') + '</strong> ' + meta.source + '</span></div>';
+            const dateLocale = currentLang === 'en' ? 'en-US' : 'pt-BR';
+            const freshnessText = updated ? new Date(updated).toLocaleDateString(dateLocale) + '<span style="color: var(--accent-green); font-weight: 600;">' + daysAgo(updated) + '</span>' : '--';
+            det += '<div style="display: flex; justify-content: space-between;"><span>📅 <strong>' + t('updatedLabel') + '</strong> ' + freshnessText + '</span></div>';
 
             // IDs oficiais (se disponíveis no response)
             if (meta.id_field && c[meta.id_field]) {
-                det += '<div style="margin-top: 4px;"><span>🆔 <strong>ID Oficial:</strong> ' + escapeHtml(c[meta.id_field]) + '</span></div>';
+                det += '<div style="margin-top: 4px;"><span>🆔 <strong>' + t('officialIdLabel') + '</strong> ' + escapeHtml(c[meta.id_field]) + '</span></div>';
             }
 
             det += '</div>';
@@ -1929,15 +1939,16 @@
     function highlightOnMap(checkType, event) {
         event.stopPropagation(); // Evita fechar o accordion
 
-        // Toast de feedback
+        // Toast de feedback com traduções
+        const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
         const checkNames = {
-            'deforestation_prodes': 'Desmatamento PRODES',
-            'deforestation_mapbiomas': 'MapBiomas Alerta',
-            'terra_indigena': 'Terras Indígenas',
-            'quilombola': 'Quilombolas',
-            'uc': 'Unidades de Conservação',
-            'embargo_ibama': 'Embargos IBAMA',
-            'app_water': 'APP (Água)'
+            'deforestation_prodes': t('check_deforestation_prodes'),
+            'deforestation_mapbiomas': t('check_deforestation_mapbiomas'),
+            'terra_indigena': t('check_terra_indigena'),
+            'quilombola': t('check_quilombola'),
+            'uc': t('check_uc'),
+            'embargo_ibama': t('check_embargo_ibama'),
+            'app_water': t('check_app_water')
         };
 
         // Limpar overlaps anteriores

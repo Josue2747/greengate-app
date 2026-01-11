@@ -118,6 +118,47 @@ const appTranslations = {
         pdfSuccess: 'PDF gerado com sucesso!',
         errorUpload: 'Erro: ',
         compliance: 'Conformidade:',
+
+        // Validation results
+        statusApproved: 'Conforme',
+        statusRejected: 'Não Conforme',
+        statusWarning: 'Atenção',
+        affectedArea: 'Área Afetada',
+
+        // Check names
+        check_deforestation_prodes: 'Desmatamento PRODES',
+        check_deforestation_mapbiomas: 'Alertas MapBiomas',
+        check_terra_indigena: 'Terras Indígenas',
+        check_quilombola: 'Territórios Quilombolas',
+        check_uc: 'Unidades de Conservação',
+        check_embargo_ibama: 'Embargos IBAMA',
+        check_app_water: 'APP (Água)',
+        check_legal_amazon: 'Amazônia Legal',
+
+        // Layer names (data freshness)
+        layer_prodes: 'PRODES (Desmatamento)',
+        layer_embargo_ibama: 'Embargos IBAMA',
+        layer_terra_indigena: 'Terras Indígenas',
+        layer_uc: 'Unidades de Conservação',
+        layer_quilombola: 'Territórios Quilombolas',
+        layer_mapbiomas: 'MapBiomas',
+
+        // Time expressions
+        timeToday: 'Hoje',
+        timeYesterday: 'Ontem',
+        timeDaysAgo: 'dias atrás',
+        timeWeeksAgo: 'semanas atrás',
+        timeMonthsAgo: 'meses atrás',
+        timeMonth: 'mês',
+        timeMonths: 'meses',
+
+        // Result details
+        affectedAreaLabel: 'Área Afetada:',
+        ofTotalArea: 'da área total',
+        sourceLabel: 'Fonte:',
+        updatedLabel: 'Atualizado:',
+        officialIdLabel: 'ID Oficial:',
+        overlapArea: 'Área de sobreposição:',
     },
     en: {
         // Header
@@ -237,6 +278,47 @@ const appTranslations = {
         pdfSuccess: 'PDF generated successfully!',
         errorUpload: 'Error: ',
         compliance: 'Compliance:',
+
+        // Validation results
+        statusApproved: 'Compliant',
+        statusRejected: 'Non-Compliant',
+        statusWarning: 'Warning',
+        affectedArea: 'Affected Area',
+
+        // Check names
+        check_deforestation_prodes: 'PRODES Deforestation',
+        check_deforestation_mapbiomas: 'MapBiomas Alerts',
+        check_terra_indigena: 'Indigenous Lands',
+        check_quilombola: 'Quilombola Territories',
+        check_uc: 'Conservation Units',
+        check_embargo_ibama: 'IBAMA Embargoes',
+        check_app_water: 'APP (Water)',
+        check_legal_amazon: 'Legal Amazon',
+
+        // Layer names (data freshness)
+        layer_prodes: 'PRODES (Deforestation)',
+        layer_embargo_ibama: 'IBAMA Embargoes',
+        layer_terra_indigena: 'Indigenous Lands',
+        layer_uc: 'Conservation Units',
+        layer_quilombola: 'Quilombola Territories',
+        layer_mapbiomas: 'MapBiomas',
+
+        // Time expressions
+        timeToday: 'Today',
+        timeYesterday: 'Yesterday',
+        timeDaysAgo: 'days ago',
+        timeWeeksAgo: 'weeks ago',
+        timeMonthsAgo: 'months ago',
+        timeMonth: 'month',
+        timeMonths: 'months',
+
+        // Result details
+        affectedAreaLabel: 'Affected Area:',
+        ofTotalArea: 'of total area',
+        sourceLabel: 'Source:',
+        updatedLabel: 'Updated:',
+        officialIdLabel: 'Official ID:',
+        overlapArea: 'Overlap area:',
     }
 };
 
