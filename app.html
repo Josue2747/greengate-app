@@ -2147,15 +2147,61 @@
         document.getElementById('registerModal').classList.remove('show');
     }
 
+    // Validação de email profissional
+    function isValidEmail(email) {
+        // Regex RFC 5322 simplificado
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+        if (!emailRegex.test(email)) return { valid: false, reason: 'Formato de email inválido.' };
+
+        // Verificar domínio
+        const domain = email.split('@')[1].toLowerCase();
+
+        // Domínios temporários/descartáveis bloqueados
+        const blockedDomains = [
+            'tempmail.com', 'guerrillamail.com', 'mailinator.com', '10minutemail.com',
+            'throwaway.email', 'fakeinbox.com', 'trashmail.com', 'temp-mail.org',
+            'yopmail.com', 'sharklasers.com', 'guerrillamail.info', 'grr.la',
+            'dispostable.com', 'mailnesia.com', 'maildrop.cc', 'getairmail.com',
+            'mohmal.com', 'tempail.com', 'tempr.email', 'discard.email',
+            'discardmail.com', 'spamgourmet.com', 'mytemp.email', 'mt2009.com'
+        ];
+
+        if (blockedDomains.includes(domain)) {
+            return { valid: false, reason: 'Emails temporários não são permitidos. Use seu email real.' };
+        }
+
+        // Verificar se domínio parece válido (tem pelo menos um ponto)
+        if (!domain.includes('.') || domain.endsWith('.') || domain.startsWith('.')) {
+            return { valid: false, reason: 'Domínio de email inválido.' };
+        }
+
+        // Verificar extensão mínima (.co, .io, etc)
+        const tld = domain.split('.').pop();
+        if (tld.length < 2) {
+            return { valid: false, reason: 'Extensão de domínio inválida.' };
+        }
+
+        return { valid: true };
+    }
+
     async function registerApiKey() {
-        const email = document.getElementById('registerEmail').value.trim();
+        const email = document.getElementById('registerEmail').value.trim().toLowerCase();
         const errorEl = document.getElementById('registerError');
         const successEl = document.getElementById('registerSuccess');
         const btn = document.getElementById('confirmRegisterBtn');
 
         // Validar email
-        if (!email || !email.includes('@')) {
-            errorEl.textContent = 'Por favor, insira um email válido.';
+        if (!email) {
+            errorEl.textContent = 'Por favor, insira seu email.';
+            errorEl.style.display = 'block';
+            successEl.style.display = 'none';
+            return;
+        }
+
+        const validation = isValidEmail(email);
+        if (!validation.valid) {
+            errorEl.textContent = validation.reason;
             errorEl.style.display = 'block';
             successEl.style.display = 'none';
             return;
