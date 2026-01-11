@@ -159,6 +159,22 @@ const appTranslations = {
         updatedLabel: 'Atualizado:',
         officialIdLabel: 'ID Oficial:',
         overlapArea: 'Área de sobreposição:',
+        highlightOnMap: 'Destacar no Mapa',
+
+        // Backend messages (para manter consistência)
+        msg_overlap_prodes: 'Sobreposição com área desmatada pós-2020 (PRODES):',
+        msg_no_overlap_prodes: 'Nenhuma sobreposição com desmatamento PRODES pós-2020',
+        msg_overlap_mapbiomas: 'Sobreposição com alerta MapBiomas pós-2020:',
+        msg_no_overlap_mapbiomas: 'Nenhuma sobreposição com alertas MapBiomas pós-2020',
+        msg_overlap_ti: 'Sobreposição com Terra Indígena:',
+        msg_no_overlap_ti: 'Nenhuma sobreposição com Terra Indígena',
+        msg_overlap_embargo: 'Sobreposição com área embargada IBAMA:',
+        msg_no_overlap_embargo: 'Nenhuma sobreposição com embargo IBAMA ativo',
+        msg_overlap_quilombola: 'Sobreposição com Território Quilombola:',
+        msg_no_overlap_quilombola: 'Nenhuma sobreposição com Território Quilombola',
+        msg_overlap_uc_integral: 'Sobreposição com UC de Proteção Integral:',
+        msg_overlap_uc_sustentavel: 'Sobreposição com UC de Uso Sustentável:',
+        msg_no_overlap_uc: 'Nenhuma sobreposição com Unidade de Conservação',
     },
     en: {
         // Header
@@ -319,6 +335,22 @@ const appTranslations = {
         updatedLabel: 'Updated:',
         officialIdLabel: 'Official ID:',
         overlapArea: 'Overlap area:',
+        highlightOnMap: 'Highlight on Map',
+
+        // Backend messages (translated)
+        msg_overlap_prodes: 'Overlap with post-2020 deforested area (PRODES):',
+        msg_no_overlap_prodes: 'No overlap with PRODES post-2020 deforestation',
+        msg_overlap_mapbiomas: 'Overlap with post-2020 MapBiomas alert:',
+        msg_no_overlap_mapbiomas: 'No overlap with MapBiomas post-2020 alerts',
+        msg_overlap_ti: 'Overlap with Indigenous Land:',
+        msg_no_overlap_ti: 'No overlap with Indigenous Land',
+        msg_overlap_embargo: 'Overlap with IBAMA embargoed area:',
+        msg_no_overlap_embargo: 'No overlap with active IBAMA embargo',
+        msg_overlap_quilombola: 'Overlap with Quilombola Territory:',
+        msg_no_overlap_quilombola: 'No overlap with Quilombola Territory',
+        msg_overlap_uc_integral: 'Overlap with Strict Protection Conservation Unit:',
+        msg_overlap_uc_sustentavel: 'Overlap with Sustainable Use Conservation Unit:',
+        msg_no_overlap_uc: 'No overlap with Conservation Unit',
     }
 };
 
@@ -379,6 +411,14 @@ const appTranslations = {
         if (typeof renderHistory === 'function') {
             renderHistory();
         }
+
+        // Re-renderizar resultados de validação se existir
+        if (window.currentValidationResult && typeof window.showResult === 'function') {
+            window.showResult(window.currentValidationResult);
+        }
+
+        // Disparar evento customizado para outros componentes
+        window.dispatchEvent(new CustomEvent('app-language-changed', { detail: { lang: newLang } }));
     };
 
     window.getCurrentAppLang = function() {

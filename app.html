@@ -973,7 +973,7 @@
 
     // Camada de overlaps (geometrias de interseção) e resultado da validação
     let overlapsLayer = null;
-    let currentValidationResult = null;
+    window.currentValidationResult = null;
 
     // meta da área (para PDF / UI)
     let currentMeta = { municipality: null, state: null, address: null };
@@ -1001,6 +1001,43 @@
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
+    }
+
+    // Função para traduzir mensagens do backend
+    function translateBackendMessage(msg) {
+        if (!msg) return '';
+        const t = (key) => window.getAppTranslation ? window.getAppTranslation(key) : key;
+
+        // Mapeamento de padrões PT -> chave de tradução
+        const patterns = [
+            { pattern: /^Sobreposição com área desmatada pós-2020 \(PRODES\):?\s*/i, key: 'msg_overlap_prodes', hasValue: true },
+            { pattern: /^Nenhuma sobreposição com desmatamento PRODES pós-2020$/i, key: 'msg_no_overlap_prodes', hasValue: false },
+            { pattern: /^Sobreposição com alerta MapBiomas pós-2020:?\s*/i, key: 'msg_overlap_mapbiomas', hasValue: true },
+            { pattern: /^Nenhuma sobreposição com alertas MapBiomas pós-2020$/i, key: 'msg_no_overlap_mapbiomas', hasValue: false },
+            { pattern: /^Sobreposição com Terra Indígena:?\s*/i, key: 'msg_overlap_ti', hasValue: true },
+            { pattern: /^Nenhuma sobreposição com Terra Indígena$/i, key: 'msg_no_overlap_ti', hasValue: false },
+            { pattern: /^Sobreposição com área embargada IBAMA:?\s*/i, key: 'msg_overlap_embargo', hasValue: true },
+            { pattern: /^Nenhuma sobreposição com embargo IBAMA ativo$/i, key: 'msg_no_overlap_embargo', hasValue: false },
+            { pattern: /^Sobreposição com Território Quilombola:?\s*/i, key: 'msg_overlap_quilombola', hasValue: true },
+            { pattern: /^Nenhuma sobreposição com Território Quilombola$/i, key: 'msg_no_overlap_quilombola', hasValue: false },
+            { pattern: /^Sobreposição com UC de Proteção Integral:?\s*/i, key: 'msg_overlap_uc_integral', hasValue: true },
+            { pattern: /^Sobreposição com UC de Uso Sustentável:?\s*/i, key: 'msg_overlap_uc_sustentavel', hasValue: true },
+            { pattern: /^Nenhuma sobreposição com Unidade de Conservação$/i, key: 'msg_no_overlap_uc', hasValue: false },
+        ];
+
+        for (const p of patterns) {
+            if (p.pattern.test(msg)) {
+                if (p.hasValue) {
+                    // Extrair o valor (ex: "10.1561 ha" ou nomes)
+                    const value = msg.replace(p.pattern, '');
+                    return t(p.key) + ' ' + value;
+                } else {
+                    return t(p.key);
+                }
+            }
+        }
+
+        return msg; // Retorna original se não encontrar padrão
     }
 
     function fmtCheckType(c) {
@@ -1164,7 +1201,7 @@
         if (sketchVM) sketchVM.cancel();
         currentPolygon = null; currentGraphic = null;
         currentMeta = { municipality: null, state: null, address: null };
-        currentValidationResult = null;
+        window.currentValidationResult = null;
 
         if (graphicsLayer) graphicsLayer.removeAll();
         if (overlapsLayer) overlapsLayer.removeAll();
@@ -1732,9 +1769,9 @@
         card.style.display = 'block';
     }
 
-    function showResult(d) {
+    window.showResult = function showResult(d) {
         // Armazenar resultado para uso posterior (ex: destacar overlaps no mapa)
-        currentValidationResult = d;
+        window.currentValidationResult = d;
 
         // Limpar overlaps anteriores
         if (overlapsLayer) {
@@ -1829,7 +1866,7 @@
                 return ` (${months} ${months === 1 ? t('timeMonth') : t('timeMonths')})`;
             }
 
-            let det = '<p>' + escapeHtml(c.message || '') + '</p>';
+            let det = '<p>' + escapeHtml(translateBackendMessage(c.message || '')) + '</p>';
 
             // Área afetada
             if ((c.overlap_area_ha || 0) > 0) {
@@ -1957,12 +1994,12 @@
         }
 
         // Buscar o check correspondente no resultado da validação
-        if (!currentValidationResult || !currentValidationResult.checks) {
+        if (!window.currentValidationResult || !window.currentValidationResult.checks) {
             showToast('❌ Nenhum resultado de validação disponível', 'error');
             return;
         }
 
-        const check = currentValidationResult.checks.find(c => c.check_type === checkType);
+        const check = window.currentValidationResult.checks.find(c => c.check_type === checkType);
         if (!check) {
             showToast('❌ Check não encontrado: ' + checkType, 'error');
             return;
