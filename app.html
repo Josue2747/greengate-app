@@ -1611,7 +1611,11 @@
             const headers = { 'Content-Type': 'application/json' };
             if (key) headers['x-api-key'] = key;
 
-            const res = await fetch(API_URL + '/api/v1/validations/quick', {
+            // Usar /validate quando tem API key (contabiliza uso)
+            // Usar /quick apenas para área de exemplo sem API key (não contabiliza)
+            const endpoint = key ? '/api/v1/validations/validate' : '/api/v1/validations/quick';
+
+            const res = await fetch(API_URL + endpoint, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(currentPolygon)
